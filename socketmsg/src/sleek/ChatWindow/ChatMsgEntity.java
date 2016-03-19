@@ -4,8 +4,10 @@ package sleek.ChatWindow;
 public class ChatMsgEntity {
     private static final String TAG = ChatMsgEntity.class.getSimpleName();
  private int i=0;
+ //dfhfxcn 
     private String name;
-
+//drtdr drryx
+    //ftdrxndrtswet
     private String date;
 
     private String text;
