@@ -3,7 +3,7 @@ package sleek.ChatWindow;
 
 public class ChatMsgEntity {
     private static final String TAG = ChatMsgEntity.class.getSimpleName();
-
+ private int i=0;
     private String name;
 
     private String date;
