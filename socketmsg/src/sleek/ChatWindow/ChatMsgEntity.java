@@ -5,6 +5,11 @@ public class ChatMsgEntity {
     private static final String TAG = ChatMsgEntity.class.getSimpleName();
  private int i=0;
  //dfhfxcn 
+
+
+
+//buyasiodfhskajfjklsafjkslaf
+
     private String name;
 //drtdr drryx
     //ftdrxndrtswet
