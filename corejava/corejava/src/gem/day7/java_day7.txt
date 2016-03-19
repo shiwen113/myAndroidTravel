@@ -1,0 +1,50 @@
+1、内部类：写在类的内部，写在方法里，局部内部类
+   等同于类的成员,也是一个类（继承、实现接口）
+   1）内部类可以写什么？
+   2）与外部类的关系是什么？
+   3）如何使用内部类
+
+   内部类的访问控制符：public package protected private
+     1)成员必须是实例，不能有静态成员
+     2)无条件的访问外部类的成员（实例、静态）
+     3）创建内部类的语法： 外部类的实例. new 内部类（）；
+   static:静态嵌套（内部）类
+    1）可以定义实例成员、静态成员
+    2）不能访问外部类的实例成员，只能访问静态成员
+    3) new 外部类类名.内部类名()
+
+匿名内部类:定义了一个类+创建了一个对象
+     new Thread(){
+         public void run() {
+            ......
+         }
+     }.start();
+
+2、枚举类：这个类的对象是确定的，
+    enum，所有的枚举类的基类是Enum
+  1)可以有构造方法，默认的是private
+  2)可以定义方法
+  3)可以定义抽象方法
+  4)枚举类可以实现接口，不能继承其它的类
+  5)Enum上的一些常见方法：
+     values  ordinal
+  6)枚举类可以用在switch-case语句中
+
+3、Object类：
+1）getClass：获得Class对象
+2) finalize: GC清理对象之前调用该访问，
+3）notify,notifyAll，线程，通知
+4) wait   wait(long)  wait(long,int) 等待，线程
+一般，实体类，重写:
+5）toString方法: 字符串描述这个对象
+6) equals方法：  与==的区别，比较内容（难点）
+7) hashCode方法
+8) clone方法  clone与自已一样的一个对象
+   Cloneable接口，标志接口
+
+面试题：
+重写了equals方法，也要重写hashCode方法?
+final,finally,finalize有什么区
+Java有几种创建对象的方法？
+   1）new   2) clone  3) 设计模式：factory method 
+   ......

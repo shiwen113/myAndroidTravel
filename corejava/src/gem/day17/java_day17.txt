@@ -1,0 +1,92 @@
+1、类的生命周期：JVM
+  new     GC
+  .java ==>  .class 
+
+加载（Loading）:将这个类文件，加到内存中，创建一个Class对象
+   
+连接（Linking）：
+   验证（Verification）：验证文件格式是否是正确
+   准备（Preparation）:  为静态变量分配内存空间
+   解析（Resolution）:   将符号引用替换为直接引用
+初始化（Initialization）：（重点）
+   类的初始化：执行静态初始块代码，或者静态成员变量
+   初始化时机：(6种情形)  InitClass.method)_
+   不初始化的情形：(3种)
+   1)访问类的静态常量，而这个常量在编译时已确定
+   2)用子类名访问父类的静态成员时，不初始化子类
+   3）创建数组对象时
+   
+使用（Using）
+卸载（Unloading）
+
+2、类的加载器：ClassLoader负责加载初始化类：
+  BootStrap加载器：根、实现c/c++、加载Java的核心类,jre/lib/一些jar包
+
+加载机制：
+
+http://my.oschina.net/u/1269532/blog/166888
+
+3、反射(reflection):
+      class:关键字    Class:类
+      对象             类
+     具体的Dog对象    Dog         Dog.class       Class对象  
+     各种人的对象     Person      Person.class    Class对象
+     不同的园         Circle      Circle.class    Class对象
+                      .....         .......
+                                  Class           Field[]
+                                                  Constructor[]
+                                                  Method[]
+People类
+Dog类
+Circle类
+。。。。
+Class类：Class对象：People类，Dog类，。。。。。
+
+  修饰符  class（interface、enum） 类名 extends 父类 implements I1,I2｛
+        //属性、成员变量： Field 
+	//构造方法:        Constructor
+	//方法:            Method
+   ｝
+
+4、如何获得Class对象，三种方法(重要)
+1)类名.class
+2)object.getClass()
+3)Class.forName("全类名：java.lang.String")
+
+5、如果已知Class对象，获得类相关的对象
+   四个方法：
+   getMethods():  一组方法,public,含父类
+   getDeclaredMethods():一组方法，无关访问权限，不含父类
+   getMethod(“方法名”，方法参数的类型)           :获得指定的方法
+   getDeclaredMethod(“方法名”，方法参数的类型)   :获得指定的方法
+
+6、理解Method对象:任何一个类中的任何一个方法都可以用一个Method对象表示
+   方法调用:
+    method.invoke(obj,参数)；
+
+7、动态代理（了解）
+
+	用？？？，框架、工具中
+	Android大框架
+
+Hibernate：实体类Student  <==> 数据库中的一张表Student（id,name,age）
+ORMapping     对象                    一条记录
+自动：
+save(Student对象)
+save(Teacher对象）
+  模拟Hibernate：
+    反射技术自动生成SQL语句： 
+           insert into Student(id,name,age) 
+		values(1,'tom',20);
+    String getSaveSQL(Object object) {
+       //
+       Class c = object.getClass();
+       //获得Fields集合
+       //成员变量
+       //对每一个成员变量Xxx
+       //在对象object,调用方法  getXxx
+   }
+
+
+
+

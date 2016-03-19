@@ -1,0 +1,86 @@
+1、异常的基本概念
+异常：不正常，在程序运行过程中碰倒的例外情况，从而改变程序的
+运行流程，
+异常对象，类表示
+Java语言对异常支持：
+1）关键字：try-catch-finally  throw  throws
+2) 异常类的体系结构
+
+2、异常的分类：(含义，类的体系结构)
+Error：系统错误，都是Error的子类
+Exception(编译期异常,checked（受检查）的异常)
+RuntimeException(运行期异常.unchecked(未受检查)异常)
+
+编译期异常与运行期异常区别：
+1）含义
+2）编译期异常是Exception的子类，不是RuntimeException
+   运行期异常:是RuntimeException的子类
+3) 处理方式：
+   编译期异常：须要程序员处理
+   运行期异常：可以由JVM直接处理
+
+了解常见的异常：面试题：说说常见的运行期异常？
+
+3、throw关键字  和 return比较
+   throw Throwable对象；  catch语句块
+                          JVM
+4、如何处理抛出的异常：
+  1）在方法声明中用throws向上抛出(多个)异常
+       throws 异常类的类名1，异常类的类名2
+       throws的异常类的类名与throw出的异常对象类型的关系
+  2）try-catch-finally语句块 （基本重点：运行流程）
+      try {
+	实现功能的代码，有可以抛出异常，可能不抛出异常
+      }catch(SQLException ex) {
+	1、可以有多个catch
+        2、前面的catch中的异常类型 小于 后面
+        处理异常的代码：
+         显示相关的异常信息，写到日志文件
+         转发异常，重新抛出异常
+      }finally {
+        一定会执行到，关闭资源
+      }
+
+5、异常类的信息：
+     getMessage   printStackTrace
+
+6、自定义异常
+   自定义编译期异常，写一个类继承Exception
+   自定义运行期异常，写一个类继承RuntimeException
+
+
+
+7、JDK7中的异常的新特性：
+1）用一个catch语句捕获多个不同类型的异常
+    catch(E1 | E2  ex)
+2) 自动关闭资源，try(
+	变量在这里定义，对象要实现Closeable(规定了一个close方法)
+
+     ) {｝//系统会自动调用这个对象上的close方法关闭资源
+
+
+8、方法的重写：
+   继承关系中，子类的方法的签名 = 父类的方法的签名
+    1)子类的访问控制符不能小于父类的访问控制符
+    2)子类方法的返回类型 父类的方法的返回类型
+    3)子类方法抛出的异常 父类方法抛出的异常关系
+  两同两小1大   
+小结方法的签名：  
+小（父-子）
+[public|protected|package|private] [static][final|abstract]
+返回类型 方法名（参数列表）throws E1,E2
+
+9、泛型编程:将类型作为变量,<T>
+类型(type) int float String Object Cat Dog Student People 
+              Girl ... 
+变量：Girl x;  x=new Girl() x = new Girl() 
+  <T>:  Girl String Object  (不可以是基本数据类型)
+
+void swap(int x,int y) {
+   int temp = x;
+   x = y;
+   y = temp;
+}
+
+
+
