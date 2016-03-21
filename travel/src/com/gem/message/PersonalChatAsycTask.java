@@ -14,8 +14,8 @@ import java.util.concurrent.ExecutorService;
 
 import android.os.AsyncTask;
 
+import com.gem.message.entity.Message;
 import com.gem.message.utils.PersonalChatUtil;
-import com.gem.scenery.entity.Message;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 /**

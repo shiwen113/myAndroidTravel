@@ -1,4 +1,4 @@
-package com.gem.scenery.entity;
+package com.gem.message.entity;
 /**
  * 消息类，虚拟信息
  * @author Administrator

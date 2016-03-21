@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="home_text">首页</string>
+    <string name="news">约游</string>
+    <string name="reference">查询</string>
+    <string name="teamName">队名</string>
+    <string name="teamzt">队伍状态</string>
+    <string name="allDay">全程</string>
+    <string name="startpoint">出发地</string>
+    <string name="destination">目的地</string>
+    <string name="sex">性别</string>
+    <string name="teamerNumber">人数</string>
+    <string name="age">年龄</string>
+    <string name="city">城市</string>
+    <string name="startTime">出发时间</string>
+    <string name="arriveTime">到达时间</string>
+    <string name="urlLifePicture">上传照片</string>
+    <string name="viewPoint">景点</string>
+    <string name="intro">约伴介绍</string>
+    <string name="mine">我的</string>
+    <string name="home">首页</string>
+    <string name="picture">旅图</string>
+    <string name="chat">消息</string>
+    <string name="next">下一步</string>
+    <string name="comment">评论</string>
+    <string name="join">加入</string>
+    
     <string name="app_name">travel</string>
     <string name="action_settings">照相机</string>
     <string name="action_search">搜索</string>
@@ -14,7 +39,7 @@
     <!-- 消息 -->
     <string name="message_tittle">消息</string>
 	<string name="zuijin_message">最近消息</string>
-	<string name="chat">通讯录</string>
+	<string name="chat_adrress">通讯录</string>
 	<string name="personal_send">发送</string>
     
      <!-- 自定义组件 -->

@@ -1,40 +1,40 @@
 package com.gem.scenery;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.ActionBar;
-import android.app.Activity;
+
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gem.scenery.R;
-import com.gem.scenery.R.drawable;
-import com.gem.scenery.R.id;
-import com.gem.scenery.R.layout;
-import com.gem.scenery.R.menu;
 import com.gem.scenery.action.ListViewAdapter;
-import com.gem.scenery.action.SceneryActionBar;
 import com.gem.scenery.action.SceneryHomeAdapt;
 import com.gem.scenery.action.SceneryHomeChage;
+import com.gem.scenery.action.SceneryPopWindow;
 import com.gem.scenery.action.ScreneryHomeOnClik;
 import com.gem.scenery.entity.Senery;
 import com.gem.scenery.interfaces.OnLoadListener;
@@ -49,7 +49,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
-public class SceneryHomeActivity extends Activity implements OnRefreshListener,OnLoadListener{
+public class SceneryHomeActivity extends Fragment implements OnRefreshListener,OnLoadListener{
 		private List<View> views;// Tab页面列表
 		private ViewPager vp;//叶卡内容
 	    private ImageView imageView;// 动画图片
@@ -63,36 +63,54 @@ public class SceneryHomeActivity extends Activity implements OnRefreshListener,O
 	    private Senery senery;
 	    private AutoListView auto;
 	    private int size=1;//第几页
+	    private Context context;
 	    private ListViewAdapter adapter;//ListVeiw适配器
 	    // 区分当前操作是刷新还是加载
 	    public  int refresh ;//刷新  
 	    public  int load ;//加载
-	    
+	    private ImageView imageview;
+	    private Uri imageUri;
+		// 初始化加载fragment里的部件
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+			View view = inflater.inflate(R.layout.activity_scenery_home, container, false);
+
+			return view;
+		}
+	  
 	    //ViewPager加载的页面
+	    
 	    public void initViewPager(LayoutInflater inflater){
 //	    	 //解析要显示的界面
 	        view1= inflater.inflate(R.layout.activity_scenery_hot, null);
 	        view2= inflater.inflate(R.layout.activity_scenery_plaza, null);
 	        view3= inflater.inflate(R.layout.activity_scenery_present, null);
 	    }
+	    
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scenery_home);
-        vp=(ViewPager) findViewById(R.id.vp_scenery);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+     //   requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题
+      //  setContentView(R.layout.activity_scenery_home);
+        vp=(ViewPager) this.getView().findViewById(R.id.vp_scenery);
+        context=getContext();
         //获得LayoutInflater对象
-        LayoutInflater inflater=getLayoutInflater();
+        LayoutInflater inflater=getLayoutInflater(savedInstanceState).from(context);
         //ViewPager加载页面
         initViewPager(inflater);
         //找标题控件
-        textView1=(TextView) findViewById(R.id.tv_screnery_hot);
-        textView2=(TextView) findViewById(R.id.tv_screnery_plaza);
-        textView3=(TextView) findViewById(R.id.tv_screnery_present);
+        textView1=(TextView) this.getView().findViewById(R.id.tv_screnery_hot);
+        textView2=(TextView) this.getView().findViewById(R.id.tv_screnery_plaza);
+        textView3=(TextView) this.getView().findViewById(R.id.tv_screnery_present);
         //给标题控件注册点击事件、监听
         textView1.setOnClickListener(new ScreneryHomeOnClik(0,vp));
         textView2.setOnClickListener(new ScreneryHomeOnClik(1,vp));
         textView3.setOnClickListener(new ScreneryHomeOnClik(2,vp));
         
+        imageview=(ImageView) this.getView().findViewById(R.id.imageView1);
+        File file = new File(Environment.getExternalStorageDirectory(),"temp.jpg");
+		imageUri = Uri.fromFile(file);
+		new SceneryPopWindow(imageUri);
 //        //将要分叶显示的View添加到list集合中
         views=new ArrayList<View>();
         views.add(view1);
@@ -102,18 +120,18 @@ public class SceneryHomeActivity extends Activity implements OnRefreshListener,O
         SceneryHomeAdapt sha=new SceneryHomeAdapt(views);
         
         //menu 自定义ActionBar
-        ActionBar actionBar=getActionBar();//获得ActionBar对象
-//       设置显示选项。这种变化显示选项部分。改变显示选项的有限子集,看到setDisplayOptions(int,int)。
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setCustomView(R.layout.action_scenery_menu);//�Զ���ActionBar����
-        actionBar.getCustomView().findViewById(R.id.action_camera).setOnClickListener(new SceneryActionBar(this));//ע�����
-        actionBar.getCustomView().findViewById(R.id.action_search).setOnClickListener(new SceneryActionBar(this));//ע�����
+//        ActionBar actionBar=getActionBar();//获得ActionBar对象
+////       设置显示选项。这种变化显示选项部分。改变显示选项的有限子集,看到setDisplayOptions(int,int)。
+//        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        actionBar.setCustomView(R.layout.action_scenery_menu);//�Զ���ActionBar����
+//        actionBar.getCustomView().findViewById(R.id.action_camera).setOnClickListener(new SceneryActionBar(this));//ע�����
+//        actionBar.getCustomView().findViewById(R.id.action_search).setOnClickListener(new SceneryActionBar(this));//ע�����
         
         //下划线图片处理
-        imageView= (ImageView) findViewById(R.id.iv_underline);
+        imageView= (ImageView) this.getView().findViewById(R.id.iv_underline);
         bmpW = BitmapFactory.decodeResource(getResources(), R.drawable.p).getWidth();// 获取图片宽度
         DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+      //getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenW = dm.widthPixels;// 获取分辨率宽度
         offset = (screenW / 3 - bmpW) / 2;// 计算偏移量
         Matrix matrix = new Matrix();//图片处理对象
@@ -135,32 +153,6 @@ public class SceneryHomeActivity extends Activity implements OnRefreshListener,O
         
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-         getMenuInflater().inflate(R.menu.scenery_home, menu);
-         //使用代码来动态控制MenuItem的显示状态 or XML定义MenuItem的显示状态   
-//          MenuItem camera=menu.findItem(R.id.action_camera); 
-//          MenuItem search=menu.findItem(R.id.action_search); 
-        return true;  
-    }
-    
-    @Override  
-    public boolean onOptionsItemSelected(MenuItem item) {  
-        switch (item.getItemId()) {  
-        case R.id.action_camera:  
-//        	((CameraPopWindow) popupWindow).showPopupWindow(item);
-//        	Toast.makeText(getApplicationContext(), "点击了", 1).show();
-            break;  
-        case R.id.action_search:  
-        	Toast.makeText(getApplicationContext(), "点击了", 1).show();
-            break;   
-        default:  
-            break;  
-        }  
-        return super.onOptionsItemSelected(item);  
-    }  
-  
     //从网络上获取数据
     public void ListData(final int what){
     	HttpUtils http=new HttpUtils();
@@ -197,8 +189,10 @@ public class SceneryHomeActivity extends Activity implements OnRefreshListener,O
 				}
 //				SimpleAdapter adapter=new SimpleAdapter(SceneryHomeActivity.this,listmap, R.layout.action_listview_hot, new String[]{"name","imn"},new int[]{R.id.tv_hot_list,R.id.tv_hot_list1});
 				auto.setResultSize(listmap.size());
-				adapter=new ListViewAdapter(SceneryHomeActivity.this, listmap);
+				if(adapter==null){
+				adapter=new ListViewAdapter(context, listmap);
 		        lv_hot.setAdapter(adapter);	
+				}
 //		        Message msg = handler.obtainMessage();
 //				msg.what = what;
 //				msg.obj = listmap;
@@ -235,5 +229,49 @@ public class SceneryHomeActivity extends Activity implements OnRefreshListener,O
 	public void onLoad() {
 		ListData(AutoListView.LOAD);
 	}
-
+	/*
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if(resultCode != RESULT_OK){
+			Log.i("MainActivity", "select pic error!");
+			return;
+		}
+		if(requestCode == SceneryPopWindow.SELECT_PIC){
+			if(imageUri != null){
+				InputStream is = null;
+				try {
+					//读取图片到io流
+					is = getContentResolver().openInputStream(imageUri);
+					//内存中的图片
+					Bitmap bm = BitmapFactory.decodeStream(is);
+					imageview.setImageBitmap(bm);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+		}else if(requestCode == SceneryPopWindow.TAKE_PHOTO){
+		    Intent intent = new Intent("com.android.camera.action.CROP");
+		    intent.setDataAndType(imageUri, "image/*");
+		    intent.putExtra("crop", "true");
+		    intent.putExtra("aspectX", 1);
+		    intent.putExtra("aspectY", 1);
+		    intent.putExtra("outputX", 200);
+		    intent.putExtra("outputY", 200);
+		    intent.putExtra("scale", true);
+		    intent.putExtra("return-data", true);
+		    startActivityForResult(intent, SceneryPopWindow.CROP_PHOTO);//启动裁剪
+		}else if(requestCode == SceneryPopWindow.CROP_PHOTO){//获取裁剪后的结果
+			Bundle bundle = data.getExtras();
+			if(bundle != null){
+				Bitmap bm = bundle.getParcelable("data");//  bundle.putParceable("data",bm);
+//				bm.compress(CompressFormat.JPEG, 100, new FileOutputStream());
+				imageview.setImageBitmap(bm);
+			}
+		}
+	}
+*/
+	
+	
 }

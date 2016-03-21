@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class ListViewAdapter extends BaseAdapter {
 
 	private ViewHolder holder;
-	private List<Map<String, String>> list;
+	private List<Map<String, String>> list;   
 	private Context context;
 
 	public ListViewAdapter(Context context, List<Map<String, String>> listmap) {

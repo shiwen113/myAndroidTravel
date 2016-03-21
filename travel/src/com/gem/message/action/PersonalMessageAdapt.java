@@ -2,8 +2,8 @@ package com.gem.message.action;
 
 import java.util.List;
 
+import com.gem.message.entity.Message;
 import com.gem.scenery.R;
-import com.gem.scenery.entity.Message;
 
 import android.content.Context;
 import android.view.LayoutInflater;

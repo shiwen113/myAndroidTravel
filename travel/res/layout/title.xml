@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xxy="http://schemas.android.com/apk/res/com.gem.scenery"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#6699CC"
+    android:orientation="horizontal" >
+
+    <!-- 首页标题栏 -->
+
+    <LinearLayout
+        android:id="@+id/home_left"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dip"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/lefttext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:gravity="center"
+            android:text="@string/reference"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" >
+        </TextView>
+  
+        <com.gem.home.view.CustomImageView
+            android:id="@+id/leftview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            xxy:src="@drawable/sereach"
+            xxy:type="circle" >
+        </com.gem.home.view.CustomImageView>
+    </LinearLayout>
+    <!-- 排版用的无意义 -->
+    <TextView
+        android:id="@+id/home_title"
+        android:layout_width="0dip"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+ 
+    <LinearLayout
+        android:id="@+id/home_right"
+    
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dip"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <com.gem.home.view.CustomImageView
+            android:id="@+id/rightview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            xxy:src="@drawable/join"
+            xxy:type="circle" >
+        </com.gem.home.view.CustomImageView>
+
+        <TextView
+            android:id="@+id/righttext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:gravity="center"
+            android:text="@string/news"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" 
+            android:layout_alignParentRight="true"/>
+    </LinearLayout>
+
+</LinearLayout>

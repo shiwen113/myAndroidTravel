@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xxy="http://schemas.android.com/apk/res/com.gem.scenery"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#6699CC"
+    android:orientation="horizontal" >
+
+    <!-- 首页标题栏 -->
+
+    <LinearLayout
+        android:id="@+id/home_left"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dip"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+<!--         <TextView -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_margin="5dip" -->
+<!--             android:gravity="center" -->
+<!--             android:text="lkhlll" -->
+<!--             android:textColor="#FFFFFF" -->
+<!--             android:textSize="20sp" > -->
+<!--         </TextView> -->
+
+        <com.gem.scenery.utils.CustomImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            xxy:src="@drawable/search"
+            xxy:type="circle" >
+        </com.gem.scenery.utils.CustomImageView>
+    </LinearLayout>
+    <!-- 排版用的无意义 -->
+    <TextView
+        android:id="@+id/home_title"
+        android:layout_width="0dip"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+ 
+    <LinearLayout
+        android:id="@+id/home_right"
+    
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dip"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.gem.scenery.utils.CustomImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            xxy:src="@drawable/camera"
+            xxy:type="circle" >
+        </com.gem.scenery.utils.CustomImageView>
+
+<!--         <TextView -->
+<!--             android:id="@+id/news" -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:layout_margin="5dip" -->
+<!--             android:gravity="center" -->
+<!--             android:text="dfsfg" -->
+<!--             android:textColor="#FFFFFF" -->
+<!--             android:textSize="20sp"  -->
+<!--             android:layout_alignParentRight="true"/> -->
+    </LinearLayout>
+
+</LinearLayout>

@@ -18,8 +18,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.gem.message.action.PersonalMessageAdapt;
+import com.gem.message.entity.Message;
 import com.gem.scenery.R;
-import com.gem.scenery.entity.Message;
 import com.google.gson.Gson;
 
 public class PersonalChatActivity extends Activity{
@@ -29,6 +29,7 @@ public class PersonalChatActivity extends Activity{
 	private Button send;//发送消息按钮
 	private PersonalMessageAdapt adapter;//适配器
 	private List<Message>msgList=new ArrayList<Message>();
+	private PersonalChatSocket pcs;
 //	private static ExecutorService exec = Executors.newFixedThreadPool(10);
 //	private List<String> list=new ArrayList<String>();
 	
@@ -60,6 +61,9 @@ public class PersonalChatActivity extends Activity{
 		inputText =(EditText) findViewById(R.id.et_pca_input_text);
 		msgListView=(ListView) findViewById(R.id.lv_msg_list_view);
 		send=(Button) findViewById(R.id.bt_pca_send);
+	    pcs=new PersonalChatSocket();
+
+		
 		send.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -85,7 +89,6 @@ public class PersonalChatActivity extends Activity{
 					adapter.notifyDataSetChanged();
 					inputText.setText("");//清空输入框中的内容
 					//将listview定位到最后一行
-					PersonalChatSocket pcs=new PersonalChatSocket();
 					pcs.connectionChatWithSocket(son,handler);
 //					pcs.sendDataToServerce(son);
 //					PersonalChatAsycTask asycTask=new PersonalChatAsycTask(msgList);
@@ -104,6 +107,9 @@ public class PersonalChatActivity extends Activity{
 				}
 			}
 		});
+		
+		//运行时连接服务器，即表示登陆成功
+		
 	}
 	
 
