@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -32,24 +34,6 @@ public class PersonalChatActivity extends Activity{
 	private PersonalChatSocket pcs;
 //	private static ExecutorService exec = Executors.newFixedThreadPool(10);
 //	private List<String> list=new ArrayList<String>();
-	
-	private static Handler handler=new Handler(){
-
-		@Override
-		public void handleMessage(android.os.Message msg) {
-			// TODO Auto-generated method stub
-			super.handleMessage(msg);
-			switch (msg.what) {
-			case PersonalChatSocket.SEND_SUCCESS:
-				Log.i("PersonalChatActivity", msg.obj.toString());
-				break;
-
-			default:
-				break;
-			}
-		}
-		
-	};
 	int i=0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +45,6 @@ public class PersonalChatActivity extends Activity{
 		inputText =(EditText) findViewById(R.id.et_pca_input_text);
 		msgListView=(ListView) findViewById(R.id.lv_msg_list_view);
 		send=(Button) findViewById(R.id.bt_pca_send);
-	    pcs=new PersonalChatSocket();
-
 		
 		send.setOnClickListener(new OnClickListener() {
 			
@@ -81,15 +63,16 @@ public class PersonalChatActivity extends Activity{
 					//当有消息时，刷新listView中的显示
 					Message msg=new Message(content,Message.TYPE_SENT); 
 					msgList.add(msg);
+					//将listview定位到最后一行
 					msgListView.setSelection(msgList.size());
 					if(adapter==null){
-					adapter=new PersonalMessageAdapt(PersonalChatActivity.this, R.layout.action_message_listview, msgList);
-					msgListView.setAdapter(adapter);
+						adapter=new PersonalMessageAdapt(PersonalChatActivity.this, R.layout.action_message_listview, msgList);
+						msgListView.setAdapter(adapter);
 					}
 					adapter.notifyDataSetChanged();
 					inputText.setText("");//清空输入框中的内容
-					//将listview定位到最后一行
 					pcs.connectionChatWithSocket(son,handler);
+//					pcs.accepetDataFromServerce(handler);
 //					pcs.sendDataToServerce(son);
 //					PersonalChatAsycTask asycTask=new PersonalChatAsycTask(msgList);
 					//请求网络，单线程执行
@@ -109,15 +92,58 @@ public class PersonalChatActivity extends Activity{
 		});
 		
 		//运行时连接服务器，即表示登陆成功
-		
+		pcs=new PersonalChatSocket();
+		Intent intent=getIntent();
+		String s=intent.getStringExtra("sendPhone");
+		Map<String, String> map =new HashMap<String, String>();
+		Gson gson =new Gson();
+		map.put("sendPhone", s);
+		String str = gson.toJson(map);
+	    pcs.connectionChatWithSocket(str, handler);
 	}
 	
 
-	/**
-	 * 连接聊天对象
-	 */
-	public void sendFromFriendConnection(){
+	
+	
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//		if (pcs.getSocket()!=null) {
+//			pcs.accepetDataFromServerce(handler);
+//		}
+//  	}
+
+
+
+
+	@SuppressLint("HandlerLeak")      
+	private Handler handler=new Handler(){
+
+		@Override
+		public void handleMessage(android.os.Message msg) {
+			// TODO Auto-generated method stub
+			super.handleMessage(msg);
+			switch (msg.what) {
+			case PersonalChatSocket.SEND_SUCCESS:
+				Log.i("PersonalChatActivity", msg.obj.toString());
+				break;
+			case PersonalChatSocket.ACCEPT_SUCCESS:
+				Message m=new Message(msg.obj.toString(),Message.TYPE_RECEIVED);
+				Log.i("PersonalChatActivity:", msg.obj.toString());
+				addListAccept(m);
+				break;
+			default:
+				break;
+			}
+			
+		}
 		
+	};
+	  
+	public void addListAccept(Message m){
+		msgList.add(m);
+		msgListView.setSelection(msgList.size());
+		adapter.notifyDataSetChanged();
 	}
 //	private void initMsgs(){
 //		Message msg1=new Message("hello guy",Message.TYPE_RECEIVED);
