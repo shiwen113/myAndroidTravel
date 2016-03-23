@@ -61,6 +61,45 @@
         </activity>
         <activity android:name="com.gem.home.activity.Item_Activity" >
         </activity>
+        
+        <!-- 我的页面 Activity-->
+         <activity
+            android:name="com.gem.mine.activity.MineTravelTeamDataActivity">
+        </activity>
+        <activity
+            android:name="com.gem.mine.activity.TroopsActivity">
+        </activity>
+        <activity
+            android:name="com.gem.mine.activity.TeammembersActivity">
+        </activity>
+        <activity
+            android:name="com.gem.mine.activity.SetupActivity">
+        </activity>
+        <activity
+            android:name="com.gem.mine.activity.InformActivity">
+        </activity>
+        <activity
+            android:name="com.gem.mine.activity.PersonalinformationActivity">
+        </activity>
+        <activity
+            android:name="com.gem.mine.activity.SharingActivity">
+        </activity>
+        <activity
+            android:name="com.gem.mine.activity.MyloginActivity">
+        </activity>
+        <activity
+            android:name="com.gem.mine.activity.MypageLoginActivity">
+            
+        </activity>
+        <activity
+            android:name="com.gem.mine.activity.MypageregisterActivity">
+        </activity>
+        <activity
+            android:name="com.gem.mine.activity.MycollectActivity">
+        </activity>
+        <activity
+            android:name="com.gem.mine.activity.MypageforgetpasswordActivity">
+        </activity>
     </application>
 
 </manifest>
