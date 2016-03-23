@@ -18,6 +18,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 
 
 //圆形图标控件
@@ -27,7 +28,7 @@ import android.view.View;
  * @author zhy
  * 
  */
-public class CustomImageView extends View {
+public class CustomImageView extends ImageView {
 	
 
 	/**
@@ -63,6 +64,15 @@ public class CustomImageView extends View {
 
 	public CustomImageView(Context context) {
 		this(context, null);
+	}
+	
+	
+	
+	//修改src
+	public void setSrc(Bitmap mSrc){
+		System.out.println("进入setsrc");
+		this.mSrc=mSrc;
+		invalidate();
 	}
 
 	/**
@@ -150,6 +160,7 @@ public class CustomImageView extends View {
 	 */
 	@Override
 	protected void onDraw(Canvas canvas) {
+		System.out.println("进入ondraw");
 		switch (type) {
 		// 如果是TYPE_CIRCLE绘制圆形
 		case TYPE_CIRCLE:

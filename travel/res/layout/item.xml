@@ -8,7 +8,7 @@
     <!-- 首页里的item -->
  
     <com.gem.home.view.CustomImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/iv_civ"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -23,10 +23,10 @@
         android:id="@+id/itview_userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView1"
-        android:layout_alignTop="@+id/imageView1"
+        android:layout_alignBottom="@+id/iv_civ"
+        android:layout_alignTop="@+id/iv_civ"
         android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@+id/imageView1"
+        android:layout_toRightOf="@+id/iv_civ"
         android:text="提莫" />
 
     <TextView
@@ -34,11 +34,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/imageView1"
+        android:layout_below="@id/iv_civ"
         android:text="苏州——拉萨" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/itview_intro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -58,14 +58,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView4"
+        android:layout_below="@id/itview_intro"
         android:src="@drawable/ic_launcher" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView4"
+       android:layout_below="@id/itview_intro"
         android:layout_toRightOf="@+id/itview_userName"
         android:src="@drawable/ic_launcher" />
 
@@ -102,5 +102,14 @@
         android:layout_alignTop="@+id/itview_userName"
         android:layout_centerHorizontal="true"
         android:text="男18" />
+
+    <TextView
+        android:id="@+id/itview_allDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_toLeftOf="@+id/textView5"
+        android:text="TextView" />
 
 </RelativeLayout>
