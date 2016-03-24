@@ -35,8 +35,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHo
 
 	@Override
 	public int getItemCount() { // TODO Auto-generated method stub
-		Log.i("fuck", "getitemcount");
-		Log.i("2016", "arr.size()"+arr.size());
+		
 		return arr.size();
 	}
 
@@ -45,7 +44,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHo
 		Log.i("onBindViewHolder", "teamname+set");
 		
 
-		 if (arg0 instanceof MyRecyclerViewHolder&&arg1!=0) {
+		 if (arg0 instanceof MyRecyclerViewHolder) {
 	           // ((MyRecyclerViewHolder) arg0).tv.setText(arr.get(arg1));
 	       Log.i("2016.3.24", "set");
 		arg0.teamName.setText(arr.get(arg1).getTeamName());
@@ -77,7 +76,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHo
 	@Override
 	public MyRecyclerViewHolder onCreateViewHolder(ViewGroup arg0, int arg1) {
 
-		
+	
 
 		  if (arg1== TYPE_ITEM) {
 			  
@@ -85,7 +84,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHo
 	            view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 	            return new MyRecyclerViewHolder(view);
 	        }
-      
+
 	        return null;
 	}
 		
