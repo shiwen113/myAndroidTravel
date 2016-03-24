@@ -36,11 +36,13 @@
     <string name="camera_from_photos">相册</string>
     <string name="camera_from_camera">相机</string>
     
-    <!-- 消息 -->
+ <!-- 消息 -->
     <string name="message_tittle">消息</string>
 	<string name="zuijin_message">最近消息</string>
 	<string name="chat_adrress">通讯录</string>
 	<string name="personal_send">发送</string>
+	<string name="message_inf_agree">同意</string>
+	<string name="message_inf_refuse">拒绝</string>
     
      <!-- 自定义组件 -->
     <string name="pull_to_refresh">下拉可以刷新</string>
@@ -55,4 +57,6 @@
       <string name="edit">Edit</string>
     <!-- 消除警告，可忽略 -->
     <string name="d">图片描述</string>
+    
+    <!-- 我的 -->
 </resources>

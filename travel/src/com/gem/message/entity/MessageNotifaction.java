@@ -1,12 +1,21 @@
 package com.gem.message.entity;
 
-import java.util.Date;
-
 public class MessageNotifaction {
 	private String imgUrl;//图片
 	private String userName;//用户名
 	private String notifaction;//通知
 	private String time;//时间
+	private int state;//1表示聊天 2表示请求
+	
+	public MessageNotifaction(String userName, String notifaction, String time,
+			int state) {
+		super();
+		this.userName = userName;
+		this.notifaction = notifaction;
+		this.time = time;
+		this.state=state;
+	}
+
 	public String getImgUrl() {
 		return imgUrl;
 	}
@@ -31,12 +40,22 @@ public class MessageNotifaction {
 	public void setTime(String time) {
 		this.time = time;
 	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
 	@Override
 	public String toString() {
-		return "MessageNotifaction [imgUrl=" + imgUrl + ", userName="
-				+ userName + ", notifaction=" + notifaction + ", time=" + time
-				+ "]";
+		return "MessageNotifaction [userName=" + userName + ", notifaction="
+				+ notifaction + ", time=" + time + ", state=" + state + "]";
 	}
+
+
 	
 	
 }

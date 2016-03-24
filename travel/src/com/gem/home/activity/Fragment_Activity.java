@@ -8,6 +8,7 @@ import java.util.List;
 import com.gem.home.dao.MyApplication;
 import com.gem.home.db.MyDatabaseHelper;
 import com.gem.message.MessageHomeActivity;
+import com.gem.mine.activity.MyloginActivity;
 import com.gem.scenery.R;
 import com.gem.scenery.SceneryHomeActivity;
 
@@ -50,7 +51,7 @@ public class Fragment_Activity extends FragmentActivity implements OnCheckedChan
 		fragments.add(new Home_home());
 		fragments.add(new SceneryHomeActivity());
 		fragments.add(new MessageHomeActivity());
-		fragments.add(new Mine());
+		fragments.add(new MyloginActivity());
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		FragmentTransaction ft = fragmentManager.beginTransaction();
 		// 初始加载的页面

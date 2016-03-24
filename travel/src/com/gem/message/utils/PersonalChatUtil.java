@@ -7,11 +7,14 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 import javax.net.ssl.HttpsURLConnection;
 
+import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -198,4 +201,13 @@ new Thread(){
 		return null;
 	}
 	
+	/**
+	 * 时间格式转换
+	 */
+	@SuppressLint("SimpleDateFormat") 
+	public static String getStringTime(Date date){
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		String s=sdf.format(date);
+		return s;
+	}
 }
