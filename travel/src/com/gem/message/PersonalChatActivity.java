@@ -1,5 +1,6 @@
 package com.gem.message;
 
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +34,7 @@ public class PersonalChatActivity extends Activity{
 	private List<Message>msgList=new ArrayList<Message>();
 	private PersonalChatSocket pcs;
 //	private static ExecutorService exec = Executors.newFixedThreadPool(10);
-//	private List<String> list=new ArrayList<String>();
+	private List<Socket> list=new ArrayList<Socket>();
 	int i=0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +52,8 @@ public class PersonalChatActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				String content=inputText.getText().toString();
-				String sendPhone="15071046331";//自己的账号
-				String acceptPhone="15927663411";//对方的账号
+				String sendPhone="15927663411";//自己的账号
+				String acceptPhone="15071046331";//对方的账号
 				Map<String,String> map=new HashMap<String, String>();
 				map.put("sendPhone", sendPhone);
 				map.put("acceptPhone", acceptPhone);
@@ -92,7 +93,7 @@ public class PersonalChatActivity extends Activity{
 		});
 		
 		//运行时连接服务器，即表示登陆成功
-		pcs=new PersonalChatSocket();
+		pcs=new PersonalChatSocket(list);
 		Intent intent=getIntent();
 		String s=intent.getStringExtra("sendPhone");
 		Map<String, String> map =new HashMap<String, String>();

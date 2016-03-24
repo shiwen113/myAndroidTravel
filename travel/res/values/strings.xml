@@ -26,6 +26,19 @@
     <string name="comment">评论</string>
     <string name="join">加入</string>
     <string name="release">发布</string>
+    <string name="serch_travel">搜索</string>
+    <string name="tv_point">目的地</string>
+    <string name="tv_goout_date">出发日期</string>
+    <string name="tv_arrive_date">到达日期</string>
+    <string name="tv_sex">性别</string>
+    <string name="tv_all_date">全程天数</string>
+    <string name="rd_men">男</string>
+    <string name="rd_wommen">女</string>
+    <string name="rd_unlimit">不限</string>
+    <string name="bt_serch">搜索</string>
+    
+    
+    <!-- 旅图 -->
     <string name="app_name">travel</string>
     <string name="action_settings">照相机</string>
     <string name="action_search">搜索</string>

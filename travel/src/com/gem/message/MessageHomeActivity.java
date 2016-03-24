@@ -171,7 +171,7 @@ public class MessageHomeActivity extends Fragment implements OnClickListener{
 			// TODO Auto-generated method stub
 			if(listData.get(arg2).getState()==1){
 				Intent intent =new Intent(getActivity(),PersonalChatActivity.class);
-				String s="15071046331";
+				String s="15927663411";
 				intent.putExtra("sendPhone", s);
 				startActivity(intent);
 			}else if(listData.get(arg2).getState()==2){

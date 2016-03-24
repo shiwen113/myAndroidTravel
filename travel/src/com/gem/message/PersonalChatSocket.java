@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Map;
 
 import android.os.Handler;
@@ -19,16 +20,14 @@ import com.google.gson.reflect.TypeToken;
 
 public class PersonalChatSocket{
 	private Socket socket;
-	public Socket getSocket() {
-		return socket;
-	}
-
-	public void setSocket(Socket socket) {
-		this.socket = socket;
-	}
+	private List<Socket> list;
 
 	public final static int SEND_SUCCESS = 0;// 发送成功
 	public final static int ACCEPT_SUCCESS = 1;// 接受成功
+
+	public PersonalChatSocket(List<Socket> list) {
+		this.list = list;
+	}
 
 	/**
 	 * 连接数据库
@@ -47,6 +46,11 @@ public class PersonalChatSocket{
 				// TODO Auto-generated method stub
 				Log.i("Message","发送信息");
 				super.run();
+//				if(list.size()!=0){
+//					accepetDataFromServerce(list.get(list.size()-1),handler);
+//					}
+//				
+				Log.i("Socket","Socket"+list);
 				InetAddress serverAddr = null;
 				try {
 					serverAddr = InetAddress.getByName("192.168.191.1");
@@ -58,6 +62,7 @@ public class PersonalChatSocket{
 				// 应用Server的IP和端口建立Socket对象
 				try {
 					socket = new Socket(serverAddr, 8010);
+					list.add(socket);
 					Log.i("Message", "连接成功");
 					// socket.connect(serverAddr,3000);
 					if (socket.isConnected()) {
@@ -82,9 +87,6 @@ public class PersonalChatSocket{
 				}
 //				//接受服务器数据
 //				Log.i("Message", "开始接受服务器数据");
-				if(socket!=null){
-					accepetDataFromServerce(socket,handler);
-					}
 			}
 		}.start();
 	}
@@ -125,11 +127,11 @@ public class PersonalChatSocket{
 	public void accepetDataFromServerce( final Socket socket,
 			final Handler handler) {
 
-		new Thread() {
-			@SuppressWarnings("null")
-			@Override
-			public void run() {
-				super.run();
+//		new Thread() {
+//			@SuppressWarnings("null")
+//			@Override
+//			public void run() {
+//				super.run();
 				Log.i("Message", "进入接收数据线程");
 				BufferedReader br = null;
 				try {
@@ -157,8 +159,8 @@ public class PersonalChatSocket{
 					e.printStackTrace();
 				}
 
-			}
+//			}
 
-		}.start();
+//		}.start();
 	}
 }

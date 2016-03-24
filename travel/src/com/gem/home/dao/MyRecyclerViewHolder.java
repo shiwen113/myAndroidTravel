@@ -1,24 +1,19 @@
 package com.gem.home.dao;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import com.gem.home.view.CustomImageView;
 import com.gem.scenery.R;
+import com.lidroid.xutils.db.sqlite.CursorUtils.FindCacheSequence;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class MyRecyclerViewHolder extends ViewHolder {
 	TextView userName, teamName, allDay, place, intro;
 	CustomImageView imageView;
+	ScrollView sv;
 
 	public MyRecyclerViewHolder(View itemView) {
 		super(itemView);
@@ -29,6 +24,7 @@ public class MyRecyclerViewHolder extends ViewHolder {
 		intro = (TextView) itemView.findViewById(R.id.itview_intro);
 		userName=(TextView) itemView.findViewById(R.id.itview_userName);
 		imageView=(CustomImageView) itemView.findViewById(R.id.iv_civ);
+		sv=(ScrollView) itemView.findViewById(R.id.sv_scrol_img);
 	
 	}
 

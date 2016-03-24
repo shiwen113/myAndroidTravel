@@ -19,7 +19,7 @@ public class Travels_Two_Activity extends Activity {
 	private Button btn_ok;
 	private MyDatabaseHelper dbHelper = new MyDatabaseHelper(this, "Travel.db", null, 1);
 	private EditText view, introduce;
-	private String mteamName, mstartPoint, mdestination, mteamZt, msex, mcity, marriveTime, mstartTime, mallDay, mage,
+	private String mteamName, mstartPoint, mdestination, msex, mcity, marriveTime, mstartTime, mallDay, mage,
 			mteamNumber;
 
 	@Override
@@ -43,7 +43,7 @@ public class Travels_Two_Activity extends Activity {
 				String sintroduce = introduce.getText().toString();
 				ContentValues values = new ContentValues();
 				values.put("teamName", mteamName);
-				values.put("teamZt", mteamZt);
+//				values.put("teamZt", mteamZt);
 				values.put("allDay",Integer.parseInt(mallDay) );
 				values.put("startPoint", mstartPoint);
 				values.put("destination", mdestination);
@@ -66,7 +66,7 @@ public class Travels_Two_Activity extends Activity {
 
 	private void intentDB(Intent intent) {
 		mteamName = intent.getStringExtra("teamName");
-		mteamZt = intent.getStringExtra("teamZt");
+//		mteamZt = intent.getStringExtra("teamZt");
 		mallDay = intent.getStringExtra("allDay");
 		mstartPoint = intent.getStringExtra("startPoint");
 		mdestination = intent.getStringExtra("destination");

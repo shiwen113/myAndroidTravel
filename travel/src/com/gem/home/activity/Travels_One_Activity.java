@@ -45,7 +45,7 @@ public class Travels_One_Activity extends Activity {
 		
 				Intent intent = new Intent(Travels_One_Activity.this, Travels_Two_Activity.class);
 				intent.putExtra("teamName", mteamName);
-				intent.putExtra("teamZt", mteamZt);
+//				intent.putExtra("teamZt", mteamZt);
 				intent.putExtra("allDay", mallDay);
 				intent.putExtra("startPoint", mstartPoint);
 				intent.putExtra("destination", mdestination);
@@ -66,7 +66,7 @@ public class Travels_One_Activity extends Activity {
 		// TODO Auto-generated method stub
 
 		mteamName = teamName.getText().toString();
-		mteamZt=teamZt.getText().toString();
+//		mteamZt=teamZt.getText().toString();
 		mallDay = allDay.getText().toString();
 		mstartPoint = startPoint.getText().toString();
 		mdestination = destination.getText().toString();
@@ -80,7 +80,7 @@ public class Travels_One_Activity extends Activity {
 	}
 	private void inView(){
 		teamName = (EditText) findViewById(R.id.edit_teamName);
-		teamZt = (EditText) findViewById(R.id.eidt_teamzt);
+//		teamZt = (EditText) findViewById(R.id.eidt_teamzt);
 		allDay = (EditText) findViewById(R.id.edit_allDay);
 		startPoint = (EditText) findViewById(R.id.edit_startPoint);
 		destination = (EditText) findViewById(R.id.edit_destination);
