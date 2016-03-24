@@ -19,7 +19,7 @@
             android:layout_alignParentLeft="true"
             android:src="@drawable/returnnew"
             android:onClick="click"
-            android:text="返回" />
+             />
 
         <TextView
             android:id="@+id/TV_TroopsActivity_TRAVELTEAM"

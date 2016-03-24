@@ -16,29 +16,29 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 
-//�ҵĸ�����ҳ����
+//我的个人主页界面
 public class MyloginActivity extends Fragment implements OnClickListener{
 
-	//������Ϣ
+	//个人信息
 	ImageView IM_MyloginActivity_PERSIONMESSAGEPICTURE;
-	//�ҵ����ж�
+	//我的旅行队
 	ImageView IM_MyloginActivity_Mytravelteam;
-	//�ҵķ���
+	//我的分享
 	ImageView im_MyloginActivity_Myshare;
-	//�ҵ�����
+	//我的设置
 	ImageView IM_MyloginActivity_personalinformation;
-	//ע��
+	//注册
 	Button BT_MyloginActivity_myregister;
-	//��¼
+	//登录
 	ImageView IM_MyloginActivity_loginpage;
-	//�ҵ����ж���Ϣ
+	//我的旅行队消息
 	Button BT_MyloginActivity_myteammessage;
-	//�ҵ��ղ�
+	//我的收藏
 	Button BT_MyloginActivity_myenshrine;
 	private Context context;
-	//�ҵ���ҳ
-	//��������¼�  ������Ϣ    �ҵ����ж�    �ҵķ���
-	//ע��     ���ж���Ϣ      �ղ�
+	//我的主页
+		//三个点击事件  个人信息    我的旅行队    我的分享
+		//注册     旅行队消息      收藏
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.activity_mylogin, container, false);
@@ -67,36 +67,38 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)  {
 		super.onActivityCreated(savedInstanceState);
+		
 		context=getContext();
 		viewInit();
 	}
 	public void onClick(View v) {
+		
 		// TODO Auto-generated method stub
 		switch(v.getId()){
-		//ҳ�� ��ת��������Ϣ
+		//页面 跳转至个人信息
 		case R.id.IM_MyloginActivity_PERSIONMESSAGEPICTURE:
 			Intent intent =new Intent(getActivity(),PersonalinformationActivity.class);
 			startActivity(intent);
 			break;
-			//�ҵ����ж�
+			//我的旅行队
 		case R.id.IM_MyloginActivity_Mytravelteam:
 			Intent intent1 =new Intent(getActivity(),TroopsActivity.class);
 			startActivity(intent1);
 			break;
-		//�ҵķ���
+			//我的分享
 		case R.id.im_MyloginActivity_Myshare:
 			Intent intent2 =new Intent(getActivity(),SharingActivity.class);
 			startActivity(intent2);
 			break;
-		//��¼����	
-			//��ת�����ý���
+			//登录界面	
+			//跳转至设置界面
 		case R.id.IM_MyloginActivity_personalinformation:
 			//
 			Intent intent3 =new Intent(getActivity(),SetupActivity.class);
 			startActivity(intent3);
 			break;
 			
-			//��ת����¼ҳ��
+			//跳转至登录页面
 		case R.id.IM_MyloginActivity_loginpage:
 			Intent intent4 =new Intent(getActivity(),MypageLoginActivity.class);
 			startActivity(intent4);
@@ -105,7 +107,7 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 			Intent intent5 =new Intent(getActivity(),MypageregisterActivity.class);
 			startActivity(intent5);
 			break;
-			//���ж���Ϣ
+			//旅行队消息
 		case R.id.BT_MyloginActivity_myteammessage:
 //			Intent intent6 =new Intent(this,AdvicesActivity.class);
 //			startActivity(intent6);

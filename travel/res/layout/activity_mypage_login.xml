@@ -6,7 +6,7 @@
     >
 
     <ImageView
-        android:id="@+id/loginbutton"
+       android:id="@+id/im_MypageLoginActivity_touxiang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -17,10 +17,12 @@
         android:id="@+id/input"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/loginbutton"
+        android:gravity="center"
+        android:layout_below="@id/im_MypageLoginActivity_touxiang"
         android:layout_marginLeft="28.0dip"
         android:layout_marginRight="28.0dip"
         android:orientation="vertical" >
+
     </LinearLayout>
 
     <LinearLayout
@@ -40,13 +42,15 @@
                 android:id="@+id/tv_1result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
                 android:background="@null"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="登录结果"
                 android:textColor="#7F007F"
                 android:textSize="14.0sp" />
+
         </RelativeLayout>
         <LinearLayout
             android:id="@+id/morehidebottom"
@@ -191,9 +195,9 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_above="@+id/et_MypageLoginActivity_Pleaseenteryourpassword"
-        android:layout_alignLeft="@+id/loginbutton"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="16dp"
+        android:layout_toRightOf="@+id/tv_MypageLoginActivity_UserName"
         android:layout_weight="1"
         android:background="@null"
         android:ems="5"
@@ -219,15 +223,6 @@
         android:onClick="denglu" />
 
     <TextView
-      android:id="@+id/tv_MypageLoginActivity_mypageregister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="注册" 
-        />
-
-    <TextView
         android:id="@+id/tv_MypageLoginActivity_forgetpassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -243,5 +238,13 @@
         android:layout_alignBottom="@+id/searchEditText"
         android:layout_alignLeft="@+id/LoginActivitydlbutton"
         android:text="用户名 ：" />
+
+    <TextView
+        android:id="@+id/tv_MypageLoginActivity_mypageregister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/more_bottom"
+        android:layout_centerHorizontal="true"
+        android:text="新用户注册" />
 
 </RelativeLayout>

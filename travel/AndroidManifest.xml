@@ -92,6 +92,10 @@
             
         </activity>
         <activity
+            android:name="com.gem.mine.activity.Mypageforgetpassword">
+            
+        </activity>
+        <activity
             android:name="com.gem.mine.activity.MypageregisterActivity">
         </activity>
         <activity
