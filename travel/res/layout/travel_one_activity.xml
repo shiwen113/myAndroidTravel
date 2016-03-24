@@ -14,9 +14,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:orientation="horizontal" >
 
-          <ImageView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/startpoint" >
@@ -32,36 +34,46 @@
             android:id="@+id/edit_teamName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" >
+            android:background="@drawable/bg_edittext"
+            android:inputType="text"
+            android:padding="5dip"
+            android:singleLine="true"
+            android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
-<!--         <LinearLayout -->
-<!--         android:layout_width="match_parent" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:orientation="horizontal" > -->
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:orientation="horizontal" > -->
 
-<!--         <ImageView -->
-<!--             android:layout_width="wrap_content" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:src="@drawable/startpoint" > -->
-<!--         </ImageView> -->
 
-<!--         <TextView -->
-<!--             android:layout_width="wrap_content" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:text="@string/teamzt" > -->
-<!--         </TextView> -->
+    <!-- <ImageView -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:src="@drawable/startpoint" > -->
+    <!-- </ImageView> -->
 
-<!--         <EditText -->
-<!--             android:id="@+id/eidt_teamzt" -->
-<!--             android:layout_width="match_parent" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:inputType="text" > -->
-<!--         </EditText> -->
-<!--     </LinearLayout> -->
-        <LinearLayout
+
+    <!-- <TextView -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:text="@string/teamzt" > -->
+    <!-- </TextView> -->
+
+
+    <!-- <EditText -->
+    <!-- android:id="@+id/eidt_teamzt" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:inputType="text" > -->
+    <!-- </EditText> -->
+    <!-- </LinearLayout> -->
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:orientation="horizontal" >
 
         <ImageView
@@ -80,12 +92,19 @@
             android:id="@+id/edit_allDay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" >
+            android:background="@drawable/bg_edittext"
+            android:inputType="text"
+            android:padding="5dip"
+            android:singleLine="true"
+            android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
-        <LinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:orientation="horizontal" >
 
         <ImageView
@@ -104,12 +123,19 @@
             android:id="@+id/edit_startPoint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" >
+            android:background="@drawable/bg_edittext"
+            android:inputType="text"
+            android:padding="5dip"
+            android:singleLine="true"
+            android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
-        <LinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:orientation="horizontal" >
 
         <ImageView
@@ -128,12 +154,19 @@
             android:id="@+id/edit_destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" >
+            android:background="@drawable/bg_edittext"
+            android:inputType="text"
+            android:padding="5dip"
+            android:singleLine="true"
+            android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
-        <LinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:orientation="horizontal" >
 
         <ImageView
@@ -152,12 +185,19 @@
             android:id="@+id/edit_sex"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" >
+            android:background="@drawable/bg_edittext"
+            android:inputType="text"
+            android:padding="5dip"
+            android:singleLine="true"
+            android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
-        <LinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:orientation="horizontal" >
 
         <ImageView
@@ -176,12 +216,19 @@
             android:id="@+id/edit_teamnumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" >
+            android:background="@drawable/bg_edittext"
+            android:inputType="text"
+            android:padding="5dip"
+            android:singleLine="true"
+            android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
-        <LinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:orientation="horizontal" >
 
         <ImageView
@@ -200,12 +247,19 @@
             android:id="@+id/edit_age"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" >
+            android:background="@drawable/bg_edittext"
+            android:inputType="text"
+            android:padding="5dip"
+            android:singleLine="true"
+            android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
-        <LinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:orientation="horizontal" >
 
         <ImageView
@@ -224,12 +278,19 @@
             android:id="@+id/edit_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" >
+            android:background="@drawable/bg_edittext"
+            android:inputType="text"
+            android:padding="5dip"
+            android:singleLine="true"
+            android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
-        <LinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:orientation="horizontal" >
 
         <ImageView
@@ -244,16 +305,26 @@
             android:text="@string/startTime" >
         </TextView>
 
-        <EditText
+        <com.gem.scenery.utils.EditTextWithDate
             android:id="@+id/edit_starttime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="date" >
-        </EditText>
+            android:background="@drawable/bg_edittext"
+            android:ems="10"
+            android:hint="请点击右边的图标"
+            android:padding="5dip"
+            android:singleLine="true"
+            android:textColorHint="#AAAAAA" >
+
+            <requestFocus />
+        </com.gem.scenery.utils.EditTextWithDate>
     </LinearLayout>
- <LinearLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
         android:orientation="horizontal" >
 
         <ImageView
@@ -268,19 +339,24 @@
             android:text="@string/arriveTime" >
         </TextView>
 
-        <EditText
+        <com.gem.scenery.utils.EditTextWithDate
             android:id="@+id/edit_arriveTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="date" >
-        </EditText>
+            android:background="@drawable/bg_edittext"
+            android:ems="10"
+            android:padding="5dip"
+            android:singleLine="true"
+            android:text="请点击右边的图标"
+            android:textColorHint="#AAAAAA" />
     </LinearLayout>
-        <Button
-            android:id="@+id/btn_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="#6699cc"
-            android:text="@string/next" />
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#6699cc"
+        android:text="@string/next" />
 
 </LinearLayout>
