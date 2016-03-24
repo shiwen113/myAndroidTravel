@@ -3,6 +3,7 @@ package com.gem.home.dao;
 
 import java.util.List;
 
+
 import com.gem.home.until.PublishTravel;
 import com.gem.scenery.R;
 
@@ -12,13 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Toast;
 import android.view.ViewGroup;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHolder> {
 	private OnItemClickLitener mOnItemClickListener;
 	private List<PublishTravel> arr;
 	private Context context;
-	
+	private static final int TYPE_ITEM = 0;
 
 	public MyRecyclerViewAdapter(List<PublishTravel> arr, Context context) {
 		super();
@@ -32,13 +35,18 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHo
 
 	@Override
 	public int getItemCount() { // TODO Auto-generated method stub
-		Log.i("fuck", "getitemcount");
+		
 		return arr.size();
 	}
 
 	@Override
 	public void onBindViewHolder(final MyRecyclerViewHolder arg0, int arg1) {
 		Log.i("onBindViewHolder", "teamname+set");
+		
+
+		 if (arg0 instanceof MyRecyclerViewHolder) {
+	           // ((MyRecyclerViewHolder) arg0).tv.setText(arr.get(arg1));
+	       Log.i("2016.3.24", "set");
 		arg0.teamName.setText(arr.get(arg1).getTeamName());
 		
 		arg0.intro.setText(arr.get(arg1).getIntro());
@@ -47,6 +55,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHo
 		arg0.userName.setText(arr.get(arg1).getLd().getUserName());
 		String url = arr.get(arg1).getUrlLifePicture();
 		new MyImageAsyncTask(arg0).execute(url);
+		 }
 		
 		if (mOnItemClickListener != null) {
 			arg0.itemView.setOnClickListener(new OnClickListener() {
@@ -59,16 +68,26 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHo
 				}
 			});
 
-		}
+		} 
+		
 		Log.i("godie", "onBindViewHolder");
 	}
 
 	@Override
 	public MyRecyclerViewHolder onCreateViewHolder(ViewGroup arg0, int arg1) {
-		MyRecyclerViewHolder holder = new MyRecyclerViewHolder(
-				LayoutInflater.from(context).inflate(R.layout.item, arg0, false));
 
-		return holder;
+	
+
+		  if (arg1== TYPE_ITEM) {
+			  
+	            View view = LayoutInflater.from(context).inflate(R.layout.item, arg0,false);
+	            view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+	            return new MyRecyclerViewHolder(view);
+	        }
+
+	        return null;
 	}
+		
+	
 
 }

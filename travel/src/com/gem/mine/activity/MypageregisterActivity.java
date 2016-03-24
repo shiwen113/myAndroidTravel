@@ -28,6 +28,8 @@ import android.os.StrictMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.widget.Button;
@@ -38,41 +40,33 @@ public class MypageregisterActivity extends Activity {
 
 	private EditText register_username;
 	private EditText register_passwd;
-	private EditText reregister_passwd;
+	private EditText reregister_account;
 	private Button register_submit;
 
-	//private Button bt;
-	//ע��ҳ��
+	
+	//注册页面
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		setContentView(R.layout.activity_mypageforgetpassword);
 		setContentView(R.layout.activity_mypageregister);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		StrictMode.setThreadPolicy(policy);			
-		
-//		   bt.setOnClickListener(new OnClickListener() {
-//	             
-//	           
-//	        });
-     
+		StrictMode.setThreadPolicy(policy);					    
 		register_username=(EditText)findViewById(R.id.register_username);
 		register_passwd=(EditText)findViewById(R.id.register_passwd);
-		reregister_passwd=(EditText)findViewById(R.id.reregister_passwd);
+		reregister_account=(EditText)findViewById(R.id.editText1);
 		register_submit=(Button)findViewById(R.id.register_submit);
 		register_username.setOnFocusChangeListener(new OnFocusChangeListener()
-		{
-			public void onFocusChange1(View v, boolean hasFocus) {
+		{   
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
 				// TODO Auto-generated method stub
 				if(!hasFocus){
 					if(register_username.getText().toString().trim().length()<4){
-						Toast.makeText(MypageregisterActivity.this, "�û�������С��4���ַ�", Toast.LENGTH_SHORT).show();
+						Toast.makeText(MypageregisterActivity.this, "用户名不能小于4个字符", Toast.LENGTH_SHORT).show();
 					}
 				}
-			}
-			@Override
-			public void onFocusChange(View arg0, boolean arg1) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 		});
@@ -83,21 +77,34 @@ public class MypageregisterActivity extends Activity {
 				// TODO Auto-generated method stub
 				if(!hasFocus){
 					if(register_passwd.getText().toString().trim().length()<6){
-						Toast.makeText(MypageregisterActivity.this, "�������û���������", Toast.LENGTH_SHORT).show();
+						Toast.makeText(MypageregisterActivity.this,"请输入用户名和密码", Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
 			
 		});
-		reregister_passwd.setOnFocusChangeListener(new OnFocusChangeListener()
+		register_passwd.setOnFocusChangeListener(new OnFocusChangeListener()
 		{
 
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				// TODO Auto-generated method stub
 				if(!hasFocus){
-					if(!reregister_passwd.getText().toString().trim().equals(register_passwd.getText().toString().trim())){
-						Toast.makeText(MypageregisterActivity.this, "�����������벻һ��", Toast.LENGTH_SHORT).show(); 
+					if(!register_passwd.getText().toString().trim().equals(register_passwd.getText().toString().trim())){
+						Toast.makeText(MypageregisterActivity.this, "两次密码输入不一致", Toast.LENGTH_SHORT).show(); 
+					}
+				}
+			}
+			
+		});
+		reregister_account.setOnFocusChangeListener(new OnFocusChangeListener()
+		{
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				// TODO Auto-generated method stub
+				if(!hasFocus){
+					if(reregister_account.getText().toString().trim().length()<6){
+						Toast.makeText(MypageregisterActivity.this,"请输入手机号", Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
@@ -113,13 +120,15 @@ public class MypageregisterActivity extends Activity {
 				}
 				// TODO Auto-generated method stub
 				
-				String httpUrl="http://10.201.1.14:8080/Travelnew/clentservlet";
+				String httpUrl="http://10.201.1.12:8080/travel/Mypageregister_register";
 				//String httpUrl="http://localhost:8080/";
 				HttpPost httpRequest=new HttpPost(httpUrl);
 				
 				List<NameValuePair> params=new ArrayList<NameValuePair>();
 				params.add(new BasicNameValuePair("userName",register_username.getText().toString().trim()));
 				params.add(new BasicNameValuePair("userPwd",register_passwd.getText().toString().trim()));
+				params.add(new BasicNameValuePair("account",reregister_account.getText().toString().trim()));
+				
 				HttpEntity httpentity = null;
 				try {
 					httpentity = new UrlEncodedFormEntity(params,"utf8");
@@ -155,7 +164,7 @@ public class MypageregisterActivity extends Activity {
 				}
 				else
 				{
-					Toast.makeText(MypageregisterActivity.this, "�������", Toast.LENGTH_SHORT).show();
+					Toast.makeText(MypageregisterActivity.this, "请求错误", Toast.LENGTH_SHORT).show();
 				}
 				
 			}
@@ -164,11 +173,11 @@ public class MypageregisterActivity extends Activity {
 	}
 	private boolean checkEdit(){
 		if(register_username.getText().toString().trim().equals("")){
-			Toast.makeText(this, "�û�������Ϊ��", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "用户名不能为空", Toast.LENGTH_SHORT).show();
 		}else if(register_passwd.getText().toString().trim().equals("")){
-			Toast.makeText(this, "���벻��Ϊ��", Toast.LENGTH_SHORT).show();
-		}else if(!register_passwd.getText().toString().trim().equals(reregister_passwd.getText().toString().trim())){
-			Toast.makeText(this, "�����������벻һ��", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this,"密码不能为空", Toast.LENGTH_SHORT).show();
+		}else if(!register_passwd.getText().toString().trim().equals(register_passwd.getText().toString().trim())){
+			Toast.makeText(this, "两次密码输入不一致", Toast.LENGTH_SHORT).show();
 		}else{
 			return true;
 		}

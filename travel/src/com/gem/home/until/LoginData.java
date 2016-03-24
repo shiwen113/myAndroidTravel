@@ -11,7 +11,7 @@ package com.gem.home.until;
  */
 public class LoginData {
 	private int ld;//主键
-	private String account;//账号
+	private String account;//账号  
 	private String userName;//用户名
 	private String passWord;//密码
 	public String getAccount() {
