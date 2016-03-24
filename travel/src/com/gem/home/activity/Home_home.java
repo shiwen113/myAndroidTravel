@@ -41,8 +41,10 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 	private RecyclerView mRecyclerView, news_RecyclerView, aim_RecyclerView, shut_RecyclerView;
 	private SwipeRefreshLayout mSwiperefreshlayout;
 	private MyRecyclerViewAdapter myRecyclerViewAdapter;
-
-	private static final int REFRESH_COMPLETE = 0X110;
+	private int lastVisibleItem;
+	private static final int MORE_ITEM = 2;
+	private static final int REFRESH_COMPLETE = 1;
+	private int Currment=0;
 	private Context context;
 	private List<PublishTravel> arr = new ArrayList<PublishTravel>();
 	private Renovate mRenovate;
@@ -52,9 +54,21 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 			Log.i("refresh", "handlemessage");
 			switch (msg.what) {
 			case REFRESH_COMPLETE:
+				//下拉刷新
+				mRenovate.initData(myRecyclerViewAdapter, arr,Currment);
+				mRecyclerView.setAdapter(myRecyclerViewAdapter);
+				mSwiperefreshlayout.setRefreshing(false);
+				
+				
+				
+				break;
+			case MORE_ITEM:
+				//下拉加载，加载数据源未实现
 				myRecyclerViewAdapter.notifyDataSetChanged();
 				mSwiperefreshlayout.setRefreshing(false);
 				break;
+				default:
+					break;
 
 			}
 		};
@@ -77,7 +91,8 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 		// 初始化数据
 		initData();
 		// 设置recyclerview排版样式（这里是垂直排列）
-		mRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayout.VERTICAL, false));
+		final LinearLayoutManager linearLayoutManager=new LinearLayoutManager(context, LinearLayout.VERTICAL, false);
+		mRecyclerView.setLayoutManager(linearLayoutManager);
 		news_RecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayout.VERTICAL, false));
 		aim_RecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayout.VERTICAL, false));
 		shut_RecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayout.VERTICAL, false));
@@ -90,9 +105,10 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
 		// recycler适配器
 		myRecyclerViewAdapter = new MyRecyclerViewAdapter(arr, context);
+		
 		// 网络通讯初始化首页数据
 		mRenovate = new Renovate();
-		mRenovate.initData(myRecyclerViewAdapter, arr,0);
+		mRenovate.initData(myRecyclerViewAdapter, arr,Currment);
 		// recycler中item监听事件
 		myRecyclerViewAdapter.setOnItemClickListener(new OnItemClickLitener() {
 
@@ -104,7 +120,27 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
 			}
 		});
+//
+		mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
+			@Override
+			public void onScrollStateChanged(RecyclerView recyclerView,
+					int newState) {
+				super.onScrollStateChanged(recyclerView, newState);
+				if (newState == RecyclerView.SCROLL_STATE_IDLE
+						&& lastVisibleItem + 1 == myRecyclerViewAdapter.getItemCount()) {
+					mSwiperefreshlayout.setRefreshing(true);
+					mHandler.sendEmptyMessageDelayed(MORE_ITEM, 2000);
+				}
+			}
+
+			@Override
+			public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+				super.onScrolled(recyclerView, dx, dy);
+				lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+			}
+
+		});
 		mRecyclerView.setAdapter(myRecyclerViewAdapter);
 		news_RecyclerView.setAdapter(myRecyclerViewAdapter);
 		aim_RecyclerView.setAdapter(myRecyclerViewAdapter);
@@ -124,8 +160,8 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 			public void onPageSelected(int arg0) {
 				// TODO Auto-generated method stub
 				// viewpager页面改变时请求新数据
-				
-				mRenovate.initData(myRecyclerViewAdapter, arr,arg0);
+				Currment=arg0;
+				mRenovate.initData(myRecyclerViewAdapter, arr,Currment);
 				Log.i("onPageSelected", "arg0+" + arg0);
 			}
 
@@ -171,15 +207,12 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 		shut_RecyclerView = (RecyclerView) ah_Shuttime.findViewById(R.id.shut_recyclerview);
 
 	}
-
+//下拉刷新
 	@Override
 	public void onRefresh() { // TODO Auto-generated method stub //
 		mHandler.sendEmptyMessageDelayed(REFRESH_COMPLETE, 2000);
-		// 下拉刷新
-		// mRenovate.renvoate();
-		// mDatas.addAll(Arrays.asList("Lucene", "Canvas", "Bitmap"));
-		// userNamelist.addAll(Arrays.asList("jack", "tony", "mike"));
-		Log.i("refresh", "onrefresh");
+	
+		Log.i("refresh", "下拉刷新+onrefresh");
 	}
 
 	private void initData() {

@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 
 import java.util.List;
 
-
+import com.gem.home.dao.MyApplication;
 import com.gem.home.dao.MyRecyclerViewAdapter;
 import com.gem.home.until.PublishTravel;
 import com.google.gson.Gson;
@@ -18,6 +18,7 @@ import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
 import android.hardware.Camera.ShutterCallback;
 import android.util.Log;
+import android.widget.Toast;
 
 public class Renovate {
 	private String url;
@@ -67,6 +68,7 @@ public class Renovate {
 				httpUtils.send(HttpMethod.POST, url, requestParams, new RequestCallBack<String>() {
 					@Override
 					public void onFailure(HttpException arg0, String arg1) {
+						Toast.makeText(MyApplication.getContext(), "访问数据失败，请检查网络", Toast.LENGTH_SHORT).show();
 						Log.i("download", "failure" + arg1);
 					}
 				@Override
