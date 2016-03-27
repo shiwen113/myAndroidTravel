@@ -29,6 +29,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gem.scenery.R;
 import com.gem.scenery.action.ListViewAdapter;
@@ -58,7 +59,9 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
 	    private int currIndex = 0;// 当前叶卡编号
 	    private int bmpW;// 动画图片宽度
 	    private View view1,view2,view3;//各个叶卡
-	    private ListView lv_hot;
+	    private ListView lv_hot;//热门
+	    private ListView lv_plaza;//广场
+	    private ListView lv_season;//当季
 	    private List<Map<String,String>> listmap;
 	    private Senery senery;
 	    private AutoListView auto;
@@ -153,20 +156,20 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
         
     }
 
+	String url="http://192.168.191.1:8080/android_net/androidweb";
     //从网络上获取数据
     public void ListData(final int what){
     	HttpUtils http=new HttpUtils();
     	RequestParams params = new RequestParams();
-    	params.addBodyParameter("size",String.valueOf(size));
-    	size++;
-    	//��ַ
-    	String url="http://192.168.191.1:8080/android_net/androidweb";
+    	params.addBodyParameter("success","success");
+    	//
     	http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
 
 			@Override
 			public void onFailure(HttpException arg0, String arg1) {
 				// TODO Auto-generated method stub
 				Log.i("sw", "onfailure");
+				Toast.makeText(getActivity(), "请求失败，请检查网络", Toast.LENGTH_LONG).show();
 			}
 
 			@Override

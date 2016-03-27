@@ -35,8 +35,13 @@
     <string name="rd_men">男</string>
     <string name="rd_wommen">女</string>
     <string name="rd_unlimit">不限</string>
+     <string name="rd_unlimit_one">不限</string>
     <string name="bt_serch">搜索</string>
-    
+    <string name="pinglun_text">评论</string>
+    <string name="shengqingjiaru">申请加入</string>
+    <string name="tongcheng">同城</string>
+    <string name="feitongcheng">非同城</string>
+    <string name="fasong">发送</string>
     
     <!-- 旅图 -->
     <string name="app_name">travel</string>
@@ -70,6 +75,18 @@
       <string name="edit">Edit</string>
     <!-- 消除警告，可忽略 -->
     <string name="d">图片描述</string>
+    
+      <!-- 图片浏览 -->
+    <string name="only_choose_num">超出可选图片张数</string>
+    <string name="finish">完成</string>
+    <string name="invalidSD">sdcard无效或没有插入！</string>
+    <string name="photo">选择相册</string>
+    <string name="album">相册</string>
+    <string name="preview">预览</string>
+    <string name="unfinished">完成</string> 
+    <string name="camera_cancel">取消</string>
+    <string name="no_photo">相册没有图片</string>
+    
     
     <!-- 我的 -->
 </resources>

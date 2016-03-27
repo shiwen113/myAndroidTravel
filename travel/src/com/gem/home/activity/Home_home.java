@@ -14,6 +14,14 @@ import com.gem.home.view.SpaceItem;
 import com.gem.home.view.ViewPagerIndicator;
 import com.gem.home.view.ViewPagerIndicator.PageOnChangeListener;
 import com.gem.scenery.R;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
 import android.content.Context;
 import android.content.Intent;
@@ -81,7 +89,36 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
 		return view;
 	}
+	/**
+	 * 请求网络访问多级评论
+	 */
+	String url="http://10.201.1.12:8080/travel/TravelComment";
+	public void sendContent(final PublishTravel pt){
+		HttpUtils http=new HttpUtils();
+		RequestParams params=new RequestParams();
+		params.addBodyParameter("td",String.valueOf(pt.getTd()));
+		http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
 
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				// TODO Auto-generated method stub
+				Toast.makeText(context, "请求失败，请检查网络", Toast.LENGTH_LONG).show();
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				// TODO Auto-generated method stub
+				String result=arg0.result;
+				if(result!=null){
+					Intent intent = new Intent(context, Item_Activity.class);
+					Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
+					intent.putExtra("pt",gson.toJson(pt));//旅行队
+					intent.putExtra("content", result);//旅行队评论
+					context.startActivity(intent);
+				}
+			}
+		});
+	}
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -115,12 +152,15 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 			@Override
 			public void onItemClick(View view, int position) {
 				Toast.makeText(context, position + " click", Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent(context, Item_Activity.class);
-				context.startActivity(intent);
+				if(view!=null){
+					PublishTravel pt=arr.get(position);
+					sendContent(pt);
+				}
 
 			}
 		});
 //
+	
 		mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
 			@Override
@@ -236,7 +276,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 		mTitleList.add("热门");
 		mTitleList.add("最新");
 		mTitleList.add("目的地");
-		mTitleList.add("结束时间");
+		mTitleList.add("同城");
 
 		// viewpager适配器
 

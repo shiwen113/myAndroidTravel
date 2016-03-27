@@ -22,7 +22,9 @@ public class Release_Title extends LinearLayout implements OnClickListener {
 	private LinearLayout left;
 	private TextView title,  leftText,rightText;
 	private static final int COLOR_TITLE = Color.parseColor("#FFFFFF");
+	@SuppressWarnings("unused")
 	private static final int COLOR_BACKGROUND = Color.parseColor("#6699CC");
+	@SuppressWarnings("unused")
 	private CustomImageView leftView,rightView;
 
 	public Release_Title(Context context, AttributeSet attrs) {
@@ -53,7 +55,7 @@ public class Release_Title extends LinearLayout implements OnClickListener {
 		switch (v.getId()) {
 
 		case R.id.home_left:
-
+			
 		Toast.makeText(context, "back", Toast.LENGTH_SHORT).show();
 
 			break;

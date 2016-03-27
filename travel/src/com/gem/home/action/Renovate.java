@@ -50,7 +50,7 @@ public class Renovate {
 	case 3:
 		url=URL_SHUT;
 		LX="qc";
-		key="7";
+		key="3";
 		break;
 	default:
 		break;

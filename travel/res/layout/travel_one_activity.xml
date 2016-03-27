@@ -11,6 +11,10 @@
         android:layout_height="wrap_content" >
     </com.gem.home.title.Release_Title>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,15 +29,18 @@
         </ImageView>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="center"
             android:text="@string/teamName" >
         </TextView>
 
         <EditText
             android:id="@+id/edit_teamName"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/bg_edittext"
             android:inputType="text"
             android:padding="5dip"
@@ -69,6 +76,10 @@
     <!-- </EditText> -->
     <!-- </LinearLayout> -->
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,22 +94,29 @@
         </ImageView>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="center"
             android:text="@string/allDay" >
         </TextView>
 
         <EditText
             android:id="@+id/edit_allDay"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/bg_edittext"
-            android:inputType="text"
+            android:inputType="number"
             android:padding="5dip"
             android:singleLine="true"
             android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -114,15 +132,18 @@
         </ImageView>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="center"
             android:text="@string/startpoint" >
         </TextView>
 
         <EditText
             android:id="@+id/edit_startPoint"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/bg_edittext"
             android:inputType="text"
             android:padding="5dip"
@@ -130,6 +151,10 @@
             android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -145,15 +170,18 @@
         </ImageView>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="center"
             android:text="@string/destination" >
         </TextView>
 
         <EditText
             android:id="@+id/edit_destination"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/bg_edittext"
             android:inputType="text"
             android:padding="5dip"
@@ -161,6 +189,10 @@
             android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -176,22 +208,56 @@
         </ImageView>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="center"
             android:text="@string/sex" >
         </TextView>
 
-        <EditText
-            android:id="@+id/edit_sex"
-            android:layout_width="match_parent"
+        <!-- <EditText -->
+        <!-- android:id="@+id/edit_sex" -->
+        <!-- android:layout_width="0dp" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- android:layout_weight="1" -->
+        <!-- android:background="@drawable/bg_edittext" -->
+        <!-- android:inputType="text" -->
+        <!-- android:padding="5dip" -->
+        <!-- android:singleLine="true" -->
+        <!-- android:textColorHint="#AAAAAA" > -->
+        <!-- </EditText> -->
+
+        <RadioGroup
+            android:id="@+id/rg_radio_sex_send"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_edittext"
-            android:inputType="text"
-            android:padding="5dip"
-            android:singleLine="true"
-            android:textColorHint="#AAAAAA" >
-        </EditText>
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/radio0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rd_men" />
+
+            <RadioButton
+                android:id="@+id/radio1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rd_wommen" />
+
+            <RadioButton
+                android:id="@+id/radio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/rd_unlimit" />
+        </RadioGroup>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -207,22 +273,71 @@
         </ImageView>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="center"
             android:text="@string/teamerNumber" >
         </TextView>
 
         <EditText
             android:id="@+id/edit_teamnumber"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/bg_edittext"
-            android:inputType="text"
+            android:inputType="number"
             android:padding="5dip"
             android:singleLine="true"
             android:textColorHint="#AAAAAA" >
         </EditText>
     </LinearLayout>
+
+    <!-- <TextView -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="10dip" /> -->
+
+
+    <!-- <LinearLayout -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_marginLeft="10dip" -->
+    <!-- android:layout_marginRight="10dip" -->
+    <!-- android:orientation="horizontal" > -->
+
+
+    <!-- <ImageView -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:src="@drawable/startpoint" > -->
+    <!-- </ImageView> -->
+
+
+    <!-- <TextView -->
+    <!-- android:layout_width="0dp" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_weight="0.3" -->
+    <!-- android:gravity="center" -->
+    <!-- android:text="@string/age" > -->
+    <!-- </TextView> -->
+
+
+    <!-- <EditText -->
+    <!-- android:id="@+id/edit_age" -->
+    <!-- android:layout_width="0dp" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_weight="1" -->
+    <!-- android:background="@drawable/bg_edittext" -->
+    <!-- android:inputType="number" -->
+    <!-- android:padding="5dip" -->
+    <!-- android:singleLine="true" -->
+    <!-- android:textColorHint="#AAAAAA" > -->
+    <!-- </EditText> -->
+    <!-- </LinearLayout> -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -238,53 +353,42 @@
         </ImageView>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/age" >
-        </TextView>
-
-        <EditText
-            android:id="@+id/edit_age"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_edittext"
-            android:inputType="text"
-            android:padding="5dip"
-            android:singleLine="true"
-            android:textColorHint="#AAAAAA" >
-        </EditText>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:orientation="horizontal" >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/startpoint" >
-        </ImageView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.3"
+            android:gravity="center"
             android:text="@string/city" >
         </TextView>
 
-        <EditText
+        <RadioGroup
             android:id="@+id/edit_city"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_edittext"
-            android:inputType="text"
-            android:padding="5dip"
-            android:singleLine="true"
-            android:textColorHint="#AAAAAA" >
-        </EditText>
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tongcheng" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/feitongcheng" />
+
+            <RadioButton
+                android:id="@+id/rb_unlimit_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rd_unlimit_one" />
+        </RadioGroup>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -300,25 +404,29 @@
         </ImageView>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
             android:text="@string/startTime" >
         </TextView>
 
         <com.gem.scenery.utils.EditTextWithDate
             android:id="@+id/edit_starttime"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/bg_edittext"
             android:ems="10"
             android:hint="请点击右边的图标"
             android:padding="5dip"
             android:singleLine="true"
             android:textColorHint="#AAAAAA" >
-
-            <requestFocus />
         </com.gem.scenery.utils.EditTextWithDate>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -334,29 +442,38 @@
         </ImageView>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
             android:text="@string/arriveTime" >
         </TextView>
 
         <com.gem.scenery.utils.EditTextWithDate
             android:id="@+id/edit_arriveTime"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/bg_edittext"
             android:ems="10"
             android:padding="5dip"
             android:singleLine="true"
             android:text="请点击右边的图标"
-            android:textColorHint="#AAAAAA" />
+            android:textColorHint="#AAAAAA" >
+         </com.gem.scenery.utils.EditTextWithDate>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
 
     <Button
         android:id="@+id/btn_next"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#6699cc"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@drawable/bg_shape_stype"
         android:text="@string/next" />
 
 </LinearLayout>

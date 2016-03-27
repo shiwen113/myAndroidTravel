@@ -84,12 +84,19 @@ public class Reference_Activity extends Activity implements OnClickListener {
 	 * 搜索数据
 	 */
 	public void buttonSubmit() {
+		String goOutDate=editGoOutDate.getText().toString();
+		String arriveDate=editArrive.getText().toString();
+		if(goOutDate.equals("请点击右边的图标")){
+			goOutDate=null;
+		}
+		if(arriveDate.equals("请点击右边的图标")){
+			arriveDate=null;
+		}
 		HttpUtils http = new HttpUtils();
 		RequestParams params = new RequestParams();
 		params.addBodyParameter("editPoint", editPoint.getText().toString());
-		params.addBodyParameter("editGoOutDate", editGoOutDate.getText()
-				.toString());
-		params.addBodyParameter("editArrive", editArrive.getText().toString());
+		params.addBodyParameter("editGoOutDate",goOutDate);
+		params.addBodyParameter("editArrive", arriveDate);
 		params.addBodyParameter("editAllDate", editAllDate.getText().toString());
 		params.addBodyParameter("sexText", String.valueOf(sexi));
 		String url = "http://10.201.1.12:8080/travel/Home_home_dtj";

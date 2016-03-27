@@ -7,14 +7,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.gem.scenery.R;
+import com.gem.scenery.R.drawable;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class MyImageAsyncTask  extends AsyncTask<String, Void, Bitmap>{
 private MyRecyclerViewHolder arg0;
+private static Bitmap imgtitle;
 	public MyImageAsyncTask(MyRecyclerViewHolder arg0) {
 		super();
 		this.arg0=arg0;
@@ -56,9 +59,10 @@ private MyRecyclerViewHolder arg0;
 		
 		
 //Bitmap bm1=BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
-		
+		if(result!=null){
 		arg0.imageView.setSrc(result);
-		
+		}
+		setImgtitle(result);
 		//arg0.imageView.setImageBitmap(result);
 		Log.i("boom", "arg0+"+arg0.imageView);
 	}
@@ -67,6 +71,14 @@ private MyRecyclerViewHolder arg0;
 	protected void onPreExecute() {
 		// TODO Auto-generated method stub
 		super.onPreExecute();
+	}
+
+	public static Bitmap getImgtitle() {
+		return imgtitle;
+	}
+
+	public void setImgtitle(Bitmap imgtitle) {
+		this.imgtitle = imgtitle;
 	}
 
 }
