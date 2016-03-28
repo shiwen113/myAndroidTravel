@@ -40,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginRight="10dip"
         android:layout_marginTop="60dp" >
 
         <com.gem.scenery.utils.CircleImageView
@@ -47,6 +48,7 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="0.5"
+             android:layout_marginLeft="10dip"
             android:src="@drawable/ceshitu" />
 
         <TextView
@@ -82,11 +84,13 @@
         android:layout_below="@+id/linearLayout1"
         android:layout_marginTop="18dp"
         android:orientation="vertical"
+         android:layout_marginLeft="10dip"
         android:paddingBottom="1dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content" 
+            >
 
             <TextView
                 android:id="@+id/tv_travel_go_out_point"
@@ -121,6 +125,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_marginRight="10dip"
         android:layout_below="@+id/linearLayout2" >
 
         <HorizontalScrollView
@@ -177,6 +182,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+         android:layout_marginLeft="10dip"
         android:layout_below="@+id/linearLayout3" >
 
         <ImageView
@@ -194,11 +200,14 @@
          android:id="@+id/lv_content_travel"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
+         android:layout_above="@+id/ll_listview_bottom"
          android:layout_alignParentLeft="true"
-         android:layout_below="@+id/ll_text_img_you" >
+         android:layout_below="@+id/ll_text_img_you"
+          >
 
      </ListView>
 	<TextView 
+	    android:id="@+id/onte"
 	    android:layout_width="match_parent"
 	    android:textColor="#000"
          android:layout_height="1dp"/>

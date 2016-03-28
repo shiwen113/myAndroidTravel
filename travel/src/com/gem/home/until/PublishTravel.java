@@ -1,5 +1,6 @@
 package com.gem.home.until;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -24,7 +25,7 @@ import java.util.Date;
 /*
  * 发布旅行队
  */
-public class PublishTravel {
+public class PublishTravel implements Serializable{
 	private long td;//主键
 	private String teamName;//队名
 	private int allDay;//全程天数

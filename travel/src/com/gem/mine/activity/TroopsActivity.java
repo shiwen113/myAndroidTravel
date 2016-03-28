@@ -31,7 +31,7 @@ public class TroopsActivity extends Activity implements OnClickListener {
 //	        //透明导航栏  
 //	        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);  
 //	  
-		setContentView(R.layout.activity_mypageforgetpassword);
+		//setContentView(R.layout.activity_mypageforgetpassword);
 		setContentView(R.layout.activity_troops);
 		//返回监听事件
 		BT_TroopsActivity_RETURN=(ImageView) findViewById(R.id.BT_TroopsActivity_RETURN);

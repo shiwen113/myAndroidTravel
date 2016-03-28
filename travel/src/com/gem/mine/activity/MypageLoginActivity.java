@@ -59,11 +59,6 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-//		 getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);  
-//	        //透明导航栏  
-//	        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);  
-//	  
-		//setContentView(R.layout.activity_mypageforgetpassword);
 		setContentView(R.layout.activity_mypage_login);
 		 eT=(EditText) findViewById(R.id.searchEditText);//用户名
          Tt=(TextView) findViewById(R.id.tv_1result);//显示登录结果
@@ -108,7 +103,7 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
         	Log.i("mylogin","ok" );
 			System.out.println("ok");
 	    	HttpUtils http=new HttpUtils();
-			  account=eT.getText().toString();
+			 account=eT.getText().toString();
 			 pwd=pw.getText().toString();
 			//String count=count.getText().toString();
 			

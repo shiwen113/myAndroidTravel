@@ -1,10 +1,19 @@
 package com.gem.scenery.action;
 
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+
+import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class SceneryHomeChage implements OnPageChangeListener{
 	 private int offset;// 动画图片偏移量
@@ -12,17 +21,20 @@ public class SceneryHomeChage implements OnPageChangeListener{
 	 private int currIndex;// 当前页卡编号
 	 private ViewPager vp;//叶卡内容
 	 private ImageView imageView;// 动画图片
-	
+	 private HttpUtils http=new HttpUtils();
+ 	 private RequestParams params = new RequestParams();
 	 int one = offset * 2 + bmpW;// 页卡1 -> 页卡2 偏移量
      int two = offset * 3;// 页卡1 -> 页卡3 偏移量
+     private Context context;
      
-     public SceneryHomeChage(int offset, int bmpW, int currIndex, ViewPager vp,
+     public SceneryHomeChage(Context context ,int offset, int bmpW, int currIndex, ViewPager vp,
 			ImageView imageView) {
 		this.offset = offset;
 		this.bmpW = bmpW;
 		this.currIndex = currIndex;
 		this.vp = vp;
 		this.imageView = imageView;
+		this.context=context;
 	}
 
 	@Override
@@ -63,6 +75,7 @@ public class SceneryHomeChage implements OnPageChangeListener{
              }
              break;
          case 1:
+        	 sendPlazaData();
              if (currIndex == 0) {
                  animation = new TranslateAnimation(offset, one, 0, 0);
              } else if (currIndex == 2) {
@@ -86,6 +99,50 @@ public class SceneryHomeChage implements OnPageChangeListener{
          animation.setDuration(300);
          imageView.startAnimation(animation);
          
+     }
+     
+     String urlPlaza="";
+     /**
+      * 请求广场的数据
+      */
+     public void sendPlazaData(){
+    	 
+    	 http.send(HttpMethod.POST, urlPlaza, params,new RequestCallBack<String>() {
+
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				// TODO Auto-generated method stub
+				Toast.makeText(context, "请求失败，请检查网络", Toast.LENGTH_LONG).show();
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+     }
+     
+     String urlSeason="";
+     /**
+      * 请求当季的数据
+      */
+     public void sendSeasonData(){
+    	 
+    	 http.send(HttpMethod.POST, urlPlaza, params,new RequestCallBack<String>() {
+
+ 			@Override
+ 			public void onFailure(HttpException arg0, String arg1) {
+ 				// TODO Auto-generated method stub
+ 				Toast.makeText(context, "请求失败，请检查网络", Toast.LENGTH_LONG).show();
+ 			}
+
+ 			@Override
+ 			public void onSuccess(ResponseInfo<String> arg0) {
+ 				// TODO Auto-generated method stub
+ 				
+ 			}
+ 		});
      }
       
 }

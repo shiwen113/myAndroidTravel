@@ -93,10 +93,11 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 	 * 请求网络访问多级评论
 	 */
 	String url="http://10.201.1.12:8080/travel/TravelComment";
-	public void sendContent(final PublishTravel pt){
+	public void sendContent(final PublishTravel pt,final int position){
 		HttpUtils http=new HttpUtils();
 		RequestParams params=new RequestParams();
 		params.addBodyParameter("td",String.valueOf(pt.getTd()));
+		params.addBodyParameter("ld",String.valueOf(17));
 		http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
 
 			@Override
@@ -119,6 +120,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 			}
 		});
 	}
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -154,7 +156,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 				Toast.makeText(context, position + " click", Toast.LENGTH_SHORT).show();
 				if(view!=null){
 					PublishTravel pt=arr.get(position);
-					sendContent(pt);
+					sendContent(pt,position);
 				}
 
 			}
@@ -275,7 +277,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 		mTitleList = new ArrayList<String>();
 		mTitleList.add("热门");
 		mTitleList.add("最新");
-		mTitleList.add("目的地");
+		mTitleList.add("随机");
 		mTitleList.add("同城");
 
 		// viewpager适配器

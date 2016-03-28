@@ -16,6 +16,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -27,6 +28,7 @@ import com.gem.home.dao.TravelCommentAdapter;
 import com.gem.home.until.LoginData;
 import com.gem.home.until.PublishTravel;
 import com.gem.home.until.TravelComment1;
+import com.gem.home.until.TravelMember;
 import com.gem.scenery.R;
 import com.gem.scenery.utils.CircleImageView;
 import com.google.gson.Gson;
@@ -53,6 +55,7 @@ private TextView chaKanAllPeople;//所有人数
 private TextView teamName;//旅行队名
 private TextView joinText;//
 private ListView lv;//评论
+private ImageButton back;//返回
 private CircleImageView civ;
 private LinearLayout linearLeft;//左边的评论
 private LinearLayout linearRirght;//右边的申请加入
@@ -77,9 +80,48 @@ private EditText contentEdit;//输入框的评论
 		content=intent.getStringExtra("content");
 		plt=intent.getStringExtra("pt");
 		showData();//显示数据
-		
+		isMemberSend();
 	}
  
+	String urlMember="http://10.201.1.12:8080/travel/TravelComment_member";
+	/**
+	 * 获取是否是此旅行队的成员
+	 */
+	public void isMemberSend(){
+		 HttpUtils http=new HttpUtils();
+	   	 RequestParams params=new RequestParams();
+	   	 params.addBodyParameter("td",String.valueOf(pt.getTd()));
+//	   	 params.addBodyParameter("ld",String.valueOf(17));
+	   	 http.send(HttpMethod.POST,urlMember,params,new RequestCallBack<String>() {
+
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				String result = arg0.result;
+				Gson gson=new GsonBuilder() 
+	 			.setDateFormat("yyyy-MM-dd hh:mm:ss") 
+	 			.create();
+				Type type = new TypeToken<List<TravelMember>>(){}.getType();
+				if(result!=null){
+					List<TravelMember> ltm=gson.fromJson(result, type);
+					for (TravelMember tm : ltm) {
+						
+						if(tm.getLd().getLd()==17){
+							joinText.setText("退出");
+						}else{
+							joinText.setText("申请加入");
+						}
+					}
+				}
+			}
+	   		 
+	   	 });
+	}
 	public void initView(){
 		teamName=(TextView) findViewById(R.id.tv_team_travel_name);
 		userName=(TextView) findViewById(R.id.tv_travel_user_name);
@@ -97,6 +139,8 @@ private EditText contentEdit;//输入框的评论
 		linearLeft.setOnClickListener(this);
 		linearRirght =(LinearLayout)findViewById(R.id.ll_travel_apply);
 		linearRirght.setOnClickListener(this);
+		back=(ImageButton) findViewById(R.id.ib_travel_infor_back);
+		back.setOnClickListener(this);
 	}
 	/**
 	 * 显示数据，bug???
@@ -142,6 +186,9 @@ private EditText contentEdit;//输入框的评论
 				sendJoinTravel(i);
 			}
 			break;
+		case R.id.ib_travel_infor_back:
+			finish();
+			break;
 		default:
 			break;
 		}
@@ -186,14 +233,13 @@ private EditText contentEdit;//输入框的评论
 	private String url="http://10.201.1.12:8080/travel/TravelCommentInsert2";
 	/**
 	 * 发送评论的数据,有bug???
+	 * 增加评论
 	 */
 	public void sendContenData(String content){
 		 Log.i("TravelCommentActivity", "login2点击了按钮");
 	      
-// 	   TravelComment1 travelComment1=list.get(0);
-// 	   System.out.println(travelComment1);
  	   TravelComment1 travelComment12=new TravelComment1();
- 	   travelComment12.setTd(listContent.get(0).getTd());
+ 	   travelComment12.setTd(pt);
  	   LoginData  ld=new LoginData();
  	   ld.setLd(17);
  	   travelComment12.setLd(ld);
@@ -230,17 +276,17 @@ private EditText contentEdit;//输入框的评论
 						.setDateFormat("yyyy-MM-dd hh:mm:ss") 
 						.create();
 						Type type=new TypeToken<List<TravelComment1>>(){}.getType();
-						if(listContent.size()!=0){
+						if(listContent!=null&&listContent.size()!=0){
 							listContent.clear();
 						}
-//						list=gson.fromJson(string,type);  list 的引用变了，notifyDataSetChanged会出问题
 						listContent.addAll((List<TravelComment1>)(gson.fromJson(string,type)));
+						}
+//						list=gson.fromJson(string,type);  list 的引用变了，notifyDataSetChanged会出问题
 //						textView.setText(list.get(0).getTd().getLd().getUserName()+"发布的旅行队");
                       
 						
 						adapter.notifyDataSetChanged();
 						}
-		       }
 	    });
 
 		
@@ -273,8 +319,10 @@ private EditText contentEdit;//输入框的评论
 	 			 if(!result.equals("")){
 	 				 if(Integer.parseInt(result)==0){
 	 					joinText.setText("申请加入");
+	 					Toast.makeText(getApplication(), "已退出", Toast.LENGTH_LONG).show();
 	 				 }else if(Integer.parseInt(result)==1){
 	 					joinText.setText("退出");
+	 					Toast.makeText(getApplication(), "申请成功", Toast.LENGTH_LONG).show();
 	 				 }
 	 			 }
 	 		}

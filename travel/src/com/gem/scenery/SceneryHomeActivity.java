@@ -3,6 +3,7 @@ package com.gem.scenery;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,11 +39,14 @@ import com.gem.scenery.action.SceneryHomeChage;
 import com.gem.scenery.action.SceneryPopWindow;
 import com.gem.scenery.action.ScreneryHomeOnClik;
 import com.gem.scenery.entity.Senery;
+import com.gem.scenery.entity.SharePicture;
 import com.gem.scenery.interfaces.OnLoadListener;
 import com.gem.scenery.interfaces.OnRefreshListener;
 import com.gem.scenery.utils.AutoListView;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
@@ -56,13 +60,14 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
 	    private ImageView imageView;// 动画图片
 	    private TextView textView1,textView2,textView3;
 	    private int offset = 0;// 动画图片偏移量
+	    
 	    private int currIndex = 0;// 当前叶卡编号
 	    private int bmpW;// 动画图片宽度
 	    private View view1,view2,view3;//各个叶卡
 	    private ListView lv_hot;//热门
 	    private ListView lv_plaza;//广场
 	    private ListView lv_season;//当季
-	    private List<Map<String,String>> listmap;
+	    private List<SharePicture> listmap;
 	    private Senery senery;
 	    private AutoListView auto;
 	    private int size=1;//第几页
@@ -143,6 +148,7 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
         
       //下拉刷新上拉加载
         lv_hot=(ListView) view1.findViewById(R.id.lv_hot);
+        lv_plaza=(ListView) view1.findViewById(R.id.lv_plaza);
         
         View v=inflater.inflate(R.layout.action_autolistview_title, null);
         auto=(AutoListView)v.findViewById(R.id.lstv);
@@ -152,11 +158,11 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
         
         vp.setAdapter(sha);
         vp.setCurrentItem(0);
-        vp.setOnPageChangeListener(new SceneryHomeChage(offset, bmpW, currIndex, vp, imageView));
+        vp.setOnPageChangeListener(new SceneryHomeChage(getContext(),offset, bmpW, currIndex, vp, imageView));
         
     }
 
-	String url="http://192.168.191.1:8080/android_net/androidweb";
+	String url="http://10.201.1.12:8080/travel/SharePicture_remeng";
     //从网络上获取数据
     public void ListData(final int what){
     	HttpUtils http=new HttpUtils();
@@ -174,32 +180,18 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
 
 			@Override
 			public void onSuccess(ResponseInfo<String> arg0) {
-				listmap=new ArrayList<Map<String,String>>();
 				String result=arg0.result;
-				Gson json=new Gson();
-				Map<String,String> map=null;
+				Type type=new TypeToken<List<SharePicture>>(){}.getType();
+				Gson json=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
 				if(!result.equals(null)){
-				List<Senery> list=json.fromJson(result,new TypeToken<List<Senery>>() {}.getType());
-				for (Senery senery : list) {
-					map=new HashMap<String, String>();
-					String name=senery.getName();
-					String imn=senery.getUrlImage();
-					map.put("name",name);
-					map.put("imn", imn);
-					System.out.println(senery);
-					listmap.add(map);
+				listmap=json.fromJson(result, type);
+				auto.setResultSize(listmap.size());   
+					if(adapter==null){
+						adapter=new ListViewAdapter(context, listmap);
+						lv_hot.setAdapter(adapter);	
 					}
+				
 				}
-//				SimpleAdapter adapter=new SimpleAdapter(SceneryHomeActivity.this,listmap, R.layout.action_listview_hot, new String[]{"name","imn"},new int[]{R.id.tv_hot_list,R.id.tv_hot_list1});
-				auto.setResultSize(listmap.size());
-				if(adapter==null){
-				adapter=new ListViewAdapter(context, listmap);
-		        lv_hot.setAdapter(adapter);	
-				}
-//		        Message msg = handler.obtainMessage();
-//				msg.what = what;
-//				msg.obj = listmap;
-//				handler.sendMessage(msg);
 			}
     	});
     }
@@ -222,7 +214,14 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
 //		}
 //	};
 
-    
+    /**
+	 * 获取旅游图片
+	 */
+	public void sendPicture(final String urlP){
+		BitmapUtils bu=new BitmapUtils(context);
+//		bu.display(holder.picture, urlP);
+	}
+	
 	@Override
 	public void onRefresh() {
 		ListData(AutoListView.REFRESH);

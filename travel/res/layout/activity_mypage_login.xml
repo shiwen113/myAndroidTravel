@@ -5,25 +5,7 @@
     android:background="@drawable/aa" 
     >
 
-    <ImageView
-       android:id="@+id/im_MypageLoginActivity_touxiang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
-        android:src="@drawable/ic_launcher" />
-
-    <LinearLayout
-        android:id="@+id/input"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_below="@id/im_MypageLoginActivity_touxiang"
-        android:layout_marginLeft="28.0dip"
-        android:layout_marginRight="28.0dip"
-        android:orientation="vertical" >
-
-    </LinearLayout>
+    
 
     <LinearLayout
         android:id="@+id/more_bottom"
@@ -163,14 +145,6 @@
         android:layout_height="1.0px"
         android:background="#ffc0c3c4" />
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1.0px"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/input"
-        android:layout_marginTop="60dp"
-        android:background="#ffc0c3c4" />
-
     
 
     <EditText
@@ -246,5 +220,21 @@
         android:layout_above="@+id/more_bottom"
         android:layout_centerHorizontal="true"
         android:text="新用户注册" />
+
+    <ImageView
+        android:id="@+id/im_MypageLoginActivity_touxiang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/tv_MypageLoginActivity_mypageregister"
+        android:layout_marginTop="54dp"
+        android:src="@drawable/welcomepage" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1.0px"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/searchEditText"
+        android:background="#ffc0c3c4" />
 
 </RelativeLayout>

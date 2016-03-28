@@ -44,8 +44,7 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 		View view = inflater.inflate(R.layout.activity_mylogin, container, false);
 
 		return view;
-	}
-	
+	}	
 	public void viewInit(){
 		IM_MyloginActivity_PERSIONMESSAGEPICTURE=(ImageView) getView().findViewById(R.id.IM_MyloginActivity_PERSIONMESSAGEPICTURE);
 		IM_MyloginActivity_Mytravelteam=(ImageView) getView().findViewById(R.id.IM_MyloginActivity_Mytravelteam);
@@ -66,13 +65,11 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 	}
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)  {
-		super.onActivityCreated(savedInstanceState);
-		
+		super.onActivityCreated(savedInstanceState);	
 		context=getContext();
 		viewInit();
 	}
-	public void onClick(View v) {
-		
+	public void onClick(View v) {		
 		// TODO Auto-generated method stub
 		switch(v.getId()){
 		//页面 跳转至个人信息
@@ -103,15 +100,17 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 			Intent intent4 =new Intent(getActivity(),MypageLoginActivity.class);
 			startActivity(intent4);
 			break;
+			//注册页面
 		case R.id.BT_MyloginActivity_myregister:
 			Intent intent5 =new Intent(getActivity(),MypageregisterActivity.class);
 			startActivity(intent5);
 			break;
-			//旅行队消息
+			//页面跳转至旅行队消息
 		case R.id.BT_MyloginActivity_myteammessage:
-//			Intent intent6 =new Intent(this,AdvicesActivity.class);
-//			startActivity(intent6);
+			Intent intent6 =new Intent(getActivity(),TroopsActivity.class);
+			startActivity(intent6);
 			break;
+			//跳转至收藏页面
 		case R.id.BT_MyloginActivity_myenshrine:
 			Intent intent7 =new Intent(getActivity(),MycollectActivity.class);
 			startActivity(intent7);
