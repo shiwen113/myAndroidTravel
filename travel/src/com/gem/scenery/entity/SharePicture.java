@@ -1,5 +1,6 @@
 package com.gem.scenery.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.gem.home.until.LoginData;
@@ -16,13 +17,14 @@ import com.gem.home.until.PublishTravel;
 /*
  * 分享旅图
  */
-public class SharePicture {
+public class SharePicture implements Serializable{
 	private int sp;//主键
 	private PublishTravel td;//队名
 	private LoginData ld;//用户
 	private String urlPhotos;//图片地址
 	private String viewPoint;//景或地点
 	private Date time;//时间
+	private String feeling;
 	public int getSp() {
 		return sp;
 	}
@@ -60,11 +62,23 @@ public class SharePicture {
 	public void setUrlPhotos(String urlPhotos) {
 		this.urlPhotos = urlPhotos;
 	}
+	public String getFeeling() {
+		return feeling;
+	}
+	public void setFeeling(String feeling) {
+		this.feeling = feeling;
+	}
+//	@Override
+//	public String toString() {
+//		return "SharePicture [sp=" + sp + ", td=" + td + ", ld=" + ld
+//				+ ", urlPhotos=" + urlPhotos + ", viewPoint=" + viewPoint
+//				+ ", time=" + time + "]";
+//	}
+	
 	@Override
 	public String toString() {
-		return "SharePicture [sp=" + sp + ", td=" + td + ", ld=" + ld
-				+ ", urlPhotos=" + urlPhotos + ", viewPoint=" + viewPoint
-				+ ", time=" + time + "]";
+		return "SharePicture [sp=" + sp + ", td=" + td + ", ld=" + ld + ", urlPhotos=" + urlPhotos + ", viewPoint="
+				+ viewPoint + ", time=" + time + ", feeling=" + feeling + "]";
 	}
 	
 }

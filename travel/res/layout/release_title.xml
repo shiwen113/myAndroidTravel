@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xxy="http://schemas.android.com/apk/res/com.gem.scenery"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#6699CC"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="5dip"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:background="#6699CC"
+            
+            android:src="@drawable/back_pressed" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/home_title"
+        android:layout_width="0dip"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:layout_weight="0.68"
+        android:gravity="center"
+        android:text="约游"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+ <TextView
+            android:id="@+id/textView1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2" />
+</LinearLayout>

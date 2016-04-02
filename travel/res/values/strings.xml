@@ -38,10 +38,14 @@
      <string name="rd_unlimit_one">不限</string>
     <string name="bt_serch">搜索</string>
     <string name="pinglun_text">评论</string>
-    <string name="shengqingjiaru">申请加入</string>
+    <string name="shengqingjiaru">立即加入</string>
     <string name="tongcheng">同城</string>
     <string name="feitongcheng">非同城</string>
     <string name="fasong">发送</string>
+    <string name="duichengyuan">队成员</string>
+    <string name="delete">删除</string>
+    <string name="huifu">回复</string>
+    <string name="shouchang">收藏</string>
     
     <!-- 旅图 -->
     <string name="app_name">travel</string>
@@ -53,6 +57,8 @@
     <string name="present">当季</string>
     <string name="camera_from_photos">相册</string>
     <string name="camera_from_camera">相机</string>
+    <string name="lvxingduixiangqing">旅行队详情</string>
+    <string name="lvtufabu">发布</string>
     
  <!-- 消息 -->
     <string name="message_tittle">消息</string>
@@ -89,4 +95,7 @@
     
     
     <!-- 我的 -->
+    <string name="string_my_travel">我的旅行队</string>
+    <string name="string_join_travel">我加入的旅行队</string>
+    <string name="fenxaing">我的分享</string>
 </resources>

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:layout_marginLeft="20dip"
+    android:layout_marginRight="10dip"
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/Search_tv"
@@ -10,8 +13,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="旅行队：菜刀队"
-        android:textSize="30px"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_point"
@@ -30,77 +33,126 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/g9453908" />
 
-    <ImageView
-        android:id="@+id/iv_user_picture"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+    <!-- <TextView -->
+    <!-- android:id="@+id/textView6" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:layout_alignLeft="@+id/iv_user_picture" -->
+    <!-- android:layout_below="@+id/iv_user_picture" -->
+    <!-- android:layout_marginTop="18dp" -->
+    <!-- android:text="我追求的海阔天空" -->
+    <!-- android:textColor="#000000" /> -->
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/iv_picture"
-        android:layout_marginLeft="20dp"
-        android:src="@drawable/ic_launcher" />
+        android:layout_below="@+id/iv_picture" >
+
+        <ImageView
+            android:id="@+id/iv_user_picture"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ceshitu" />
+
+        <!-- <com.gem.scenery.utils.CircleImageView -->
+        <!-- android:id="@+id/iv_user_picture" -->
+        <!-- android:layout_width="30dp" -->
+        <!-- android:layout_height="30dp" -->
+        <!-- android:src="@drawable/ceshitu" /> -->
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="李娜"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/iv_issue_picture"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="12小时前"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <!-- <TextView -->
+    <!-- android:id="@+id/tv" -->
+    <!-- android:layout_width="match_parent" -->
+    <!-- android:layout_height="10dip" -->
+    <!-- android:layout_alignParentLeft="true" -->
+    <!-- android:layout_below="@+id/ll" /> -->
 
     <TextView
-        android:id="@+id/tv_user_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/iv_user_picture"
-        android:layout_toRightOf="@+id/iv_user_picture"
-        android:text="李娜"
-         android:textColor="#000000" />
-
-<!--     <TextView -->
-<!--         android:id="@+id/tv_" -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:layout_alignBottom="@+id/tv_user_name" -->
-<!--         android:layout_marginLeft="28dp" -->
-<!--         android:layout_toRightOf="@+id/tv_user_name" -->
-<!--         android:text="海南三亚" -->
-<!--          android:textColor="#000000" /> -->
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/linearLayout1"
+        android:background="#c0c0c0" />
 
     <TextView
-        android:id="@+id/iv_issue_picture"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_share_zheke"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:text="12小时前"
-         android:textColor="#000000" />
-
-<!--     <TextView -->
-<!--         android:id="@+id/textView6" -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:layout_alignLeft="@+id/iv_user_picture" -->
-<!--         android:layout_below="@+id/iv_user_picture" -->
-<!--         android:layout_marginTop="18dp" -->
-<!--         android:text="我追求的海阔天空" -->
-<!--         android:textColor="#000000" /> -->
-
-    <ImageButton
-        android:id="@+id/Search_ib"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/iv_user_picture"
-        android:layout_below="@+id/iv_user_picture"
-        android:src="@drawable/xin" />
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/ll" />
 
     <TextView
-        android:id="@+id/Search_tv_Adapter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Search_ib"
-        android:layout_marginBottom="15dp"
-        android:layout_toRightOf="@+id/tv_user_name"
-        android:text="1008"
-        android:textColor="#000000" />
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignBottom="@+id/tv_share_zheke"
+        android:layout_alignParentLeft="true"
+        android:background="#c0c0c0" />
 
-    <Button
-        android:id="@+id/btn_scenery_pinglun"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Search_ib"
-        android:layout_alignRight="@+id/iv_issue_picture"
-        android:text="评论1" />
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_share_zheke"
+        android:gravity="center_vertical" >
+
+        <ImageButton
+            android:id="@+id/Search_ib"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:src="@drawable/praise" />
+
+        <TextView
+            android:id="@+id/Search_tv_Adapter"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:text="0"
+            android:textColor="#000000" />
+
+        <TextView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#c0c0c0" />
+
+        <ImageButton
+            android:id="@+id/btn_scenery_pinglun"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="#fff"
+            android:src="@drawable/tour_comment" />
+
+        <TextView
+            android:id="@+id/tv_comment_num"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:text="0"
+            android:textColor="#000000" />
+    </LinearLayout>
 
 </RelativeLayout>

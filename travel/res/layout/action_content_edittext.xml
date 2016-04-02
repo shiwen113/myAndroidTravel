@@ -6,12 +6,12 @@
     android:gravity="center"
     android:orientation="horizontal" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="@color/green"
-        android:text="@string/comment" />
+<!--     <TextView -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:textSize="16sp" -->
+<!--         android:textColor="@color/green" -->
+<!--         android:text="@string/comment" /> -->
 
     <EditText
         android:id="@+id/et_content_data"
@@ -29,6 +29,7 @@
         android:id="@+id/btn_content_fasong"
         android:layout_width="80dip"
         android:layout_height="45dip"
+        android:background="@drawable/bg_shape_stype"
         android:text="@string/fasong" />
 
 </LinearLayout>

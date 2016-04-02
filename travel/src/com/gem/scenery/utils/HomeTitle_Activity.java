@@ -1,20 +1,19 @@
 package com.gem.scenery.utils;
 
-import com.gem.scenery.R;
-import com.gem.scenery.action.SceneryPopWindow;
-import com.gem.scenery.action.SceneryTile;
-
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View.OnClickListener;
+
+import com.gem.scenery.PictureUpLoadActivity;
+import com.gem.scenery.R;
 
 public class HomeTitle_Activity extends LinearLayout implements OnClickListener {
 	private LinearLayout rightBtn,leftBtn;
@@ -36,11 +35,13 @@ public class HomeTitle_Activity extends LinearLayout implements OnClickListener 
 
 	public void onClick(View v) {
 		Context context = getContext();
-		SceneryTile st=new SceneryTile(activity,v);
+//		SceneryTile st=new SceneryTile(activity,v);
 		switch (v.getId()) {
 		case R.id.home_right://照相机
-			st.onCamera();//弹框
-			Toast.makeText(context, "照相机", Toast.LENGTH_LONG).show();
+			Intent intent =new Intent(activity,PictureUpLoadActivity.class);
+			context.startActivity(intent);
+//			st.onCamera();//弹框
+//			Toast.makeText(context, "照相机", Toast.LENGTH_LONG).show();
 			break;
 		case R.id.home_left://搜索
 			Toast.makeText(context, "搜索", Toast.LENGTH_LONG).show();

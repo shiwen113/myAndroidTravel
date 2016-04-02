@@ -124,7 +124,7 @@ public class PersonalChatSocket{
 	/**
 	 * 接受服务器数据
 	 */
-	public void accepetDataFromServerce( final Socket socket,
+	public void accepetDataFromServerce(
 			final Handler handler) {
 
 //		new Thread() {
@@ -136,7 +136,7 @@ public class PersonalChatSocket{
 				BufferedReader br = null;
 				try {
 					br = new BufferedReader(new InputStreamReader(
-							socket.getInputStream()));
+							list.get(list.size()-1).getInputStream()));
 					Log.i("Message", "输入流："+br);
 					String content = null;
 					StringBuffer msgdata = null;

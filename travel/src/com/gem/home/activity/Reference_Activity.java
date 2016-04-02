@@ -112,7 +112,7 @@ public class Reference_Activity extends Activity implements OnClickListener {
 			@Override
 			public void onSuccess(ResponseInfo<String> arg0) {
 				// TODO Auto-generated method stub
-				if (arg0 != null) {
+				if (!arg0.equals("")&&arg0!=null) {
 					String result = arg0.result;
 					// Gson gson = new Gson();
 					// Type type=new

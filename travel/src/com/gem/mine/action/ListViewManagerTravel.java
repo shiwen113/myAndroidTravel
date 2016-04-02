@@ -1,0 +1,112 @@
+package com.gem.mine.action;
+
+import java.lang.reflect.Type;
+import java.util.List;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.gem.home.until.PublishTravel;
+import com.gem.scenery.R;
+import com.gem.scenery.entity.PersonalData;
+import com.gem.scenery.utils.CircleImageView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.king.photo.util.Bimp;
+import com.lidroid.xutils.BitmapUtils;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+
+public class ListViewManagerTravel extends BaseAdapter {
+	private List<PublishTravel> createList;
+	private Context context;
+	private Holder holder;
+	private BitmapUtils bu;
+	public ListViewManagerTravel(List<PublishTravel> createList, Context context) {
+		super();
+		this.createList = createList;
+		this.context = context;
+		bu=new BitmapUtils(context);
+	}
+
+	@Override
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return createList.size();
+	}
+
+	@Override
+	public Object getItem(int arg0) {
+		// TODO Auto-generated method stub
+		return createList.get(arg0);
+	}
+
+	@Override
+	public long getItemId(int arg0) {
+		// TODO Auto-generated method stub
+		return arg0;
+	}
+
+	@Override
+	public View getView(int arg0, View v, ViewGroup arg2) {
+		if(v==null){
+			v=LayoutInflater.from(context).inflate(R.layout.activity_my_travel_team_name, null);
+			holder=new Holder();
+			holder.civ=(ImageView) v.findViewById(R.id.civ_picture);
+			holder.tv=(TextView) v.findViewById(R.id.tv_my_all_travel_team);
+			v.setTag(holder);
+		}else{
+			holder=(Holder) v.getTag();
+		}
+		PublishTravel pt=createList.get(arg0);
+		if(pt!=null){
+			holder.tv.setText(pt.getTeamName());
+			sendPersonalData(pt);
+		}
+		return v;
+	}
+
+	public static class Holder{
+		ImageView civ;
+		TextView tv;
+	}
+	String url="http://10.201.1.12:8080/travel/Home_home_yhtx";
+	/**
+	 * 请求个人资料
+	 */
+	public void sendPersonalData(PublishTravel pt){
+		HttpUtils http =new HttpUtils();
+		RequestParams params =new RequestParams();
+		params.addBodyParameter("ld",String.valueOf(pt.getLd().getLd()));
+		http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
+
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				// TODO Auto-generated method stub
+				Toast.makeText(context, "请求失败,请检查您的网络", Toast.LENGTH_LONG).show();
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				String result =arg0.result;
+				if(!result.equals("")){
+					Gson gson=new Gson();
+					Type type =new TypeToken<PersonalData>(){}.getType();
+					PersonalData pd=gson.fromJson(result, type);
+					bu.display(holder.civ, pd.getUriUpLoadPicture());
+				}
+			}
+		});
+		
+	}
+}

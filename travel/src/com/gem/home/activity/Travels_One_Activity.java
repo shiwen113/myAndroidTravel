@@ -68,7 +68,7 @@ public class Travels_One_Activity extends Activity implements OnCheckedChangeLis
 				if(!mteamName.equals("")&&!destination.equals("")&&!mteamNumber.equals("")){
 				startActivity(intent);
 				}else{
-					Toast.makeText(getApplication(), "请检查又没填写用户名，目的地，人数", Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplication(), "请填写用户名，目的地，人数", Toast.LENGTH_LONG).show();
 				}
 			}
 

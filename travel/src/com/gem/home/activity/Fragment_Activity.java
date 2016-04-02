@@ -19,6 +19,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
@@ -29,13 +30,20 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 public class Fragment_Activity extends FragmentActivity implements OnCheckedChangeListener {
 
 	private RadioGroup mRadioGroup;
-	private int currentIndex;
+	private int currentIndex=0;//
 	private List<Fragment> fragments;
 	private static final int COLOR_TEXT_HIGHTLIGHT = Color.parseColor("#FFFFFF");
 	private static final int COLOR_TEXT_NORMAL = Color.parseColor("#000000");
 	private MyDatabaseHelper dbHelper;
+	private FragmentManager fragmentManager = getSupportFragmentManager();
+	private FragmentTransaction ft = fragmentManager.beginTransaction();
 	private Context  context=MyApplication.getContext();
-
+	private int nextIndex;
+	private Home_home home;
+	private SceneryHomeActivity scenery;
+	private MessageHomeActivity message;
+	private MyloginActivity login;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,34 +56,59 @@ public class Fragment_Activity extends FragmentActivity implements OnCheckedChan
 		mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup_home);
 		mRadioGroup.setOnCheckedChangeListener(this);
 		fragments = new ArrayList<Fragment>();
-		fragments.add(new Home_home());
-		fragments.add(new SceneryHomeActivity());
-		fragments.add(new MessageHomeActivity());
-		fragments.add(new MyloginActivity());
-		FragmentManager fragmentManager = getSupportFragmentManager();
-		FragmentTransaction ft = fragmentManager.beginTransaction();
+		home=new Home_home();
+		scenery=new SceneryHomeActivity();
+		message=new MessageHomeActivity();
+		login=new MyloginActivity();
+		fragments.add(home);
+		fragments.add(scenery);
+		fragments.add(message);
+		fragments.add(login);
+	
+		//FragmentManager fragmentManager = getSupportFragmentManager();
+		//FragmentTransaction ft = fragmentManager.beginTransaction();
 		// 初始加载的页面
-		ft.add(R.id.tab_content, fragments.get(0));
+		ft.add(R.id.tab_content, fragments.get(currentIndex));
 		ft.commit();
-		changeTextColor(0);
+		changeTextColor(currentIndex);
+		
+		
+	}
+
+	
+
+	@Override
+	public void onAttachFragment(Fragment fragment) {
+		// TODO Auto-generated method stub
+		super.onAttachFragment(fragment);
+		
+		 if (home == null && fragment instanceof Home_home) {  
+	            home = (Home_home)fragment;  
+	        }else if (scenery == null && fragment instanceof SceneryHomeActivity) {  
+	            scenery = (SceneryHomeActivity)fragment;  
+	        }else if (message == null && fragment instanceof MessageHomeActivity) {  
+	            message = (MessageHomeActivity)fragment;  
+	        }  else  if(login == null && fragment instanceof MyloginActivity){
+	        	 login = (MyloginActivity)fragment;  
+			}
 		
 		
 	}
 
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
-		int nextIndex = 0;
+		
 
 		if (R.id.home == checkedId) {
 			nextIndex = 0;
 		}
-		if (R.id.picture == checkedId) {
+		else if (R.id.picture == checkedId) {
 			nextIndex = 1;
 		}
-		if (R.id.chat == checkedId) {
+		else if (R.id.chat == checkedId) {
 			nextIndex = 2;
 		}
-		if (R.id.mine == checkedId) {
+		else if (R.id.mine == checkedId) {
 			nextIndex = 3;
 		}
 
@@ -86,12 +119,15 @@ public class Fragment_Activity extends FragmentActivity implements OnCheckedChan
 	// 监听时同时给一个默认值
 	public void changefragment(int nextIndex) {
 		if (currentIndex != nextIndex) {
-			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			FragmentTransaction ft = fragmentManager.beginTransaction();
+			Log.i("ft", "ft+"+ft);
 			ft.hide(fragments.get(currentIndex));
 			if (!fragments.get(nextIndex).isAdded()) {
 				ft.add(R.id.tab_content, fragments.get(nextIndex));
 			}
 			ft.show(fragments.get(nextIndex)).commit();
+			
 		}
 		currentIndex = nextIndex;
 	}

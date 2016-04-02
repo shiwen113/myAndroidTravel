@@ -10,19 +10,22 @@ import com.gem.home.until.ToolDao;
 import com.gem.home.until.TravelComment1;
 import com.gem.scenery.R;
 
-import android.R.integer;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.provider.Telephony.Mms.Addr;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
+/**
+ * 显示错乱，下滑在上拉
+ * @author C5-0
+ *
+ */
 public class TravelCommentAdapter extends BaseAdapter {
     Context context;
     List<TravelComment1> list;
+    List<B> bs=new ArrayList<B>();
     int a=0;  //记住前一个评论的position
 	
 	int b=0;  //表示现在要显示的是几级评论
@@ -39,6 +42,7 @@ public class TravelCommentAdapter extends BaseAdapter {
 		super();
 		this.context = context;
 		this.list = list;
+//		this.bs=bs;
 	}
 
 	@Override
@@ -63,6 +67,7 @@ public class TravelCommentAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		ViewHolder viewHolder;
+//		if(arr.size()>position)
 		if(convertView==null){
 		viewHolder=new ViewHolder();
 		convertView=LayoutInflater.from(context).inflate(R.layout.travelcommnet_adapter,null);
@@ -74,14 +79,17 @@ public class TravelCommentAdapter extends BaseAdapter {
 		}
 		TravelComment1 travelComment1=list.get(position);
 		c=travelComment1.getIdWith();
+		
+		String string=null;
+		
 		if(travelComment1.getIdWith()==0){
 			b=1;
 			if(arr.size()!=0){
 				arr.clear();
 			}
 			
-			String string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+travelComment1.getTd().getLd().getUserName()+"发布的旅行队评论："+travelComment1.getCommentNotes();
-			viewHolder.textView.setText(string);
+			string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+travelComment1.getTd().getLd().getUserName()+"发布的旅行队评论："+travelComment1.getCommentNotes();
+//			viewHolder.textView.setText(string);
 			if(travelComment1.getIsend()==1){
 				A a=new A(b,travelComment1.getLd().getUserName(),travelComment1.getTd().getLd().getUserName());
 				arr.add(a);
@@ -111,7 +119,7 @@ public class TravelCommentAdapter extends BaseAdapter {
 //				int b1=map.get(comment1);
 //				if(b1+1==b&&comment1.getLd().getUserName().equals(s)&&);
 //			}
-			String string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+s+"的评论："+travelComment1.getCommentNotes();
+			string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+s+"的评论："+travelComment1.getCommentNotes();
 			for(A tc:arr){
 				if(tc.a==(b-1)&&tc.b.equals(s)&&tc.c.equals(travelComment1.getLd().getUserName())){
 					string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+s+"的回复："+travelComment1.getCommentNotes();
@@ -122,10 +130,19 @@ public class TravelCommentAdapter extends BaseAdapter {
 				A a=new A(b,travelComment1.getLd().getUserName(),s);
 				arr.add(a);
 			}
-			viewHolder.textView.setText(string);		
+//			viewHolder.textView.setText(string);		
+		}
+//		viewHolder.textView.setText(string);
+		if(bs.size()<=position){
+			bs.add(new B(b, string, ToolDao.setTimedate(travelComment1.getCommentTime())));
+			viewHolder.textView.setText(string);
+			viewHolder.textView2.setText(ToolDao.setTimedate(travelComment1.getCommentTime()));
+		}else {
+			viewHolder.textView.setText(bs.get(position).content);
+			viewHolder.textView2.setText(bs.get(position).time);
 		}
 		map.put(travelComment1.getTcm(), b);
-		viewHolder.textView2.setText(ToolDao.setTimedate(travelComment1.getCommentTime()));
+//		viewHolder.textView2.setText(ToolDao.setTimedate(travelComment1.getCommentTime()));
 		a=position;
 		d=travelComment1.getTcm();
 		return convertView;
@@ -149,5 +166,16 @@ public class TravelCommentAdapter extends BaseAdapter {
 		this.b = b;
 		this.c = c;
 	}
-	  
-  }
+ }
+  
+  class B{
+	  public int a;  //表示几级评论
+	  public String content; //评论的内容  （包括评论者和被评论者及其内容）
+	  public String time; //评论的时间
+	public B(int a, String content, String time) {
+		super();
+		this.a = a;
+		this.content = content;
+		this.time = time;
+	}
+   }

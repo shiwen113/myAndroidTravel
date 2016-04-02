@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.gem.scenery.R;
 
-public class PicturePage {
+public class PicturePage{
 	private ViewHolder holder;
 	private View v;
 	public PicturePage(View v,ViewHolder holder) {
@@ -24,17 +24,21 @@ public class PicturePage {
 		holder.userName=(TextView) v.findViewById(R.id.tv_user_name);
 		holder.number=(TextView) v.findViewById(R.id.Search_tv_Adapter);
 		holder.dainzan=(ImageButton) v.findViewById(R.id.Search_ib);
-		holder.pinglun=(Button) v.findViewById(R.id.btn_scenery_pinglun);
+		holder.pinglun=(ImageButton) v.findViewById(R.id.btn_scenery_pinglun);
+		holder.numberPinglun=(TextView) v.findViewById(R.id.tv_comment_num);
+		holder.fenxiang=(TextView) v.findViewById(R.id.tv_share_zheke);
 	}
 	public static class ViewHolder {
-		TextView travelName;//队名
-		TextView travelPoint;//景点
-		TextView issuePicture;//发布时间
-		ImageView picture;//发表的旅图
-		ImageView userPicture;//用户头像
-		TextView userName;//用户名
-		TextView number;//
-		ImageButton dainzan;//点赞
-		Button pinglun;//评论
+		public TextView travelName;//队名
+		public TextView travelPoint;//景点
+		public TextView issuePicture;//发布时间
+		public ImageView picture;//发表的旅图
+		public ImageView userPicture;//用户头像
+		public TextView userName;//用户名
+		public TextView number;//点赞次数
+		public ImageButton dainzan;//点赞
+		public ImageButton pinglun;//评论
+		public TextView numberPinglun;//评论次数
+		public TextView fenxiang;//分享此刻
 	}
 }

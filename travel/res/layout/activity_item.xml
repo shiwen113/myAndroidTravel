@@ -15,7 +15,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dip"
             android:background="#6699CC"
-            android:src="@drawable/back_one" />
+            android:src="@drawable/back_pressed" />
 
         <TextView
             android:id="@+id/tv_travel_infor_text"
@@ -28,9 +28,12 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/tv_shouchang"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:text="@string/shouchang"
+            android:gravity="center"
+            android:textSize="16sp"
             android:layout_weight="0.2" />
     </LinearLayout>
 

@@ -65,14 +65,6 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
-
-/**
- * 首页面activity
- *
- * @author king
- * @QQ:595163260
- * @version 2014年10月18日  下午11:48:34
- */
 public class MainActivity extends Activity {
 
 	private GridView noScrollgridview;
@@ -89,7 +81,7 @@ public class MainActivity extends Activity {
 			teamNumber,sview,sintroduce;
 	private String urlPicture="picture";
 	private int i=0;
-	private String url="http://10.201.1.12:8080/travel/Home_home_yy";
+//	private String url="http://10.201.1.12:8080/travel/Home_home_yy";
 	private String urlsendPicture="http://10.201.1.12:8080/travel/Home_home_yyzp";
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -174,12 +166,12 @@ public class MainActivity extends Activity {
 //		}
 		//Log.i("MainActivity", "file:"+Bimp.tempSelectBitmap);
 //		List<File> list=new ArrayList<File>();
-		RequestParams param =new RequestParams();
-		for (ImageItem image : Bimp.tempSelectBitmap) {
-			File file=new File(image.getImagePath());
-			params.addBodyParameter("file"+i,file);
-			i++;
-		}
+//		RequestParams param =new RequestParams();
+//		for (ImageItem image : Bimp.tempSelectBitmap) {
+//			File file=new File(image.getImagePath());
+//			params.addBodyParameter("file"+i,file);
+//			i++;
+//		}
 		Gson gson=new GsonBuilder() 
 		.setDateFormat("yyyy-MM-dd hh:mm:ss") 
 		.create();
@@ -206,37 +198,36 @@ public class MainActivity extends Activity {
 				if (arg0 != null) {
 					Log.i("MainActivity", "is ok");
 					String result = arg0.result;
-					if(result.equals("success")){
+					if(!result.equals("")){
 						Toast.makeText(getApplication(), "is ok", Toast.LENGTH_LONG).show();
 //						Intent intent = new Intent(MainActivity.this, Fragment_Activity.class);
 //						startActivity(intent);
-						//sendPicture();
-					}
+						sendPicture(result);
+					}  
 				}
 			}
 		});
 		
 		}
-/*	*//**
-	 * 请求发送图片
-	 *//*
 	
-	public void sendPicture(){
+	 /**
+	  * 请求发送图片
+	  */
+	public void sendPicture(String td){
 		HttpUtils http=new HttpUtils();
 		RequestParams param =new RequestParams();
-		LoginData ld=new LoginData();
-		Gson gson =new Gson();
-		ld.setLd(16);
-		String s=gson.toJson(ld);
+//		LoginData ld=new LoginData();
+//		Gson gson =new Gson();
+//		ld.setLd(17);
+//		String s=gson.toJson();
+		
 		for (ImageItem image : Bimp.tempSelectBitmap) {
 			File file=new File(image.getImagePath());
 			param.addBodyParameter("file"+i,file);
-			if(i==1){
-				param.addBodyParameter("loginData",s);
-			}
 			i++;
 		}
-		http.send(HttpMethod.POST, url, param, new RequestCallBack<String>() {
+		param.addBodyParameter("td",td);
+		http.send(HttpMethod.POST, urlsendPicture, param, new RequestCallBack<String>() {
 			
 			@Override
 			public void onFailure(HttpException arg0, String arg1) {
@@ -252,15 +243,15 @@ public class MainActivity extends Activity {
 					String result = arg0.result;
 					Log.i("MainActivity", "is ok"+","+result);
 					if(result.equals("success")){
-						Toast.makeText(getApplication(), "is ok", Toast.LENGTH_LONG).show();
-						Intent intent = new Intent(MainActivity.this, Home_home.class);
-						startActivity(intent);
+						Toast.makeText(getApplication(), "发送成功", Toast.LENGTH_LONG).show();
+//						Intent intent = new Intent(MainActivity.this, Home_home.class);
+//						startActivity(intent);
 					}
 				}
 			}
 		});
 		
-	}*/
+	}
 	
 	/**
 	 * 往本地数据库中插入数据

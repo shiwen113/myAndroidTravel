@@ -1,44 +1,102 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
- 
-    tools:context="com.example.material.TroopsActivity" >
+    android:orientation="vertical" >
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:background="#35B4F8"
-        android:layout_alignParentTop="true" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-        <ImageView
-            android:id="@+id/BT_TroopsActivity_RETURN"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/returnnew"
-            android:onClick="click"
-             />
+            android:background="#6699cc"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/im_back_travel_team"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dip"
+                android:src="@drawable/back_pressed" />
+
+            <TextView
+                android:id="@+id/tv_travel_team_my"
+                style="@style/size"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/message_tittle"
+                android:textColor="#000000" />
+
+            <TextView
+                android:id="@+id/tv_edit_travel_team"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
         <TextView
-            android:id="@+id/TV_TroopsActivity_TRAVELTEAM"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_string_my_travel"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="旅行队"
-            android:textSize="25dp" />
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/string_my_travel"
+            android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/TV_TroopsActivity_information"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_string_join_travel"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:onClick="click"
-            android:text="资料" />
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/string_join_travel"
+            android:textSize="18sp" />
+    </LinearLayout>
 
-    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/im_string_my_travel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center" >
+
+            <ImageView
+                android:id="@+id/im_string_join_travel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+	 <android.support.v4.view.ViewPager
+        android:id="@+id/vp_travel_data"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.28" >
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

@@ -57,6 +57,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 	private List<PublishTravel> arr = new ArrayList<PublishTravel>();
 	private Renovate mRenovate;
 	private MyViewPagerAdapter mViewPagerAdapter;
+	int i=0;
 	private Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			Log.i("refresh", "handlemessage");
@@ -66,9 +67,6 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 				mRenovate.initData(myRecyclerViewAdapter, arr,Currment);
 				mRecyclerView.setAdapter(myRecyclerViewAdapter);
 				mSwiperefreshlayout.setRefreshing(false);
-				
-				
-				
 				break;
 			case MORE_ITEM:
 				//下拉加载，加载数据源未实现
@@ -89,6 +87,8 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
 		return view;
 	}
+	
+	
 	/**
 	 * 请求网络访问多级评论
 	 */
@@ -104,6 +104,12 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 			public void onFailure(HttpException arg0, String arg1) {
 				// TODO Auto-generated method stub
 				Toast.makeText(context, "请求失败，请检查网络", Toast.LENGTH_LONG).show();
+				Intent intent = new Intent(context, Item_Activity.class);
+				 intent.putExtra("flag", false);
+				 
+				 Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
+				 intent.putExtra("pt",gson.toJson(pt));//旅行队
+				context.startActivity(intent);
 			}
 
 			@Override
@@ -113,11 +119,12 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 				if(result!=null){
 					Intent intent = new Intent(context, Item_Activity.class);
 					Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
+					intent.putExtra("flag", true);
 					intent.putExtra("pt",gson.toJson(pt));//旅行队
 					intent.putExtra("content", result);//旅行队评论
 					context.startActivity(intent);
 				}
-			}
+			}    
 		});
 	}
 	
@@ -222,6 +229,17 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 			}
 		});
 
+	}
+
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		if(i!=0){
+		mRenovate.initData(myRecyclerViewAdapter, arr,Currment);
+		}
+		i++;
+//		myRecyclerViewAdapter.notifyDataSetChanged();
 	}
 
 	// 初始化控件

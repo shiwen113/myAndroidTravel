@@ -1,5 +1,7 @@
 package com.gem.home.until;
 
+import java.io.Serializable;
+
 /*
  * 表名 logindata
 主键 ld
@@ -9,7 +11,7 @@ package com.gem.home.until;
 /*
  * *注册信息表：
  */
-public class LoginData {
+public class LoginData implements Serializable{
 	private int ld;//主键
 	private String account;//账号  
 	private String userName;//用户名

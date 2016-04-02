@@ -17,7 +17,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dip"
             android:background="#6699CC"
-            android:src="@drawable/back_one" />
+            android:src="@drawable/back_pressed" />
 
         <TextView
             android:id="@+id/tv_travel_home_text"

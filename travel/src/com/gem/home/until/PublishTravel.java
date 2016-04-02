@@ -3,8 +3,6 @@ package com.gem.home.until;
 import java.io.Serializable;
 import java.util.Date;
 
-
-
 /*
  * 表名 traveldata
 主键 td
@@ -25,6 +23,7 @@ import java.util.Date;
 /*
  * 发布旅行队
  */
+@SuppressWarnings("serial")
 public class PublishTravel implements Serializable{
 	private long td;//主键
 	private String teamName;//队名
@@ -33,7 +32,6 @@ public class PublishTravel implements Serializable{
 	private String destination;//目的地
 	private int sex;//性别，1表示男。0，表示女，2不限
 	private int city;//0表示同城，1表示非同城，2表示不限
-	private int peopleNumber;//人数
 	private Date startTime;//出发时间
 	private Date arriveTime;//预计到达时间
 	private String urlLifePicture;//生活照
@@ -41,29 +39,10 @@ public class PublishTravel implements Serializable{
 	private String intro;//简介
 	private Date createTime;//创建时间
     private LoginData ld;
+    private int peopleNumber;
+    private int toView; 
     
-    
-	public PublishTravel() {
-	}
-	public PublishTravel(String teamName, int allDay, String statPoint,
-			String destination, int sex, int city, int peopleNumber,
-			Date startTime, Date arriveTime, String viewPoint, String intro,
-			Date createTime, LoginData ld) {
-		super();
-		this.teamName = teamName;
-		this.allDay = allDay;
-		this.statPoint = statPoint;
-		this.destination = destination;
-		this.sex = sex;
-		this.city = city;
-		this.peopleNumber = peopleNumber;
-		this.startTime = startTime;
-		this.arriveTime = arriveTime;
-		this.viewPoint = viewPoint;
-		this.intro = intro;
-		this.createTime = createTime;
-		this.ld = ld;
-	}
+	
 	public String getTeamName() {
 		return teamName;
 	}
@@ -150,22 +129,34 @@ public class PublishTravel implements Serializable{
 	public void setLd(LoginData ld) {
 		this.ld = ld;
 	}
+	
 	public int getPeopleNumber() {
 		return peopleNumber;
 	}
 	public void setPeopleNumber(int peopleNumber) {
 		this.peopleNumber = peopleNumber;
 	}
+	public int getToView() {
+		return toView;
+	}
+	public void setToView(int toView) {
+		this.toView = toView;
+	}
+//	@Override
+//	public String toString() {
+//		return "PublishTravel [td=" + td + ", teamName=" + teamName + ", allDay=" + allDay + ", statPoint=" + statPoint
+//				+ ", destination=" + destination + ", sex=" + sex + ", city=" + city + ", startTime=" + ToolDao.setTimedate1(startTime)
+//				+ ", arriveTime=" + ToolDao.setTimedate1(arriveTime) + ", urlLifePicture=" + urlLifePicture + ", viewPoint=" + viewPoint
+//				+ ", intro=" + intro + ", createTime=" + ToolDao.setTimedate(createTime) + ", ld=" + ld + ", peopleNumber=" + peopleNumber
+//				+ "]";
+//	}
 	@Override
 	public String toString() {
-		return "PublishTravel [td=" + td + ", teamName=" + teamName
-				+ ", allDay=" + allDay + ", statPoint=" + statPoint
-				+ ", destination=" + destination + ", sex=" + sex + ", city="
-				+ city + ", peopleNumber=" + peopleNumber + ", startTime="
-				+ startTime + ", arriveTime=" + arriveTime
-				+ ", urlLifePicture=" + urlLifePicture + ", viewPoint="
-				+ viewPoint + ", intro=" + intro + ", createTime=" + createTime
-				+ ", ld=" + ld + "]";
+		return "PublishTravel [td=" + td + ", teamName=" + teamName + ", allDay=" + allDay + ", statPoint=" + statPoint
+				+ ", destination=" + destination + ", sex=" + sex + ", city=" + city + ", startTime=" + ToolDao.setTimedate1(startTime)
+				+ ", arriveTime=" + ToolDao.setTimedate1(arriveTime) + ", urlLifePicture=" + urlLifePicture + ", viewPoint=" + viewPoint
+				+ ", intro=" + intro + ", createTime=" + ToolDao.setTimedate(createTime) + ", ld=" + ld + ", peopleNumber=" + peopleNumber
+				+ ", toView=" + toView + "]";
 	}
 	
 	
