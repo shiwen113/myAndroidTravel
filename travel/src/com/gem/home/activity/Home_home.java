@@ -1,12 +1,15 @@
 package com.gem.home.activity;
 
 //首页
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.gem.home.action.Renovate;
+import com.gem.home.dao.MyImageAsyncTask;
 import com.gem.home.dao.MyRecyclerViewAdapter;
+import com.gem.home.dao.MyRecyclerViewHolder;
 import com.gem.home.dao.MyViewPagerAdapter;
 import com.gem.home.dao.OnItemClickLitener;
 import com.gem.home.until.PublishTravel;
@@ -14,8 +17,10 @@ import com.gem.home.view.SpaceItem;
 import com.gem.home.view.ViewPagerIndicator;
 import com.gem.home.view.ViewPagerIndicator.PageOnChangeListener;
 import com.gem.scenery.R;
+import com.gem.scenery.entity.PersonalData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
@@ -93,7 +98,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 	 * 请求网络访问多级评论
 	 */
 	String url="http://10.201.1.12:8080/travel/TravelComment";
-	public void sendContent(final PublishTravel pt,final int position){
+	public void sendContent(final PublishTravel pt,final int position,final PersonalData pd){
 		HttpUtils http=new HttpUtils();
 		RequestParams params=new RequestParams();
 		params.addBodyParameter("td",String.valueOf(pt.getTd()));
@@ -122,12 +127,42 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 					intent.putExtra("flag", true);
 					intent.putExtra("pt",gson.toJson(pt));//旅行队
 					intent.putExtra("content", result);//旅行队评论
+					intent.putExtra("pd",pd);
 					context.startActivity(intent);
 				}
 			}    
 		});
 	}
 	
+	String urlU="http://10.201.1.12:8080/travel/Home_home_yhtx";
+	/**
+	 * 获取用户图片
+	 */
+	public void sendUserPicture(final PublishTravel pt,final int position){
+		RequestParams params = new RequestParams();
+		HttpUtils http=new HttpUtils();
+	 	params.addBodyParameter("ld",String.valueOf(pt.getLd().getLd()));
+		http.send(HttpMethod.POST, urlU, params,new RequestCallBack<String>() {
+
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				// TODO Auto-generated method stub
+				Toast.makeText(context, "请求失败，请检查网络", Toast.LENGTH_LONG).show();
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				// TODO Auto-generated method stub
+				String result =arg0.result;
+				if(!result.equals(null)&&result!=null){
+					Gson gson =new Gson();
+					Type type =new TypeToken<PersonalData>(){}.getType();
+					PersonalData pd=gson.fromJson(result, type);
+					sendContent(pt,position,pd);
+				}
+			}
+		});
+	}
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -163,7 +198,8 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 				Toast.makeText(context, position + " click", Toast.LENGTH_SHORT).show();
 				if(view!=null){
 					PublishTravel pt=arr.get(position);
-					sendContent(pt,position);
+//					sendContent(pt,position);
+					sendUserPicture(pt,position);
 				}
 
 			}
@@ -270,7 +306,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 //下拉刷新
 	@Override
 	public void onRefresh() { // TODO Auto-generated method stub //
-		mHandler.sendEmptyMessageDelayed(REFRESH_COMPLETE, 2000);
+		mHandler.sendEmptyMessageDelayed(REFRESH_COMPLETE, 1000);
 	
 		Log.i("refresh", "下拉刷新+onrefresh");
 	}

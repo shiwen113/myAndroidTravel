@@ -8,6 +8,7 @@ import java.net.URL;
 
 import com.gem.scenery.R;
 import com.gem.scenery.R.drawable;
+import com.gem.scenery.utils.CircleImageView;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,12 +16,12 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class MyImageAsyncTask  extends AsyncTask<String, Void, Bitmap>{
-private MyRecyclerViewHolder arg0;
+public class UserPictureAsyncTask  extends AsyncTask<String, Void, Bitmap>{
+private CircleImageView civ;
 private static Bitmap imgtitle;
-	public MyImageAsyncTask(MyRecyclerViewHolder arg0) {
+	public UserPictureAsyncTask(CircleImageView civ) {
 		super();
-		this.arg0=arg0;
+		this.civ=civ;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -60,11 +61,11 @@ private static Bitmap imgtitle;
 		
 //Bitmap bm1=BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
 		if(result!=null&&!result.equals("")){
-		arg0.imageView.setSrc(result);
+			civ.setImageBitmap(result);
 		}
 		setImgtitle(result);
 		//arg0.imageView.setImageBitmap(result);
-		Log.i("boom", "arg0+"+arg0.imageView);
+//		Log.i("boom", "arg0+"+arg0.imageView);
 	}
 
 	@Override

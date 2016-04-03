@@ -4,6 +4,7 @@ package com.gem.scenery.action;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 
@@ -21,6 +22,7 @@ public class SceneryPopWindow implements OnClickListener {
 	}
 	@Override
 	public void onClick(View v) {
+		Intent intent=new Intent();
 		switch (v.getId()) {
 		case R.id.tv_camera:
 //			intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);

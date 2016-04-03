@@ -78,9 +78,6 @@
         <activity android:name="com.gem.home.activity.LookAllPeopleNumberActivity"></activity>
 		<activity android:name="com.gem.scenery.SendSharePictureActivity"></activity>
         <activity android:name="com.gem.scenery.PictureUpLoadActivity"></activity>
-        <activity android:name="com.gem.scenery.ShowAllPhoto"></activity>
-        <activity android:name="com.gem.scenery.GalleryActivity"></activity>
-        <activity android:name="com.gem.scenery.ImageFile"></activity>
         
         
         <!-- 我的页面 Activity -->

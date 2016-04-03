@@ -23,6 +23,7 @@ import com.gem.scenery.action.ListViewAdapter;
 import com.gem.scenery.action.SceneryHomeAdapt;
 import com.gem.scenery.action.SceneryHomeChage;
 import com.gem.scenery.action.ScreneryHomeOnClik;
+import com.gem.scenery.action.ListViewAdapter.Callback;
 import com.gem.scenery.entity.Senery;
 import com.gem.scenery.entity.SharePicture;
 import com.gem.scenery.interfaces.OnLoadListener;
@@ -39,7 +40,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
-public class SceneryHomeActivity extends Fragment implements OnRefreshListener,OnLoadListener{
+public class SceneryHomeActivity extends Fragment implements OnRefreshListener,OnLoadListener,Callback{
 		private List<View> views;// Tab页面列表
 		private ViewPager vp;//叶卡内容
 	    private ImageView imageView,imageView2,imageView3;// 动画图片
@@ -65,6 +66,7 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
 	    public  int load ;//加载
 //	    private ImageView imageview;
 		// 初始化加载fragment里的部件
+	    private Callback callback;//回调接口
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			View view = inflater.inflate(R.layout.activity_scenery_home, container, false);
@@ -183,7 +185,7 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
 						adapter=new ListViewAdapter(context, listmap);
 						lv_hot.setAdapter(adapter);	
 					}
-				
+					adapter.notifyDataSetChanged();
 				}
 			}
     	});
@@ -267,6 +269,13 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
 		}
 	}
 */
+	/**
+	 * 回调，处理adapter的点击事件
+	 */
+	@Override
+	public void myClick(View v) {
+		
+	}
 	
 	
 }

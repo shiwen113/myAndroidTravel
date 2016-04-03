@@ -8,7 +8,7 @@
     <!-- 首页里的item -->
 
     <com.gem.home.view.CustomImageView
-        android:id="@+id/iv_civ"
+        android:id="@+id/iv_civ_uer"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dip"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/iv_civ"
+        android:layout_below="@id/iv_civ_uer"
         android:text="苏州——拉萨" />
 
     <TextView
@@ -104,8 +104,8 @@
           android:id="@+id/itview_userName"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_alignTop="@+id/iv_civ"
-          android:layout_toRightOf="@+id/iv_civ"
+          android:layout_alignTop="@+id/iv_civ_uer"
+          android:layout_toRightOf="@+id/iv_civ_uer"
           android:text="提莫" />
 
       <TextView
@@ -121,8 +121,11 @@
           android:id="@+id/tv_show_date"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_alignBottom="@+id/itview_place"
-          android:layout_toRightOf="@+id/itview_userName"
-           />
+          android:layout_marginRight="10dip"
+          android:layout_alignRight="@+id/sv_scrol_img"
+          android:layout_below="@+id/itview_allDay"
+          android:layout_toRightOf="@+id/iv_civ_uer"
+          android:gravity="right"
+          />
 
 </RelativeLayout>

@@ -26,7 +26,8 @@ public class MyRecyclerViewHolder extends ViewHolder {
 		allDay = (TextView) itemView.findViewById(R.id.itview_allDay);
 		intro = (TextView) itemView.findViewById(R.id.itview_intro);
 		userName=(TextView) itemView.findViewById(R.id.itview_userName);
-		imageView=(CustomImageView) itemView.findViewById(R.id.iv_civ);
+//		imageView=(CustomImageView) itemView.findViewById(R.id.iv_civ);
+		imageView=(CustomImageView) itemView.findViewById(R.id.iv_civ_uer);
 		gotime=(TextView) itemView.findViewById(R.id.tv_show_date);
 		chakanliang=(TextView) itemView.findViewById(R.id.tv_chakanliang);
 		ll=(LinearLayout) itemView.findViewById(R.id.ll_linear_scrol_view);

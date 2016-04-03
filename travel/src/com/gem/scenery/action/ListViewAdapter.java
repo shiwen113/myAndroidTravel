@@ -2,10 +2,13 @@ package com.gem.scenery.action;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +38,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
-public class ListViewAdapter extends BaseAdapter {
+public class ListViewAdapter extends BaseAdapter implements OnClickListener{
 
 	private ViewHolder holder;
 	private List<SharePicture> list;   
@@ -46,9 +49,13 @@ public class ListViewAdapter extends BaseAdapter {
  	private int num;//点赞量
  	private int stateD;
  	private String pNum;//评论量
+ 	private Callback callback;//回调接口
+ 	private Map<Integer,PersonalData> userP =new HashMap<Integer, PersonalData>();//用户图片
+
 	public ListViewAdapter(Context context, List<SharePicture> listmap) {
 		this.list = listmap;
 		this.context = context;
+//		this.callback=callback;
 	}
 
 	@Override
@@ -66,6 +73,11 @@ public class ListViewAdapter extends BaseAdapter {
 		return position;
 	}
 	
+	public interface Callback{
+	        public void myClick(View view);
+	}
+
+	
 	@Override
 	public View getView(final int position, View v, ViewGroup parent) {
 		final SharePicture sp=list.get(position);
@@ -75,21 +87,22 @@ public class ListViewAdapter extends BaseAdapter {
 					R.layout.action_scenery_jinse, null);
 			PicturePage pp=new PicturePage(v,holder);
 			pp.initView();
+			
 //			sendUserPicture(sp.getLd().getLd());
 			dianZanState(sp,position);
-			sendPingLunNum(sp);
 			v.setTag(holder);
 		} else {
 			holder = (ViewHolder) v.getTag();
 		}
 		dianZanNum(sp);
+		sendPingLunNum(sp);
 		holder.dainzan.setTag(position);
 		 if(list2.contains(position)){
 			  holder.dainzan.setImageResource(R.drawable.praise_have);
 		  }else {
 			  holder.dainzan.setImageResource(R.drawable.praise);
-			  
 		  }
+//		 holder.dainzan.setOnClickListener(this);
 		 holder.dainzan.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -126,11 +139,13 @@ public class ListViewAdapter extends BaseAdapter {
 				context.startActivity(intent);
 			}
 		});
-		
-			if(!sp.getLd().equals("")){
-				sendUserPicture(sp.getLd().getLd());
+		 	
+			if(sp.getLd().getLd()!=0){
+				userP.remove(position);
+				if(userP.get(position)==null){
+				sendUserPicture(sp.getLd().getLd(),position);
+				}
 			}
-		
 		if(sp!=null&&!sp.equals("")){
 			//数据显示
 			holder.travelName.setText("旅行队："+sp.getTd().getTeamName());
@@ -163,9 +178,11 @@ public class ListViewAdapter extends BaseAdapter {
 	
 	String urlU="http://10.201.1.12:8080/travel/Home_home_yhtx";
 	/**
+	 * 
+	 * 
 	 * 获取用户图片
 	 */
-	public void sendUserPicture(int ld){
+	public void sendUserPicture(int ld,final int p){
 		RequestParams params = new RequestParams();
 		HttpUtils http=new HttpUtils();
 	 	params.addBodyParameter("ld",String.valueOf(ld));
@@ -186,7 +203,10 @@ public class ListViewAdapter extends BaseAdapter {
 					Type type =new TypeToken<PersonalData>(){}.getType();
 					PersonalData pd=gson.fromJson(result, type);
 					BitmapUtils bpu=new BitmapUtils(context);
+					if(!TextUtils.isEmpty(pd.getUriUpLoadPicture())){
 					bpu.display(holder.userPicture, pd.getUriUpLoadPicture());
+					userP.put(p, pd);
+					}
 				}
 			}
 		});
@@ -304,6 +324,11 @@ public class ListViewAdapter extends BaseAdapter {
 				Log.i("PNum",pNum);
 			}
 		});
+	}
+
+	@Override
+	public void onClick(View v) {
+		 callback.myClick(v);
 	}
 	
 	

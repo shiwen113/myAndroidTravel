@@ -35,13 +35,10 @@ public class HomeTitle_Activity extends LinearLayout implements OnClickListener 
 
 	public void onClick(View v) {
 		Context context = getContext();
-//		SceneryTile st=new SceneryTile(activity,v);
 		switch (v.getId()) {
 		case R.id.home_right://照相机
 			Intent intent =new Intent(activity,PictureUpLoadActivity.class);
 			context.startActivity(intent);
-//			st.onCamera();//弹框
-//			Toast.makeText(context, "照相机", Toast.LENGTH_LONG).show();
 			break;
 		case R.id.home_left://搜索
 			Toast.makeText(context, "搜索", Toast.LENGTH_LONG).show();

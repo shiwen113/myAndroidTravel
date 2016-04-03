@@ -8,15 +8,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageView.ScaleType;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -25,12 +29,14 @@ import android.widget.Toast;
 
 import com.gem.home.dao.MyImageAsyncTask;
 import com.gem.home.dao.TravelCommentAdapter;
+import com.gem.home.dao.UserPictureAsyncTask;
 import com.gem.home.until.LoginData;
 import com.gem.home.until.PublishTravel;
 import com.gem.home.until.ToolDao;
 import com.gem.home.until.TravelComment1;
 import com.gem.home.until.TravelMember;
 import com.gem.scenery.R;
+import com.gem.scenery.entity.PersonalData;
 import com.gem.scenery.utils.CircleImageView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -56,9 +62,11 @@ private TextView peopleNum;//人数
 private TextView chaKanAllPeople;//所有人数
 private TextView teamName;//旅行队名
 private TextView joinText;//
+private TextView gotoDate;//出发时间
 private ListView lv;//评论
 private ImageButton back;//返回
 private CircleImageView civ;
+private LinearLayout ll;
 private LinearLayout linearLeft;//左边的评论
 private LinearLayout linearRirght;//右边的申请加入
 private String content;//传过来的评论
@@ -76,6 +84,7 @@ private TextView huifu;//回复
 private TextView delete;//删除
 private TextView shouchang;//收藏
 boolean flag;  //是否有数据(旅行队的评论)传过来（是否有网）
+private PersonalData pd;//个人资料（发布者的个人资料）
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -88,6 +97,7 @@ boolean flag;  //是否有数据(旅行队的评论)传过来（是否有网）
 		
 		content=intent.getStringExtra("content");
 		plt=intent.getStringExtra("pt");
+		pd=(PersonalData) intent.getSerializableExtra("pd");
 		showData();//显示数据
 		
 		isMemberSend();
@@ -134,6 +144,7 @@ boolean flag;  //是否有数据(旅行队的评论)传过来（是否有网）
 	   	 });
 	}
 	public void initView(){
+		gotoDate= (TextView) findViewById(R.id.tv_date);
 		teamName=(TextView) findViewById(R.id.tv_team_travel_name);
 		userName=(TextView) findViewById(R.id.tv_travel_user_name);
 		userSexAndAge=(TextView) findViewById(R.id.tv_travel_age);
@@ -155,6 +166,7 @@ boolean flag;  //是否有数据(旅行队的评论)传过来（是否有网）
 		chaKanAllPeople.setOnClickListener(this);
 		shouchang=(TextView) findViewById(R.id.tv_shouchang);
 		shouchang.setOnClickListener(this);
+		ll=(LinearLayout) findViewById(R.id.ll_picture_show);
 	}
 	/**
 	 * 显示数据，bug???
@@ -165,17 +177,21 @@ boolean flag;  //是否有数据(旅行队的评论)传过来（是否有网）
 		pt=gson.fromJson(plt, type);
 		teamName.setText("旅行队："+pt.getTeamName());
 		userName.setText(pt.getLd().getUserName());
-//		userSexAndAge.setText(pt.getLd().get)//???
+		if(pd.getSex()==1){
+		userSexAndAge.setText("男"+" "+pd.getAge());
+		}else if(pd.getSex()==0){
+			userSexAndAge.setText("女"+" "+pd.getAge());
+		}
 		allDay.setText("全程 "+pt.getAllDay()+"天");
 		arrive.setText(pt.getStatPoint());
 		point.setText(pt.getDestination());
 		jianjie.setText(pt.getIntro());
 		peopleNum.setText("人数"+pt.getPeopleNumber());
-//		BitmapUtils bitmapUtils=new BitmapUtils(this);
-//		bitmapUtils.display(civ,pt.getUrlLifePicture());
-		if(MyImageAsyncTask.getImgtitle()!=null){
-			civ.setImageBitmap(MyImageAsyncTask.getImgtitle());//设置图片
-		}
+		gotoDate.setText("出发时间"+ToolDao.setTimedate1(pt.getStartTime()));
+		new UserPictureAsyncTask(civ).execute(pd.getUriUpLoadPicture());
+//		if(MyImageAsyncTask.getImgtitle()!=null){
+//			civ.setImageBitmap(MyImageAsyncTask.getImgtitle());//设置图片
+//		}
 		//在显示旅行队
 		if(flag){
 		Type typeList=new TypeToken<List<TravelComment1>>(){}.getType();
@@ -185,6 +201,21 @@ boolean flag;  //是否有数据(旅行队的评论)传过来（是否有网）
 		lv.setAdapter(adapter);
 		}
 		lv.setOnItemClickListener(this);
+		}
+		
+		//显示生活照
+		String[] urlP=pt.getUrlLifePicture().split(";");
+		BitmapUtils bu=new BitmapUtils(getApplication());
+		for (int i = 0; i < urlP.length; i++) {
+			String uri="http://10.201.1.12:8080/gotravel/TravelTeam/"+urlP[i];
+			Log.i("MyUri", uri);
+			ImageView iv=new ImageView(getApplication());
+//			imageloader.displayImage(url, iv);
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(500, 500);
+		    iv.setLayoutParams(layoutParams);
+		    iv.setScaleType(ScaleType.CENTER_INSIDE);
+			bu.display(iv, uri);
+			ll.addView(iv);
 		}
 	}
 
@@ -345,7 +376,7 @@ boolean flag;  //是否有数据(旅行队的评论)传过来（是否有网）
 	
 	private String url="http://10.201.1.12:8080/travel/TravelCommentInsert2";
 	/**
-	 * 发送评论的数据,有bug???
+	 * 发送评论的数据
 	 * 增加评论
 	 */
 	public void sendContenData(String content){
@@ -409,7 +440,7 @@ boolean flag;  //是否有数据(旅行队的评论)传过来（是否有网）
 	
 	String urlJoin="http://10.201.1.12:8080/travel/TravelComment_Join_Exit";
 	/**
-	 * 申请加入 bug？？？
+	 * 申请加入
 	 */
 	public void sendJoinTravel(int i){
 		 HttpUtils http=new HttpUtils();

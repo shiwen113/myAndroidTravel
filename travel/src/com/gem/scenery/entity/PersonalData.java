@@ -1,5 +1,7 @@
 package com.gem.scenery.entity;
 
+import java.io.Serializable;
+
 import com.gem.home.until.LoginData;
 /*
  * 表名 personaldata
@@ -14,7 +16,7 @@ import com.gem.home.until.LoginData;
 /**
  * 个人资料
  */
-public class PersonalData {
+public class PersonalData implements Serializable{
 	private int fdd;//主键
 	private String uriUpLoadPicture;//上传的图标
 	private LoginData ld;//用户
