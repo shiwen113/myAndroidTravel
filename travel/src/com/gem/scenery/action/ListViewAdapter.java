@@ -51,7 +51,6 @@ public class ListViewAdapter extends BaseAdapter{
  	private int stateD;
  	private String pNum;//评论量
  	private int comment;
- 	private MyApplication m=(MyApplication) context.getApplicationContext();
 	public ListViewAdapter(Context context, List<PopularScene> listmap) {
 		this.list = listmap;
 		this.context = context;
