@@ -1,9 +1,11 @@
 package com.gem.scenery.action;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.R.string;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,11 +23,13 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gem.home.dao.MyApplication;
 import com.gem.home.until.LoginData;
 import com.gem.home.until.ToolDao;
 import com.gem.scenery.R;
 import com.gem.scenery.entity.PersonalData;
 import com.gem.scenery.entity.PictureComment;
+import com.gem.scenery.entity.PopularScene;
 import com.gem.scenery.entity.SharePicture;
 import com.gem.travel.raw.PropertiesUtil;
 import com.google.gson.Gson;
@@ -59,18 +63,24 @@ public class Travel_team_all_data extends Activity implements OnClickListener{
 	private String text;//获取的内容
 	private PictureComment pc;
 	private BaseAdapter adapter;
+	private PopularScene ps;
+	private MyApplication m;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.travel_picture_particulars);
+		m=(MyApplication) getApplicationContext();
 		initView();
 		Intent intent=getIntent();
-		sp=(SharePicture) intent.getSerializableExtra("sp");
-		num=intent.getIntExtra("num",0);
-		state=intent.getIntExtra("state", 0);
-		Log.i("state", "state"+state);
-		sendShareComment(sp);
+		String string=intent.getStringExtra("scene");
+		Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
+		ps=gson.fromJson(string, PopularScene.class);
+//		sp=(SharePicture) intent.getSerializableExtra("sp");
+//		num=intent.getIntExtra("num",0);
+//		state=intent.getIntExtra("state", 0);
+//		Log.i("state", "state"+state);
+		sendShareComment(ps.getSp());
 		showData();
 		
 	}
@@ -94,15 +104,19 @@ public class Travel_team_all_data extends Activity implements OnClickListener{
 
 	public void showData(){
 		//数据显示
-		travelName.setText("旅行队："+sp.getTd().getTeamName());
-		travelPoint.setText("景点："+sp.getViewPoint());
-		issuePicture.setText("发表时间："+ToolDao.setTimedate1(sp.getTime()));
-		userName.setText("用户名："+sp.getLd().getUserName());
-		number.setText(""+num);
-		if(state==0){
+		travelName.setText("旅行队："+ps.getSp().getTd().getTeamName());
+		travelPoint.setText("景点："+ps.getSp().getViewPoint());
+		issuePicture.setText("发表时间："+ToolDao.setTimedate1(ps.getSp().getTime()));
+		userName.setText("用户名："+ps.getSp().getLd().getUserName());
+		number.setText(String.valueOf(ps.getThumbUpNumber()));
+		if(ps.getPhotoState()==0){
 			dainzan.setBackgroundResource(R.drawable.praise);
-		}else if(state==1){
+		}else {
 			dainzan.setBackgroundResource(R.drawable.praise_have);
+		}
+		 if(!ps.getUriUpLoadPicture().equals("")){
+			 BitmapUtils bpu=new BitmapUtils(this);
+			 bpu.display(userPicture, ps.getUriUpLoadPicture());
 		}
 	}
 	@Override
@@ -123,8 +137,9 @@ public class Travel_team_all_data extends Activity implements OnClickListener{
 			break;
 		}
 	}
-	
-	String urlU=PropertiesUtil.getPropertiesURL(this)+"Sharepicture_pinglunchalu";
+	 
+//	String urlU=PropertiesUtil.getPropertiesURL(this)+"Sharepicture_pinglunchalu";
+	String urlU="http://10.201.1.12:8080/travel/Sharepicture_pinglunchalu";
 	/**
 	 * 添加一条单级评论
 	 */
@@ -132,11 +147,12 @@ public class Travel_team_all_data extends Activity implements OnClickListener{
 		RequestParams params = new RequestParams();
 		HttpUtils http=new HttpUtils();
 		pc=new PictureComment();
-		LoginData ld=new LoginData();
-		ld.setLd(17);
-		pc.setLd(ld);
+//		LoginData ld=new LoginData();
+//		ld.setLd(17);
+		
+		pc.setLd(m.getLd());
 		pc.setCommentNotes(text);
-		pc.setSp(sp);
+		pc.setSp(ps.getSp());
 		pc.setPhotoTime(new Date());
 		Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
 		params.addBodyParameter("pc",gson.toJson(pc));
@@ -157,7 +173,14 @@ public class Travel_team_all_data extends Activity implements OnClickListener{
 //					Gson gson =new Gson();
 //					Type type =new TypeToken<PersonalData>(){}.getType();
 //				}
+				if(list==null){
+					list=new ArrayList<PictureComment>();
+				}
 				list.add(pc);
+				if(adapter==null){
+					adapter=new PictureCommentBastAdapter(list,Travel_team_all_data.this);
+					lv.setAdapter(adapter);
+				}
 				adapter.notifyDataSetChanged();
 			}
 		});
@@ -182,7 +205,7 @@ public class Travel_team_all_data extends Activity implements OnClickListener{
 			public void onSuccess(ResponseInfo<String> arg0) {
 				// TODO Auto-generated method stub
 				String result=arg0.result;
-				if(!result.equals("")&&result!=null){
+				if(!result.equals("")&&result!=null&&!result.equals("null")){
 					Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
 					Type type =new TypeToken<List<PictureComment>>(){}.getType();
 					list =gson.fromJson(result, type);

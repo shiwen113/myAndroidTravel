@@ -20,11 +20,11 @@ public class MessageHomeOnPageChangeListener implements OnPageChangeListener{
 
 	@Override
 	public void onPageSelected(int arg0) {
-		if(arg0==0){
-			MessageHomeActivity.showNowMessage();
-		}else if(arg0==1){
-			MessageHomeActivity.showAddressBook();
-		}
+//		if(arg0==0){
+//			MessageHomeActivity.showNowMessage();
+//		}else if(arg0==1){
+//			MessageHomeActivity.showAddressBook();
+//		}
 	}
 
 }

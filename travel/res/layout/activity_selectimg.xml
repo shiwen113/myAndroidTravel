@@ -106,7 +106,7 @@
     <Button
         android:id="@+id/btn_ok"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_marginLeft="10dip"
         android:layout_marginRight="10dip"
         android:background="@drawable/bg_shape_stype"

@@ -24,7 +24,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/serch_travel"
+            android:text="@string/yueban"
             android:textSize="16sp" />
 
         <TextView

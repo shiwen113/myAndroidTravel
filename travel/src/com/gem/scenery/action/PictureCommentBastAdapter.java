@@ -54,7 +54,7 @@ public class PictureCommentBastAdapter extends BaseAdapter {
 			}
 		PictureComment pc=list.get(arg0);
 		if(pc!=null){
-			viewHolder.textView.setText(pc.getCommentNotes());
+			viewHolder.textView.setText(pc.getLd().getUserName()+":"+pc.getCommentNotes());
 			viewHolder.textView2.setText(ToolDao.setTimedate1(pc.getPhotoTime()));
 		}
 		return v;

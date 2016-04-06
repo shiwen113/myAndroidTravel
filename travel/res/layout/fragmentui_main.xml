@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:orientation="vertical" >
 
@@ -27,18 +27,20 @@
         <RadioButton
             android:id="@+id/home"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:layout_weight="0.98"
             android:button="@null"
             android:checked="true"
+            android:drawableTop="@drawable/home_logo_unfocus"
             android:gravity="center"
             android:singleLine="true"
             android:text="@string/home"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <RadioButton
             android:id="@+id/picture"
+            android:drawableTop="@drawable/collect_bg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
@@ -47,9 +49,10 @@
             android:singleLine="true"
             android:text="@string/picture"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <RadioButton
+             android:drawableTop="@drawable/message_off"
             android:id="@+id/chat"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -59,19 +62,21 @@
             android:singleLine="true"
             android:text="@string/chat"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
 
         <RadioButton
+            android:drawableTop="@drawable/mine_off"
             android:id="@+id/mine"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.0"
             android:button="@null"
+           
             android:gravity="center"
             android:singleLine="true"
             android:text="@string/mine"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="15sp" />
     </RadioGroup>
 
 </LinearLayout>

@@ -29,7 +29,6 @@ public class SetupActivity extends Activity implements OnClickListener {
 //	        //透明导航栏  
 //	        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);  
 //	  
-		setContentView(R.layout.activity_mypageforgetpassword);
 		setContentView(R.layout.activity_setup);
 		BT__SetupActivity_backtrack=(ImageView) findViewById(R.id.BT__SetupActivity_backtrack);
 		BT__SetupActivity_backtrack.setOnClickListener(this);

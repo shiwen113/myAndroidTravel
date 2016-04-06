@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.gem.home.action.Renovate;
+import com.gem.home.dao.MyApplication;
 import com.gem.home.dao.MyImageAsyncTask;
 import com.gem.home.dao.MyRecyclerViewAdapter;
 import com.gem.home.dao.MyRecyclerViewHolder;
@@ -58,10 +59,13 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 	private static final int MORE_ITEM = 2;
 	private static final int REFRESH_COMPLETE = 1;
 	private int Currment=0;
+	private int nowP = REFRESH_COMPLETE;;
+	private int nextP = 0;
 	private Context context;
 	private List<PublishTravel> arr = new ArrayList<PublishTravel>();
 	private Renovate mRenovate;
 	private MyViewPagerAdapter mViewPagerAdapter;
+	private MyApplication maApplication;
 	int i=0;
 	private Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -69,7 +73,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 			switch (msg.what) {
 			case REFRESH_COMPLETE:
 				//下拉刷新
-				mRenovate.initData(myRecyclerViewAdapter, arr,Currment);
+				mRenovate.initData(myRecyclerViewAdapter, arr, Currment, REFRESH_COMPLETE);
 				mRecyclerView.setAdapter(myRecyclerViewAdapter);
 				mSwiperefreshlayout.setRefreshing(false);
 				break;
@@ -102,7 +106,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 		HttpUtils http=new HttpUtils();
 		RequestParams params=new RequestParams();
 		params.addBodyParameter("td",String.valueOf(pt.getTd()));
-		params.addBodyParameter("ld",String.valueOf(17));
+//		params.addBodyParameter("ld",String.valueOf(maApplication.getLd().getLd()));
 		http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
 
 			@Override
@@ -167,6 +171,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		context = getContext();
+		maApplication=(MyApplication) context.getApplicationContext();
 		// 初始化控件加载布局
 		inView(savedInstanceState);
 		// 初始化数据
@@ -188,8 +193,9 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 		myRecyclerViewAdapter = new MyRecyclerViewAdapter(arr, context);
 		
 		// 网络通讯初始化首页数据
-		mRenovate = new Renovate();
-		mRenovate.initData(myRecyclerViewAdapter, arr,Currment);
+				mRenovate = new Renovate();
+
+				mRenovate.initData(myRecyclerViewAdapter, arr, Currment, REFRESH_COMPLETE);
 		// recycler中item监听事件
 		myRecyclerViewAdapter.setOnItemClickListener(new OnItemClickLitener() {
 
@@ -214,7 +220,11 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 				super.onScrollStateChanged(recyclerView, newState);
 				if (newState == RecyclerView.SCROLL_STATE_IDLE
 						&& lastVisibleItem + 1 == myRecyclerViewAdapter.getItemCount()) {
-					mSwiperefreshlayout.setRefreshing(true);
+					// mSwiperefreshlayout.setRefreshing(true);
+					// 上拉加载更多数据源
+					
+					nextP = nowP++;
+					mRenovate.initData(myRecyclerViewAdapter, arr, Currment, nextP);
 					mHandler.sendEmptyMessageDelayed(MORE_ITEM, 2000);
 				}
 			}
@@ -246,7 +256,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 				// TODO Auto-generated method stub
 				// viewpager页面改变时请求新数据
 				Currment=arg0;
-				mRenovate.initData(myRecyclerViewAdapter, arr,Currment);
+				mRenovate.initData(myRecyclerViewAdapter, arr, Currment, REFRESH_COMPLETE);
 				Log.i("onPageSelected", "arg0+" + arg0);
 			}
 
@@ -272,7 +282,7 @@ public class Home_home extends Fragment implements SwipeRefreshLayout.OnRefreshL
 		// TODO Auto-generated method stub
 		super.onStart();
 		if(i!=0){
-		mRenovate.initData(myRecyclerViewAdapter, arr,Currment);
+			mRenovate.initData(myRecyclerViewAdapter, arr, Currment, REFRESH_COMPLETE);
 		}
 		i++;
 //		myRecyclerViewAdapter.notifyDataSetChanged();

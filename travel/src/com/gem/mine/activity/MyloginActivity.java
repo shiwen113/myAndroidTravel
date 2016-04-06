@@ -1,6 +1,10 @@
 package com.gem.mine.activity;
 
 
+import io.rong.imkit.RongIM;
+import io.rong.imlib.model.Conversation;
+
+import com.gem.home.dao.MyApplication;
 import com.gem.scenery.R;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -34,9 +38,9 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 	//我的分享
 	private ImageView im_MyloginActivity_Myshare;
 	//我的设置
-	private ImageView IM_MyloginActivity_personalinformation;
+//	private ImageView IM_MyloginActivity_personalinformation;
 	//注册
-	private Button BT_MyloginActivity_myregister;
+//	private Button BT_MyloginActivity_myregister;
 	//登录
 	private ImageView IM_MyloginActivity_loginpage;
 	//我的旅行队消息
@@ -46,6 +50,7 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 	private Context context;
 	private HttpUtils http;
 	private RequestParams params;
+	private MyApplication m;
 	//我的主页
 		//三个点击事件  个人信息    我的旅行队    我的分享
 		//注册     旅行队消息      收藏
@@ -59,15 +64,15 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 		IM_MyloginActivity_PERSIONMESSAGEPICTURE=(ImageView) getView().findViewById(R.id.IM_MyloginActivity_PERSIONMESSAGEPICTURE);
 		IM_MyloginActivity_Mytravelteam=(ImageView) getView().findViewById(R.id.IM_MyloginActivity_Mytravelteam);
 		im_MyloginActivity_Myshare=(ImageView) getView().findViewById(R.id.im_MyloginActivity_Myshare);
-		IM_MyloginActivity_personalinformation=(ImageView) getView().findViewById(R.id.IM_MyloginActivity_personalinformation);
+//		IM_MyloginActivity_personalinformation=(ImageView) getView().findViewById(R.id.IM_MyloginActivity_personalinformation);
 		IM_MyloginActivity_PERSIONMESSAGEPICTURE.setOnClickListener(this);
 		IM_MyloginActivity_Mytravelteam.setOnClickListener(this);
 		im_MyloginActivity_Myshare.setOnClickListener(this);
-		IM_MyloginActivity_personalinformation.setOnClickListener(this);
-		BT_MyloginActivity_myregister=(Button) getView().findViewById(R.id.BT_MyloginActivity_myregister);
+//		IM_MyloginActivity_personalinformation.setOnClickListener(this);
+//		BT_MyloginActivity_myregister=(Button) getView().findViewById(R.id.BT_MyloginActivity_myregister);
 		BT_MyloginActivity_myteammessage=(Button) getView().findViewById(R.id.BT_MyloginActivity_myteammessage);
 		BT_MyloginActivity_myenshrine=(Button) getView().findViewById(R.id.BT_MyloginActivity_myenshrine);
-		BT_MyloginActivity_myregister.setOnClickListener(this);
+//		BT_MyloginActivity_myregister.setOnClickListener(this);
 		BT_MyloginActivity_myteammessage.setOnClickListener(this);
 		BT_MyloginActivity_myenshrine.setOnClickListener(this);
 		IM_MyloginActivity_loginpage=(ImageView) getView().findViewById(R.id.IM_MyloginActivity_loginpage);
@@ -77,6 +82,7 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 	public void onActivityCreated(Bundle savedInstanceState)  {
 		super.onActivityCreated(savedInstanceState);	
 		context=getContext();
+		m=(MyApplication) context.getApplicationContext();
 		viewInit();
 	}
 	public void onClick(View v) {		
@@ -111,33 +117,45 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 			startActivity(intent4);
 			break;
 			//注册页面
-		case R.id.BT_MyloginActivity_myregister:
-			Intent intent5 =new Intent(getActivity(),MypageregisterActivity.class);
-			startActivity(intent5);
-			break;
+//		case R.id.BT_MyloginActivity_myregister:
+//			Intent intent5 =new Intent(getActivity(),MypageregisterActivity.class);
+//			startActivity(intent5);
+//			break;
 			//页面跳转至旅行队消息
 		case R.id.BT_MyloginActivity_myteammessage:
 //			Intent intent6 =new Intent(getActivity(),TroopsActivity.class);
 //			startActivity(intent6);
+			RongIM.getInstance().startConversationList(context);
 			break;
 			//跳转至收藏页面
 		case R.id.BT_MyloginActivity_myenshrine:
-			Intent intent7 =new Intent(getActivity(),MycollectActivity.class);
+			if(m.getLd()!=null){
+			Intent intent7 =new Intent(context,MycollectActivity.class);
 			startActivity(intent7);
+			}else{
+				Toast.makeText(context, "请先登录，查看更多", Toast.LENGTH_LONG).show();
+			}
 			break;
 		
 		}
 	
 	}
 	
-	String urlAllTravel="http://10.201.1.12:8080/travel/Wode_lvxingdui";
+	
 	/**
 	 * 请求获得我相关的旅行队
 	 */
 		public void sendAllMyTravel(final Intent intent1){
 			http=new HttpUtils();
 			params=new RequestParams();
-			params.addBodyParameter("ld",String.valueOf(17));
+			String urlAllTravel = null;
+			if(m.getLd()!=null){
+			urlAllTravel="http://10.201.1.12:8080/travel/Wode_lvxingdui";
+			params.addBodyParameter("ld",String.valueOf(m.getLd().getLd()));
+			}else{
+				urlAllTravel="http://10.201.1.12:8080/travel/Wo";
+				Toast.makeText(context, "请先登陆", Toast.LENGTH_LONG).show();
+			}
 			http.send(HttpMethod.POST,urlAllTravel,params,new RequestCallBack<String>() {
 
 				@Override
@@ -152,17 +170,21 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 					startActivity(intent1);
 				}
 		 	});
-				
 		}
 
-		String urlShare="http://10.201.1.12:8080/travel/Wode_wodefenxiang";
+		String urlShare=null;
 		/**
 		 * 获取我分享的旅图
 		 */
 		public void sendShare(final Intent intent2){
 			http=new HttpUtils();
 			params=new RequestParams();
-			params.addBodyParameter("ld",String.valueOf(17));
+			if(m.getLd()!=null){
+				urlShare="http://10.201.1.12:8080/travel/Wode_wodefenxiang";
+			params.addBodyParameter("ld",String.valueOf(m.getLd().getLd()));
+			}else{
+				urlShare="http://10.201.1.12:8080/travel/g";
+			}
 			http.send(HttpMethod.POST, urlShare, params, new RequestCallBack<String>() {
 				@Override
 				public void onFailure(HttpException arg0, String arg1) {

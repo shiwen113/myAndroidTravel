@@ -46,6 +46,7 @@
     <string name="delete">删除</string>
     <string name="huifu">回复</string>
     <string name="shouchang">收藏</string>
+    <string name="yueban">约伴详情</string>
     
     <!-- 旅图 -->
     <string name="app_name">travel</string>
@@ -62,7 +63,7 @@
     
  <!-- 消息 -->
     <string name="message_tittle">消息</string>
-	<string name="zuijin_message">最近消息</string>
+	<string name="zuijin_message">好友列表</string>
 	<string name="chat_adrress">通讯录</string>
 	<string name="personal_send">发送</string>
 	<string name="message_inf_agree">同意</string>

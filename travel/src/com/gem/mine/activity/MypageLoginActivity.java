@@ -4,7 +4,10 @@ package com.gem.mine.activity;
 import java.lang.reflect.Type;
 
 import com.gem.home.activity.Fragment_Activity;
+import com.gem.home.dao.MyApplication;
 import com.gem.home.until.LoginData;
+import com.gem.message.activity.RongyunDemo;
+import com.gem.message.activity.SPUtils;
 import com.gem.scenery.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -16,7 +19,9 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
 import android.app.Activity;
+import android.app.Application;
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -46,8 +51,10 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
 	private EditText pw;
 	private String pwd;
 	 private String account;
+	 private MyApplication m;
+	 private Context context;
 	//登录头像
-	private ImageView im_MypageLoginActivity_touxiang;
+//	private ImageView im_MypageLoginActivity_touxiang;
 	//注册
 	private TextView tv_MypageLoginActivity_mypageregister;
 	
@@ -60,6 +67,8 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_mypage_login);
+		context=getApplication();
+		m=(MyApplication) MypageLoginActivity.this.getApplicationContext();
 		 eT=(EditText) findViewById(R.id.searchEditText);//用户名
          Tt=(TextView) findViewById(R.id.tv_1result);//显示登录结果
          pw=(EditText) findViewById(R.id.et_MypageLoginActivity_Pleaseenteryourpassword);//��ʾ����
@@ -73,8 +82,8 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
         tv_MypageLoginActivity_forgetpassword=(TextView) findViewById(R.id.tv_MypageLoginActivity_forgetpassword);
         tv_MypageLoginActivity_forgetpassword.setOnClickListener(this);
 	   //点击登录头像，页面跳转我的页面
-        im_MypageLoginActivity_touxiang=(ImageView) findViewById(R.id.im_MypageLoginActivity_touxiang);
-        im_MypageLoginActivity_touxiang.setOnClickListener(this);
+//        im_MypageLoginActivity_touxiang=(ImageView) findViewById(R.id.im_MypageLoginActivity_touxiang);
+//        im_MypageLoginActivity_touxiang.setOnClickListener(this);
 	}
 	//实现，页面跳转至找回  页面跳转注册页面  登录按钮的实现
 	public void onClick(View v) {
@@ -92,11 +101,11 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
 			Intent intent10=new Intent(this,Mypageforgetpassword.class);
 			startActivity(intent10);
 			break;
-			//点击头像，页面跳转至我的个人页面
-		case R.id.im_MypageLoginActivity_touxiang:
-			Intent intent3 =new Intent(this,MyloginActivity.class);
-			startActivity(intent3);
-			break;
+//			//点击头像，页面跳转至我的个人页面
+//		case R.id.im_MypageLoginActivity_touxiang:
+//			Intent intent3 =new Intent(this,MyloginActivity.class);
+//			startActivity(intent3);
+//			break;
 			
 			//实现登录功能
         case R.id.LoginActivitydlbutton:
@@ -109,6 +118,7 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
 			
 			String url;
 			url="http://10.201.1.12:8080/travel/Mypagelogin_login";
+			if(m.getLd()==null){
 			RequestParams params=new RequestParams();
 			params.addBodyParameter("account",account);
 			params.addBodyParameter("userPwd", pwd);
@@ -135,12 +145,19 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
 				    	Tt.setText("账号不存在");
 				    }else if(data.getAccount().equals(account)&&data.getPassWord().equals(pwd)){
 				    	Tt.setText("登录成功");
-				    	Intent intent=new Intent(MypageLoginActivity.this,Fragment_Activity.class);
+				    	 m.setLd(data);
+				    	 RongyunDemo rd=new RongyunDemo(context);
+//				    	 rd.getToken();
+				    	 Intent intent=new Intent(MypageLoginActivity.this,Fragment_Activity.class);
+				 		if(SPUtils.get(context,"token","")!=null&&!SPUtils.get(context, "token","").equals("")){
+				 			rd.connect((String)SPUtils.get(context, "token",""));
+				 		}else{
+				 			rd.getToken();
+				 		}
 				    	startActivity(intent);
 				    }else{
 				    	Tt.setText("密码错误");
 				    }
-				    Log.i("urilActivity", "result:"+result);
 //					if(result!=null&&!result.trim().equals("null")){
 //						
 //						//Tt.setText(result);
@@ -156,6 +173,10 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
 	
 		
 		});
+			
+			}else{
+				Toast.makeText(getApplication(), "已登录", Toast.LENGTH_LONG).show();
+			}
 			System.out.println("ok");
 		
 		}

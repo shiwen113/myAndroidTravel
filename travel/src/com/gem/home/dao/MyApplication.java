@@ -1,10 +1,28 @@
 package com.gem.home.dao;
 
+import io.rong.imkit.RongIM;
+import io.rong.imlib.RongIMClient;
+
+import java.util.LinkedList;
+
+import android.app.ActivityManager;
 import android.app.Application;
+import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Vibrator;
 
+import com.baidu.mapapi.SDKInitializer;
+import com.gem.home.baiduMap.LocationService;
+import com.gem.home.until.LoginData;
+import com.gem.message.action.RecentChatAdapter;
+import com.gem.message.client.Client;
+import com.gem.message.entity.RecentChatEntity;
+import com.gem.message.utils.Constants;
+import com.gem.message.utils.SharePreferenceUtil;
 import com.gem.scenery.R;
+import com.gem.scenery.entity.PopularScene;
 import com.nostra13.universalimageloader.cache.memory.impl.UsingFreqLimitedMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -18,12 +36,42 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 //获取全局对象
 public class MyApplication extends Application {
 	private static Context context;
-
+	private Client client;// 客户端
+	private boolean isClientStart;// 客户端连接是否启动
+	private NotificationManager mNotificationManager;
+	private int newMsgNum = 0;// 后台运行的消息
+	private LinkedList<RecentChatEntity> list;
+	private RecentChatAdapter adapter;
+	private int recentNum = 0;
+	private LoginData ld;
+	public LocationService locationService;
+	public Vibrator mVibrator;
+	private PopularScene ps;
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
-		super.onCreate();
 		context = getApplicationContext();
+		SharePreferenceUtil util = new SharePreferenceUtil(this,
+				Constants.SAVE_USER);
+		System.out.println(util.getIp() + " " + util.getPort());
+		client = new Client(util.getIp(), util.getPort());// 从配置文件中读ip和地址
+		list = new LinkedList<RecentChatEntity>();
+		adapter = new RecentChatAdapter(context,list);
+		// TODO Auto-generated method stub
+		
+		//融云
+//		if (getApplicationInfo().packageName.equals(getCurProcessName(getApplicationContext())) ||
+//                "io.rong.push".equals(getCurProcessName(getApplicationContext()))) {
+			RongIM.init(this);
+//        }
+		
+			/***
+			 * 初始化定位sdk，建议在Application中创建
+			 */
+			locationService = new LocationService(getApplicationContext());
+			mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
+			SDKInitializer.initialize(getApplicationContext());
+			
+		super.onCreate();
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(
 				context)
 				.memoryCacheExtraOptions(480, 800)
@@ -70,7 +118,95 @@ public class MyApplication extends Application {
 		ImageLoader.getInstance().init(config);
 	}
 
+	
+	 public static String getCurProcessName(Context context) {
+
+	        int pid = android.os.Process.myPid();
+
+	        ActivityManager activityManager = (ActivityManager) context
+	                .getSystemService(Context.ACTIVITY_SERVICE);
+
+	        for (ActivityManager.RunningAppProcessInfo appProcess : activityManager
+	                .getRunningAppProcesses()) {
+
+	            if (appProcess.pid == pid) {
+	                return appProcess.processName;
+	            }
+	        }
+	        return null;
+	    }
+
 	public static Context getContext() {
 		return context;
 	}
+	public Client getClient() {
+		return client;
+	}
+
+	public boolean isClientStart() {
+		return isClientStart;
+	}
+
+	public void setClientStart(boolean isClientStart) {
+		this.isClientStart = isClientStart;
+	}
+
+	public NotificationManager getmNotificationManager() {
+		return mNotificationManager;
+	}
+
+	public void setmNotificationManager(NotificationManager mNotificationManager) {
+		this.mNotificationManager = mNotificationManager;
+	}
+
+	public int getNewMsgNum() {
+		return newMsgNum;
+	}
+
+	public void setNewMsgNum(int newMsgNum) {
+		this.newMsgNum = newMsgNum;
+	}
+
+	public LinkedList<RecentChatEntity> getmRecentList() {
+		return list;
+	}
+
+	public void setmRecentList(LinkedList<RecentChatEntity> mRecentList) {
+		this.list = mRecentList;
+	}
+
+	public RecentChatAdapter getmRecentAdapter() {
+		return adapter;
+	}
+
+	public void setmRecentAdapter(RecentChatAdapter mRecentAdapter) {
+		this.adapter = mRecentAdapter;
+	}
+
+	public int getRecentNum() {
+		return recentNum;
+	}
+
+	public void setRecentNum(int recentNum) {
+		this.recentNum = recentNum;
+	}
+
+	public LoginData getLd() {
+		return ld;
+	}
+
+	public void setLd(LoginData ld) {
+		this.ld = ld;
+	}
+
+
+	public PopularScene getPs() {
+		return ps;
+	}
+
+
+	public void setPs(PopularScene ps) {
+		this.ps = ps;
+	}
+
 }

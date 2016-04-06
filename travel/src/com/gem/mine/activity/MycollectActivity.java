@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gem.home.dao.MyApplication;
 import com.gem.home.until.PublishTravel;
 import com.gem.mine.action.MycollectAdapter;
 import com.gem.scenery.R;
@@ -31,18 +32,24 @@ public class MycollectActivity extends Activity implements OnClickListener{
     private List<PublishTravel> arr=new ArrayList<PublishTravel>();
     private MycollectAdapter adapter;
     private ImageView back;
+    private MyApplication m;
 	//收藏页面
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_mycollect);
+		m=(MyApplication) getApplicationContext();
 		listView=(ListView) findViewById(R.id.lv_lvxingdui_shoucang);
 		back=(ImageView) findViewById(R.id.ibtn_shoucang);
 //		adapter= new MycollectAdapter(this, arr);
 //		listView.setAdapter(adapter);
 		back.setOnClickListener(this);
+//		if(m.getLd()!=null){
 		initialize();
+//		}else{
+//			Toast.makeText(getApplication(), "请先登录，查看更多", Toast.LENGTH_LONG).show();
+//		}
 	}
 
 	public void initialize(){
@@ -50,7 +57,7 @@ public class MycollectActivity extends Activity implements OnClickListener{
 		String url="http://10.201.1.12:8080/travel/Wode_shoucang";
 		HttpUtils utils=new HttpUtils();
 		RequestParams params=new RequestParams();
-		params.addBodyParameter("ld",String.valueOf(17));
+		params.addBodyParameter("ld",String.valueOf(m.getLd().getLd()));
 		utils.send(HttpMethod.POST, url,params,new RequestCallBack<String>() {
 
 			@Override

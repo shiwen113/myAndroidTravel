@@ -178,8 +178,9 @@ public class SceneryHomeChage implements OnPageChangeListener{
 				if(!result.equals(null)){
 				listmap=json.fromJson(result, type);
 //				auto.setResultSize(listmap.size()); 
-				ListViewAdapter adapter =new ListViewAdapter(context,listmap);
-				lv.get(0).setAdapter(adapter);
+				
+//				ListViewAdapter adapter =new ListViewAdapter(context,listmap);
+//				lv.get(0).setAdapter(adapter);
 				}
 			}
 		});

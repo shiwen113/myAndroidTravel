@@ -31,7 +31,8 @@ public class Renovate {
 	private static final String URL_AIM="http://10.201.1.12:8080/travel/Home_home_mdd";//目的地
 	private static final String URL_SHUT="http://10.201.1.12:8080/travel/Home_home_js";//结束时间
 	// 初始化数据网络端
-	public void initData( final MyRecyclerViewAdapter adapter,final List<PublishTravel> arr ,int arg0) {
+	// 初始化数据网络端
+	public void initData( final MyRecyclerViewAdapter adapter,final List<PublishTravel> arr ,int arg0,final int page) {
 	Log.i("xxy", "renovate+initdata");
 	switch (arg0) {
 	case 0:
@@ -92,7 +93,6 @@ public class Renovate {
 			}}).start();
 				
 	}
-	
 
 	
 }

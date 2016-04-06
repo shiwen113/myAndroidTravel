@@ -2,16 +2,19 @@ package com.gem.home.dao;
 
 import java.util.List;
 
-import com.gem.home.until.PublishTravel;
-import com.gem.home.until.ToolDao;
-import com.gem.scenery.R;
-import com.lidroid.xutils.BitmapUtils;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+
+import com.gem.home.until.PublishTravel;
+import com.gem.home.until.ToolDao;
+import com.gem.scenery.R;
+import com.lidroid.xutils.BitmapUtils;
 
 public class ListViewAdaptSearchData extends BaseAdapter {
 	private List<PublishTravel> list;//查询结果
@@ -79,7 +82,14 @@ public class ListViewAdaptSearchData extends BaseAdapter {
 		BitmapUtils bpu=new BitmapUtils(context);
 		for(int i=0;picture.length>i;i++){
 			String url=picture[i];
-			bpu.display(arg0.ll,"http://10.201.1.12:8080/gotravel/"+"TravelTeam/"+url);
+			ImageView iv=new ImageView(context);
+//			LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) iv.getLayoutParams(); 
+//			linearParams.height = 100; // 当控件的高强制设成365象素
+//			linearParams.weight=200;
+//			iv.setLayoutParams(linearParams); // 使设置好的布局参数应用到控件aaa
+//			arg0.ll.setLayoutParams(lp);
+			bpu.display(iv,"http://10.201.1.12:8080/gotravel/"+"TravelTeam/"+url);
+			arg0.ll.addView(iv);
 		}
 	}
 }

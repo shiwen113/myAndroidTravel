@@ -5,7 +5,7 @@
     android:background="#fff"
     android:orientation="vertical" >
 
-    <ListView
+   <!--  <ListView
         android:id="@+id/lv_msg_list_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -30,5 +30,94 @@
             android:layout_height="wrap_content"
             android:text="@string/personal_send" />
     </LinearLayout>
+ -->
+ 
+    <RelativeLayout
+        android:id="@+id/rl_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.01"
+        android:background="@drawable/title_bar"
+        android:orientation="vertical" >
 
+        <Button
+            android:id="@+id/chat_back"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/selector_btn_back"
+            android:paddingLeft="10dp"
+            android:text="会话"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/chat_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="way"
+            android:textColor="#ffffff"
+            android:textSize="20.0sp" />
+    </RelativeLayout>
+
+
+
+
+
+
+
+
+    <ListView
+        android:id="@+id/lv_msg_list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="10.0dip"
+        android:layout_marginRight="10.0dip"
+        android:layout_marginTop="10.0dip"
+        android:layout_weight="10"
+        android:cacheColorHint="#00000000"
+        android:divider="@null"
+        android:dividerHeight="5dp"
+        android:scrollbars="none" >
+
+    </ListView>
+
+
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.8"
+        android:background="@drawable/layout_bg1" >
+
+        <Button
+            android:id="@+id/bt_pca_send"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/chat_send_button_bg"
+            android:text="发送"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/et_pca_input_text"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/bt_pca_send"
+            android:background="@drawable/edittext1"
+            android:singleLine="true"
+            android:textSize="18sp" />
+    </RelativeLayout>
+ 
 </LinearLayout>

@@ -18,12 +18,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gem.home.dao.MyApplication;
 import com.gem.scenery.R;
 import com.gem.scenery.action.ListViewAdapter;
 import com.gem.scenery.action.SceneryHomeAdapt;
 import com.gem.scenery.action.SceneryHomeChage;
 import com.gem.scenery.action.ScreneryHomeOnClik;
-import com.gem.scenery.action.ListViewAdapter.Callback;
+import com.gem.scenery.entity.PopularScene;
 import com.gem.scenery.entity.Senery;
 import com.gem.scenery.entity.SharePicture;
 import com.gem.scenery.interfaces.OnLoadListener;
@@ -40,7 +41,7 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
-public class SceneryHomeActivity extends Fragment implements OnRefreshListener,OnLoadListener,Callback{
+public class SceneryHomeActivity extends Fragment implements OnRefreshListener,OnLoadListener{
 		private List<View> views;// Tab页面列表
 		private ViewPager vp;//叶卡内容
 	    private ImageView imageView,imageView2,imageView3;// 动画图片
@@ -61,12 +62,14 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
 	    private Context context;
 	    private ListViewAdapter adapter;//ListVeiw适配器
 	    private SceneryHomeChage shg;
+	    private List<PopularScene> arr;
 	    // 区分当前操作是刷新还是加载
 	    public  int refresh ;//刷新  
 	    public  int load ;//加载
+	    private MyApplication m;
 //	    private ImageView imageview;
 		// 初始化加载fragment里的部件
-	    private Callback callback;//回调接口
+//	    private Callback callback;//回调接口
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 			View view = inflater.inflate(R.layout.activity_scenery_home, container, false);
@@ -90,6 +93,7 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
       //  setContentView(R.layout.activity_scenery_home);
         vp=(ViewPager) this.getView().findViewById(R.id.vp_scenery);
         context=getContext();
+        m=(MyApplication) getActivity().getApplicationContext();
         //获得LayoutInflater对象
         LayoutInflater inflater=getLayoutInflater(savedInstanceState).from(context);
         //ViewPager加载页面
@@ -157,12 +161,13 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
         
     }
 
-	String url="http://10.201.1.12:8080/travel/SharePicture_remeng";
+//	String url="http://10.201.1.12:8080/travel/SharePicture_remeng";
+	String url="http://10.201.1.12:8080/travel/SecenryAllData";
     //从网络上获取数据
     public void ListData(final int what){
     	HttpUtils http=new HttpUtils();
     	RequestParams params = new RequestParams();
-    	params.addBodyParameter("success","success");
+    	params.addBodyParameter("ld",String.valueOf(m.getLd().getLd()));
     	//
     	http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
 
@@ -176,13 +181,13 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
 			@Override
 			public void onSuccess(ResponseInfo<String> arg0) {
 				String result=arg0.result;
-				Type type=new TypeToken<List<SharePicture>>(){}.getType();
+				Type type=new TypeToken<List<PopularScene>>(){}.getType();
 				Gson json=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
 				if(!result.equals(null)){
-				listmap=json.fromJson(result, type);
-				auto.setResultSize(listmap.size());   
+				arr=json.fromJson(result, type);
+				auto.setResultSize(arr.size());   
 					if(adapter==null){
-						adapter=new ListViewAdapter(context, listmap);
+						adapter=new ListViewAdapter(context, arr);
 						lv_hot.setAdapter(adapter);	
 					}
 					adapter.notifyDataSetChanged();
@@ -272,10 +277,10 @@ public class SceneryHomeActivity extends Fragment implements OnRefreshListener,O
 	/**
 	 * 回调，处理adapter的点击事件
 	 */
-	@Override
-	public void myClick(View v) {
-		
-	}
+//	@Override
+//	public void myClick(View v) {
+//		
+//	}
 	
 	
 }

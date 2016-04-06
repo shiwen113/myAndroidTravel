@@ -9,6 +9,27 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
+    <!-- 百度API所需权限 -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    
+    
+    
+     <!-- 手机振动的权限 -->
+    <uses-permission android:name="android.permission.VIBRATE"/>  
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -29,10 +50,33 @@
     <!-- 相机 -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+     <!-- 融云权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 获取机型信息权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
+
+    <!-- 查看 Wi-Fi 状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 查看网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 录音 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 控制振动器 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 防止设备休眠 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    
+    
     <!-- 获得全局对象MyApplication（content） -->
     <application
         android:name="com.gem.home.dao.MyApplication"
@@ -46,17 +90,33 @@
         </activity>
         	<activity android:name="com.gem.scenery.action.Travel_team_all_data"></activity>
         
+<!--         <activity -->
+<!--             android:name="com.gem.message.MessageHomeActivity" -->
+<!--             android:label="@string/app_name" -->
+<!--             android:theme="@android:style/Theme.NoTitleBar" > -->
+<!--         </activity> -->
+<!--         <activity -->
+<!--             android:name="com.gem.message.PersonalChatActivity" -->
+<!--             android:label="@string/app_name" > -->
+<!--         </activity> -->
+<!--         <activity android:name="com.gem.message.MyActivity"></activity> -->
+         <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+            <intent-filter>
+                <action android:name="com.baidu.location.service_v2.2" >
+                </action>
+            </intent-filter>
+        </service>   
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="YO3wuUpKYdwcCHE94NQe3ky6uXgavsVp" />
         
-        <activity
-            android:name="com.gem.message.MessageHomeActivity"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" >
-        </activity>
-        <activity
-            android:name="com.gem.message.PersonalChatActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity android:name="com.gem.home.activity.Fragment_Activity" >
+        <activity android:name="com.gem.home.activity.Fragment_Activity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -77,8 +137,12 @@
         </activity>
         <activity android:name="com.gem.home.activity.LookAllPeopleNumberActivity"></activity>
 		<activity android:name="com.gem.scenery.SendSharePictureActivity"></activity>
-        <activity android:name="com.gem.scenery.PictureUpLoadActivity"></activity>
-        
+        <activity android:name="com.gem.scenery.PictureUpLoadActivity"
+             android:launchMode="singleTask"
+            android:screenOrientation="portrait" 
+            ></activity>
+        <activity android:name="com.gem.message.activity.FriendChatActivity"></activity>
+        <activity android:name="com.gem.message.MessageHomeActivity"></activity>
         
         <!-- 我的页面 Activity -->
         <activity android:name="com.gem.mine.activity.MineTravelTeamDataActivity" >
@@ -138,6 +202,120 @@
         </activity>
         <activity android:name="com.king.photo.activity.GalleryActivity" >
         </activity>
+        
+         <!-- 融云服务 -->
+        <service
+            android:name="io.rong.push.PushService"
+            android:process="io.rong.push" >
+
+            <!-- Waring: The name of the push process can't be changed!!! -->
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="io.rong.push" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="io.rong.push.CommandService"
+            android:process="io.rong.push" >
+
+            <!-- Waring: The name of the push process can't be changed!!! -->
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="io.rong.command" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="io.rong.push.PushReceiver"
+            android:process="io.rong.push" >
+
+            <!-- Waring: The name of the push process can't be changed!!! -->
+            <intent-filter>
+                <action android:name="io.rong.imlib.action.push.heartbeat" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="io.rong.imkit.tools.SelectPictureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="io.rong.imkit.tools.PreviewPictureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="io.rong.imkit.tools.RongWebviewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="io.rong.imkit.widget.provider.TakingPicturesActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name="io.rong.imlib.ipc.RongService"
+            android:process=":ipc" >
+        </service>
+        <service android:name="io.rong.imlib.ReConnectService" />
+
+        <receiver android:name="io.rong.imlib.ConnectChangeReceiver" />
+        <receiver android:name="io.rong.imlib.ipc.PushMessageReceiver" >
+            <intent-filter>
+                <action android:name="io.rong.push.message" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="io.rong.imlib.HeartbeatReceiver"
+            android:process=":ipc" />
+
+        <meta-data
+            android:name="RONG_CLOUD_APP_KEY"
+            android:value="e0x9wycfxzdpq" />
+        <activity
+            android:name="com.gem.message.activity.ConversationListActivity"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.gem.scenery"
+                    android:pathPrefix="/conversationlist"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.gem.message.activity.ConversationtActivity"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.gem.scenery"
+                    android:pathPrefix="/conversation/"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        
+        
     </application>
 
 </manifest>

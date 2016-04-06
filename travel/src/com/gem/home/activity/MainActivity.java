@@ -44,6 +44,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.gem.home.dao.MyApplication;
 import com.gem.home.db.MyDatabaseHelper;
 import com.gem.home.until.LoginData;
 import com.gem.home.until.PublishTravel;
@@ -80,6 +81,7 @@ public class MainActivity extends Activity {
 	private String teamName, startPoint, destination, sex, city, arriveTime, startTime, allDay, age,
 			teamNumber,sview,sintroduce;
 	private String urlPicture="picture";
+	private MyApplication m;
 	private int i=0;
 //	private String url="http://10.201.1.12:8080/travel/Home_home_yy";
 	private String urlsendPicture="http://10.201.1.12:8080/travel/Home_home_yyzp";
@@ -94,6 +96,7 @@ public class MainActivity extends Activity {
 		parentView = getLayoutInflater().inflate(R.layout.activity_selectimg, null);
 		setContentView(parentView);
 		Init();
+		m=(MyApplication) getApplicationContext();
 		
 		Intent intentDB = getIntent();
 		intentDB(intentDB);
@@ -132,6 +135,7 @@ public class MainActivity extends Activity {
 	 * 发数据给网络
 	 */
 	public void sendHttp(){
+		if(m.getLd()!=null){
 		HttpUtils http=new HttpUtils();
 		RequestParams params=new RequestParams();
 //		params.addBodyParameter("teamName",mteamName);//队名
@@ -141,11 +145,9 @@ public class MainActivity extends Activity {
 //		params.addBodyParameter("city",mcity);//城市
 //		params.addBodyParameter("startTime",mstartTime);//出发时间
 //		params.addBodyParameter("arriveTime",marriveTime);//到达时间
-		LoginData ld=new LoginData();
-		ld.setLd(16);
 		plt=new PublishTravel();
 		plt.setTeamName(teamName);
-		plt.setLd(ld);
+		plt.setLd(m.getLd());
 		plt.setAllDay( Integer.parseInt(allDay));
 		plt.setStatPoint(startPoint);
 		plt.setDestination(destination);
@@ -207,7 +209,9 @@ public class MainActivity extends Activity {
 				}
 			}
 		});
-		
+		}else{
+			Toast.makeText(getApplication(), "请先登陆", Toast.LENGTH_SHORT).show();
+		}
 		}
 	
 	 /**
