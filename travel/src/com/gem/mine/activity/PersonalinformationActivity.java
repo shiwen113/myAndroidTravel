@@ -1,17 +1,17 @@
 package com.gem.mine.activity;
 
-
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.lang.reflect.Type;
 
 import com.gem.home.dao.MyApplication;
 import com.gem.home.until.LoginData;
 import com.gem.scenery.R;
+import com.gem.scenery.entity.FileUtils;
+import com.gem.scenery.entity.ImageItem;
 import com.gem.scenery.entity.PersonalData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
@@ -30,7 +30,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.Media;
@@ -74,9 +73,11 @@ public class PersonalinformationActivity extends Activity implements OnClickList
     private ImageView img;
     private PopupWindow popupWindow; 
 	private Uri imageUri;
+	private ImageView back;
 	public static final int TAKE_PHOTO = 1;
 	public static final int CROP_PHOTO = 2;
 	public static final int CHOOSE_PHOTO = 3;
+	private ImageItem takePhoto ;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
@@ -99,6 +100,8 @@ public class PersonalinformationActivity extends Activity implements OnClickList
 		et_PersonalinformationActivity_address=(EditText) findViewById(R.id.et_PersonalinformationActivity_address);
 		img=(ImageView) findViewById(R.id.tv_PersonalinformationActivity_mypicturetouxiang);
 		img.setOnClickListener(this);
+		back=(ImageView) findViewById(R.id.im_PersonalinformationActivity_return);
+		back.setOnClickListener(this);
 		if(m.getLd()!=null){
 		//分别写每个控件的实现		
 		HttpUtils httpUtils=new HttpUtils();
@@ -124,12 +127,20 @@ public class PersonalinformationActivity extends Activity implements OnClickList
 					Type type=new TypeToken<PersonalData>(){}.getType();
 					PersonalData data=gson.fromJson(s, type);
 					et_PersonalinformationActivity_name.setText(data.getLd().getUserName());
+					if(data.getAge()!=-1){
 					et_myage.setText(String.valueOf(data.getAge()));
+					}else {
+						et_myage.setText("");
+					}
 					et_PersonalinformationActivity_address.setText(data.getOftenPoint());
 					if(data.getSex()==1){
 						radioButton1.setChecked(true);
 					}else {
 						radioButton2.setChecked(true);
+					}
+					if(data.getUriUpLoadPicture()!=null&&!data.getUriUpLoadPicture().equals("")){
+					BitmapUtils bu=new BitmapUtils(PersonalinformationActivity.this);
+					bu.display(img, "http://10.201.1.12:8080/gotravel/UserImage/"+data.getUriUpLoadPicture());
 					}
 				}
 			}
@@ -148,7 +159,7 @@ public class PersonalinformationActivity extends Activity implements OnClickList
 				finish();
 				break;
 			//点击更换图片
-			case R.id.tv_PersonalinformationActivity_mychange:		
+			case R.id.tv_PersonalinformationActivity_mypicturetouxiang:		
 				onCamera();
 				break;
 				//点击保存  传送数据
@@ -192,6 +203,13 @@ public class PersonalinformationActivity extends Activity implements OnClickList
 					public void onSuccess(ResponseInfo<String> arg0) {
 						// TODO Auto-generated method stub
 						Log.i("mysave","ok2");
+						if(takePhoto!=null){
+						sendUserPicture();
+						}else {
+						Toast.makeText(getApplication(), "保存成功", Toast.LENGTH_SHORT).show();
+						PersonalinformationActivity.this.finish();
+						}
+						
 					}
 				});	
 			}else{
@@ -199,6 +217,29 @@ public class PersonalinformationActivity extends Activity implements OnClickList
 			}
 	}
   }
+	/**
+	 * 保存用户图片
+	 */
+	public void sendUserPicture(){
+		HttpUtils http=new HttpUtils();
+	    RequestParams params=new RequestParams();
+	    params.addBodyParameter("ld",String.valueOf(m.getLd().getLd()));
+	    File file=new File(takePhoto.getImagePath());
+	    params.addBodyParameter("file",file);
+	    http.send(HttpMethod.POST, httpUrl, params, new RequestCallBack<String>() {
+
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				Toast.makeText(getApplication(), "保存成功", Toast.LENGTH_SHORT).show();
+				PersonalinformationActivity.this.finish();
+			}
+		});
+	}
 	@Override
 	public void onCheckedChanged(RadioGroup group, int checkedId) {
 		// TODO Auto-generated method stub
@@ -213,172 +254,199 @@ public class PersonalinformationActivity extends Activity implements OnClickList
 	}
 	
 	/**
-	  * 照相机弹框
-	  */
-	 public void onCamera(){
-		//点击相机图片弹出PopupWindow
-//		 局注入器，注入布局给View对象
-      View myView = getLayoutInflater().inflate(R.layout.action_camera, null);
-      //通过view 和宽·高，构造PopopWindow
-      popupWindow = new PopupWindow(myView, 300, 400, true);
-       
-      popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000)
-              //此处为popwindow 设置背景，同事做到点击外部区域，popwindow消失
-             );
-      popupWindow.setOutsideTouchable(true);
-      //设置焦点为可点击
-      popupWindow.setFocusable(true);//可以试试设为false的结果
-      //将window视图显示在myButton下面
-      popupWindow.showAsDropDown(img);
-//		System.out.println("点击了");
-      TextView tv_camera=(TextView) myView.findViewById(R.id.tv_camera);
-      TextView tv_photos=(TextView) myView.findViewById(R.id.tv_photos);
-      tv_camera.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// 定义file对象 用于存储摄像头拍下来的图片 图片命名
-			File outputImage = new File(Environment
-					.getExternalStorageDirectory(), "output_image.jpg");
-			if (outputImage.exists()) {
-				outputImage.delete();
+	 * 照相机弹框
+	 */
+	public void onCamera() {
+		// 点击相机图片弹出PopupWindow
+		// 局注入器，注入布局给View对象
+		View myView = getLayoutInflater().inflate(R.layout.action_camera, null);
+		// 通过view 和宽·高，构造PopopWindow
+		popupWindow = new PopupWindow(myView, 300, 400, true);
+
+		popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000)
+		// 此处为popwindow 设置背景，同事做到点击外部区域，popwindow消失
+				);
+		popupWindow.setOutsideTouchable(true);
+		// 设置焦点为可点击
+		popupWindow.setFocusable(true);// 可以试试设为false的结果
+		// 将window视图显示在myButton下面
+		popupWindow.showAsDropDown(img);
+		// System.out.println("点击了");
+		TextView tv_camera = (TextView) myView.findViewById(R.id.tv_camera);
+		TextView tv_photos = (TextView) myView.findViewById(R.id.tv_photos);
+		tv_camera.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// 定义file对象 用于存储摄像头拍下来的图片 图片命名
+				/*File outputImage = new File(Environment
+						.getExternalStorageDirectory(), "output_image.jpg");
+				if (outputImage.exists()) {
+					outputImage.delete();
+				}
+				try {
+					outputImage.createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// 调用URI的fromFile方法将File对象转化成Uri对象 这个对象指的就是拍出来的图片的唯一地址
+				imageUri = Uri.fromFile(outputImage);*/
+				// 利用意图调用相机
+				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			/*	Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+				// Android自定义裁切输出位置
+				intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+				// 调用startActivityForResult()这个方法来启动相机程序     */			
+				startActivityForResult(intent, TAKE_PHOTO);
+                popupWindow.dismiss();
+                
 			}
-			try {
-				outputImage.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		});
+		tv_photos.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent("android.intent.action.GET_CONTENT");// 打开相机程序，选择照片
+				intent.setType("image/*");
+				startActivityForResult(intent, CHOOSE_PHOTO);
+				popupWindow.dismiss();
 			}
-			// 调用URI的fromFile方法将File对象转化成Uri对象 这个对象指的就是拍出来的图片的唯一地址
-			imageUri = Uri.fromFile(outputImage);
-			// 利用意图调用相机
-			Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-			// Android自定义裁切输出位置
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-			// 调用startActivityForResult()这个方法来启动相机程序
-			startActivityForResult(intent, TAKE_PHOTO);
-		}
-	});
-      tv_photos.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent("android.intent.action.GET_CONTENT");// 打开相机程序，选择照片
-			intent.setType("image/*");
-			startActivityForResult(intent, CHOOSE_PHOTO);
-			popupWindow.dismiss();
-		}
-	});
-	 }
+		});
+	}
 
 	// 通过onActivityResult()接收传回的图像
-		@Override
-		protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-			// TODO Auto-generated method stub
-			super.onActivityResult(requestCode, resultCode, data);
-			switch (requestCode) {
-			case TAKE_PHOTO:
-				if (resultCode == RESULT_OK) {
-					Toast.makeText(getApplication(), "onActivityResult_TAKE_PHOTO", Toast.LENGTH_SHORT).show();
-					Log.i("onActivityResult", "TAKE_PHOTO");
-					Intent intent = new Intent("com.android.camera.action.CROP");
-					intent.setDataAndType(imageUri, "image/*");
-					intent.putExtra("scale", true);
-					intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-					startActivityForResult(intent, CROP_PHOTO);
-				}
-				break;
-			case CROP_PHOTO:
-				if (resultCode == RESULT_OK) {
-					Log.i("log", "ok");
-					try {
-						Bitmap bitmap = BitmapFactory
-								.decodeStream(getContentResolver().openInputStream(
-										imageUri));
-						Toast.makeText(getApplication(), "onActivityResult_TAKE_PHOTO", Toast.LENGTH_SHORT).show();
-						Log.i("onActivityResult", "CROP_PHOTO");
-						// 将裁剪后的照片显示出来
-						img.setImageBitmap(bitmap);
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case TAKE_PHOTO:
+			if (resultCode == RESULT_OK) {
+//				Toast.makeText(getApplication(), "onActivityResult_TAKE_PHOTO",
+//						Toast.LENGTH_SHORT).show();
+//				Log.i("onActivityResult", "TAKE_PHOTO");
+//				Intent intent = new Intent("com.android.camera.action.CROP");
+//				intent.setDataAndType(imageUri, "image/*");
+//				intent.putExtra("scale", true);
+//				intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+//				startActivityForResult(intent, CROP_PHOTO);
+				String fileName = String.valueOf(System.currentTimeMillis());
+				// Bitmap bitmap = BitmapFactory
+				// .decodeStream(getContentResolver().openInputStream(
+				// imageUri));
+				Bitmap bm = (Bitmap) data.getExtras().get("data");
+//				Toast.makeText(getApplication(), "onActivityResult_TAKE_PHOTO",
+//						Toast.LENGTH_SHORT).show();
+				Log.i("onActivityResult", bm+"");
+				FileUtils.saveBitmap(bm, fileName);
 
-				}
-				break;
-			case CHOOSE_PHOTO:
-				if (resultCode ==RESULT_OK) {
-					// 判断手机系统版本号
-					if (Build.VERSION.SDK_INT >= 19) {
-						HandlerImageOnKitKat(data);
-					} else {
-						HandlerImageBeforeKitKat(data);
-					}
-				}
-				break;
-			default:
-				break;
-		
-		}
-		}
-		@TargetApi(19)
-		private void HandlerImageOnKitKat(Intent data) {
-			// TODO Auto-generated method stub
-			String imagePath = null;
-			Uri uri = data.getData();
-			if (DocumentsContract.isDocumentUri(this, uri)) {
-				String docId = DocumentsContract.getDocumentId(uri);
-				if ("com.android.providers.downloads.documents".equals(uri
-						.getAuthority())) {
-					String id = docId.split(":")[1];
-					String selection = MediaStore.Images.Media._ID + "=" + id;
-					imagePath = getImagePath(
-							MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
-				} else if ("com.android.providers.downloads.documents".equals(uri
-						.getAuthority())) {
-					Uri contentUri = ContentUris.withAppendedId(Uri
-							.parse("content://downloads/public_" + "dowloads"),
-							Long.valueOf(docId));
-					imagePath = getImagePath(contentUri, null);
-				}
-			} else if ("content".equalsIgnoreCase(uri.getScheme())) {
-				imagePath = getImagePath(uri, null);
+				takePhoto = new ImageItem();
+				takePhoto.setBitmap(bm);
+				takePhoto.setImagePath(FileUtils.SDPATH + fileName + ".JPEG");
+				// 将裁剪后的照片显示出来
+				img.setImageBitmap(bm);
+				
 			}
-			displayImage(imagePath);
-		}
+			break;
+		case CROP_PHOTO:
+			if (resultCode == RESULT_OK) {
+				Log.i("log", "ok");
+//				String fileName = String.valueOf(System.currentTimeMillis());
+//				// Bitmap bitmap = BitmapFactory
+//				// .decodeStream(getContentResolver().openInputStream(
+//				// imageUri));
+//				Bitmap bm = (Bitmap) data.getExtras().get("data");
+//				Toast.makeText(getApplication(), "onActivityResult_TAKE_PHOTO",
+//						Toast.LENGTH_SHORT).show();
+//				Log.i("onActivityResult", "CROP_PHOTO");
+//				FileUtils.saveBitmap(bm, fileName);
+//
+//				ImageItem takePhoto = new ImageItem();
+//				takePhoto.setBitmap(bm);
+//				takePhoto.setImagePath(FileUtils.SDPATH + fileName + ".JPEG");
+//				// 将裁剪后的照片显示出来
+//				addPicture.setImageBitmap(bm);
 
-		private void HandlerImageBeforeKitKat(Intent data) {
-			// TODO Auto-generated method stub
-			Uri uri = data.getData();
-			String imagePath = getImagePath(uri, null);
-			displayImage(imagePath);
-		}
-
-
-		private String getImagePath(Uri uri, String selection) {
-			// TODO Auto-generated method stub
-			String path = null;
-			Cursor cursor =getContentResolver().query(uri, null, selection,
-					null, null);
-			if (cursor != null) {
-				if (cursor.moveToFirst()) {
-					path = cursor.getString(cursor.getColumnIndex(Media.DATA));
+			}
+			break;
+		case CHOOSE_PHOTO:
+			if (resultCode == RESULT_OK) {
+				// 判断手机系统版本号
+				if (Build.VERSION.SDK_INT >= 19) {
+					HandlerImageOnKitKat(data);
+				} else {
+					HandlerImageBeforeKitKat(data);
 				}
-				cursor.close();
 			}
-			return path;
+			break;
+		default:
+			break;
+
 		}
-		
-		private void displayImage(String imagePath) {
-			// TODO Auto-generated method stub
-			if (imagePath != null) {
-				Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-				img.setImageBitmap(bitmap);
-			} else {
-				Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT)
-						.show();
-			
+	}
+
+	@TargetApi(19)
+	private void HandlerImageOnKitKat(Intent data) {
+		// TODO Auto-generated method stub
+		String imagePath = null;
+		Uri uri = data.getData();
+		if (DocumentsContract.isDocumentUri(this, uri)) {
+			String docId = DocumentsContract.getDocumentId(uri);
+			if ("com.android.providers.downloads.documents".equals(uri
+					.getAuthority())) {
+				String id = docId.split(":")[1];
+				String selection = MediaStore.Images.Media._ID + "=" + id;
+				imagePath = getImagePath(
+						MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+			} else if ("com.android.providers.downloads.documents".equals(uri
+					.getAuthority())) {
+				Uri contentUri = ContentUris.withAppendedId(Uri
+						.parse("content://downloads/public_" + "dowloads"),
+						Long.valueOf(docId));
+				imagePath = getImagePath(contentUri, null);
 			}
+		} else if ("content".equalsIgnoreCase(uri.getScheme())) {
+			imagePath = getImagePath(uri, null);
 		}
+		displayImage(imagePath);
+	}
+
+	private void HandlerImageBeforeKitKat(Intent data) {
+		// TODO Auto-generated method stub
+		Uri uri = data.getData();
+		String imagePath = getImagePath(uri, null);
+		displayImage(imagePath);
+	}
+
+	private String getImagePath(Uri uri, String selection) {
+		// TODO Auto-generated method stub
+		String path = null;
+		Cursor cursor = getContentResolver().query(uri, null, selection, null,
+				null);
+		if (cursor != null) {
+			if (cursor.moveToFirst()) {
+				path = cursor.getString(cursor.getColumnIndex(Media.DATA));
+			}
+			cursor.close();
+		}
+		return path;
+	}
+
+	private void displayImage(String imagePath) {
+		// TODO Auto-generated method stub
+		if (imagePath != null) {
+			Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+			takePhoto = new ImageItem();
+			takePhoto.setBitmap(bitmap);
+			takePhoto.setImagePath(imagePath);
+			img.setImageBitmap(bitmap);
+		} else {
+			Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT)
+					.show();
+
+		}
+	}
+
 }
 

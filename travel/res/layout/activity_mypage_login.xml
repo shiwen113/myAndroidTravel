@@ -175,7 +175,7 @@
         android:layout_weight="1"
         android:background="@null"
         android:ems="5"
-        android:hint="请输入用户名"
+        android:hint="请输入账号"
         android:imeOptions="actionDone"
         android:singleLine="true"
         android:textSize="16sp" >
@@ -194,6 +194,7 @@
         android:paddingTop="5.0dip"
         android:text="登录"
         android:textSize="20dp"
+        android:background="@color/beige"
         android:onClick="denglu" />
 
     <TextView
@@ -203,7 +204,7 @@
         android:layout_alignRight="@+id/LoginActivitydlbutton"
         android:layout_below="@+id/LoginActivitydlbutton"
         android:onClick="denglu"
-        android:text="忘记密码" />
+        android:text="退出登录" />
 
     <TextView
         android:id="@+id/tv_MypageLoginActivity_UserName"
@@ -211,7 +212,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/searchEditText"
         android:layout_alignLeft="@+id/LoginActivitydlbutton"
-        android:text="用户名 ：" />
+        android:text="账号 ：" />
 
     <TextView
         android:id="@+id/tv_MypageLoginActivity_mypageregister"

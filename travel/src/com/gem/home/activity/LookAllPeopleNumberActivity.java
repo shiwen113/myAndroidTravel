@@ -3,9 +3,11 @@ package com.gem.home.activity;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.media.RatingCompat.Style;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -74,17 +76,30 @@ public class LookAllPeopleNumberActivity extends Activity implements OnClickList
 	/**
 	 * 请求图像
 	 */
+	@SuppressLint("ResourceAsColor") 
 	public void sendTitlePicture(){
 		BitmapUtils bu=new BitmapUtils(getApplication());
 		ll.removeAllViews();
 		if(list!=null){
-		for (PersonalData pd : list) {
+		for (final PersonalData pd : list) {
 			String url=pd.getUriUpLoadPicture();
 			ImageView iv=new ImageView(getApplication());
+	        iv.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent=new Intent(LookAllPeopleNumberActivity.this,PersonalDataActivity.class);
+				    intent.putExtra("PersonalData",pd);
+				    startActivity(intent);
+				}
+			});
+
 			TextView tv=new TextView(getApplication());
 			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(200, 200);
 		    iv.setLayoutParams(layoutParams);
-			bu.display(iv, url);
+			bu.display(iv, "http://10.201.1.12:8080/gotravel/UserImage/"+url);
+			tv.setTextColor(R.color.black);
 			tv.setText(pd.getLd().getUserName());
 			ll.addView(iv);
 			ll.addView(tv);

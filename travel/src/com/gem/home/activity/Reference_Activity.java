@@ -67,7 +67,7 @@ public class Reference_Activity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.ib_travel_home_back:
-			Toast.makeText(getApplication(), "返回", Toast.LENGTH_LONG).show();
+//			Toast.makeText(getApplication(), "返回", Toast.LENGTH_LONG).show();
 			this.finish();
 			break;
 		case R.id.bt_button_submit:
@@ -142,8 +142,8 @@ public class Reference_Activity extends Activity implements OnClickListener {
 			} else if (text.equals("不限")) {
 				sexi = 2;
 			}
-			Toast.makeText(getApplication(), "text" + text, Toast.LENGTH_LONG)
-					.show();
+//			Toast.makeText(getApplication(), "text" + text, Toast.LENGTH_LONG)
+//					.show();
 		}
 
 	}

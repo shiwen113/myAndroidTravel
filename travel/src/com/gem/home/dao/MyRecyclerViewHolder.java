@@ -13,7 +13,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class MyRecyclerViewHolder extends ViewHolder {
-	TextView userName, teamName, allDay, place, intro,gotime,chakanliang;
+	TextView userName, teamName,limitSex, allDay, place, intro,gotime,chakanliang;
 	CustomImageView imageView;
 	LinearLayout ll;
 //	ImageView lv;
@@ -32,6 +32,7 @@ public class MyRecyclerViewHolder extends ViewHolder {
 		chakanliang=(TextView) itemView.findViewById(R.id.tv_chakanliang);
 		ll=(LinearLayout) itemView.findViewById(R.id.ll_linear_scrol_view);
 //		lv=(ImageView) itemView.findViewById(R.id.iv_img_picture);
+		limitSex=(TextView) itemView.findViewById(R.id.tv_sex_limit);
 	}
 
 }

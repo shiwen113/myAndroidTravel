@@ -1,11 +1,24 @@
 package com.gem.mine.activity;
 
 
+import java.lang.reflect.Type;
+import java.util.List;
+
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.Conversation;
 
 import com.gem.home.dao.MyApplication;
+import com.gem.home.dao.MyImageAsyncTask;
+import com.gem.home.dao.MyRecyclerViewHolder;
+import com.gem.home.until.PublishTravel;
 import com.gem.scenery.R;
+import com.gem.scenery.action.ListViewAdapter;
+import com.gem.scenery.entity.PersonalData;
+import com.gem.scenery.entity.PopularScene;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.lidroid.xutils.BitmapUtils;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
@@ -25,6 +38,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -44,9 +58,9 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 	//登录
 	private ImageView IM_MyloginActivity_loginpage;
 	//我的旅行队消息
-	private Button BT_MyloginActivity_myteammessage;
+	private LinearLayout BT_MyloginActivity_myteammessage;
 	//我的收藏
-	private Button BT_MyloginActivity_myenshrine;
+	private LinearLayout BT_MyloginActivity_myenshrine;
 	private Context context;
 	private HttpUtils http;
 	private RequestParams params;
@@ -64,15 +78,11 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 		IM_MyloginActivity_PERSIONMESSAGEPICTURE=(ImageView) getView().findViewById(R.id.IM_MyloginActivity_PERSIONMESSAGEPICTURE);
 		IM_MyloginActivity_Mytravelteam=(ImageView) getView().findViewById(R.id.IM_MyloginActivity_Mytravelteam);
 		im_MyloginActivity_Myshare=(ImageView) getView().findViewById(R.id.im_MyloginActivity_Myshare);
-//		IM_MyloginActivity_personalinformation=(ImageView) getView().findViewById(R.id.IM_MyloginActivity_personalinformation);
 		IM_MyloginActivity_PERSIONMESSAGEPICTURE.setOnClickListener(this);
 		IM_MyloginActivity_Mytravelteam.setOnClickListener(this);
 		im_MyloginActivity_Myshare.setOnClickListener(this);
-//		IM_MyloginActivity_personalinformation.setOnClickListener(this);
-//		BT_MyloginActivity_myregister=(Button) getView().findViewById(R.id.BT_MyloginActivity_myregister);
-		BT_MyloginActivity_myteammessage=(Button) getView().findViewById(R.id.BT_MyloginActivity_myteammessage);
-		BT_MyloginActivity_myenshrine=(Button) getView().findViewById(R.id.BT_MyloginActivity_myenshrine);
-//		BT_MyloginActivity_myregister.setOnClickListener(this);
+		BT_MyloginActivity_myenshrine=(LinearLayout) getView().findViewById(R.id.BT_MyloginActivity_myenshrine);
+		BT_MyloginActivity_myteammessage=(LinearLayout) getView().findViewById(R.id.IM_MyloginActivity_mytravelteammessage);
 		BT_MyloginActivity_myteammessage.setOnClickListener(this);
 		BT_MyloginActivity_myenshrine.setOnClickListener(this);
 		IM_MyloginActivity_loginpage=(ImageView) getView().findViewById(R.id.IM_MyloginActivity_loginpage);
@@ -84,6 +94,15 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 		context=getContext();
 		m=(MyApplication) context.getApplicationContext();
 		viewInit();
+	}
+	
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		if(m.getLd()!=null){
+			sendUserPicture();
+		}
 	}
 	public void onClick(View v) {		
 		// TODO Auto-generated method stub
@@ -101,30 +120,17 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 			
 		case R.id.im_MyloginActivity_Myshare://我的分享
 			Intent intent2 =new Intent(getActivity(),SharingActivity.class);
-			sendShare(intent2);
+//			sendShare(intent2);
+			startActivity(intent2);
 			break;
-			//登录界面	
-			//跳转至设置界面
-		case R.id.IM_MyloginActivity_personalinformation:
-			//
-			Intent intent3 =new Intent(getActivity(),SetupActivity.class);
-			startActivity(intent3);
-			break;
-			
-			//跳转至登录页面
-		case R.id.IM_MyloginActivity_loginpage:
+		case R.id.IM_MyloginActivity_loginpage://登录
 			Intent intent4 =new Intent(getActivity(),MypageLoginActivity.class);
 			startActivity(intent4);
 			break;
-			//注册页面
-//		case R.id.BT_MyloginActivity_myregister:
-//			Intent intent5 =new Intent(getActivity(),MypageregisterActivity.class);
-//			startActivity(intent5);
-//			break;
-			//页面跳转至旅行队消息
-		case R.id.BT_MyloginActivity_myteammessage:
-//			Intent intent6 =new Intent(getActivity(),TroopsActivity.class);
-//			startActivity(intent6);
+		case R.id.IM_MyloginActivity_mytravelteammessage://我的消息
+//			if(RongIM.getInstance() != null){
+//			    RongIM.getInstance().startSubConversationList(context, Conversation.CREATOR);
+//			}
 			RongIM.getInstance().startConversationList(context);
 			break;
 			//跳转至收藏页面
@@ -171,11 +177,45 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 				}
 		 	});
 		}
-
-		String urlShare=null;
+		
+		String urlU="http://10.201.1.12:8080/travel/Home_home_yhtx";
 		/**
-		 * 获取我分享的旅图
+		 * 获取用户图片
 		 */
+		public void sendUserPicture(){
+			RequestParams params = new RequestParams();
+			HttpUtils http=new HttpUtils();
+		 	params.addBodyParameter("ld",String.valueOf(m.getLd().getLd()));
+			http.send(HttpMethod.POST, urlU, params,new RequestCallBack<String>() {
+
+				@Override
+				public void onFailure(HttpException arg0, String arg1) {
+					// TODO Auto-generated method stub
+//					Toast.makeText(context, "请求失败，请检查网络", Toast.LENGTH_LONG).show();
+				}
+
+				@Override
+				public void onSuccess(ResponseInfo<String> arg0) {
+					// TODO Auto-generated method stub
+					String result =arg0.result;
+					if(!result.equals(null)&&result!=null){
+						Gson gson =new Gson();
+						Type type =new TypeToken<PersonalData>(){}.getType();
+						PersonalData pd=gson.fromJson(result, type);
+						if(!pd.getUriUpLoadPicture().equals(null)&&!pd.getUriUpLoadPicture().equals("null")&&pd.getUriUpLoadPicture()!=null){
+						BitmapUtils bu=new BitmapUtils(context);
+						bu.display(IM_MyloginActivity_loginpage, "http://10.201.1.12:8080/gotravel/UserImage/"+pd.getUriUpLoadPicture());
+						}
+					}
+				}
+			});
+		}
+
+		/*String urlShare=null;
+		*//**
+		 * 获取我分享的旅图
+		 *//*
+		private boolean flag=true;
 		public void sendShare(final Intent intent2){
 			http=new HttpUtils();
 			params=new RequestParams();
@@ -183,13 +223,18 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 				urlShare="http://10.201.1.12:8080/travel/Wode_wodefenxiang";
 			params.addBodyParameter("ld",String.valueOf(m.getLd().getLd()));
 			}else{
+				flag=false;
 				urlShare="http://10.201.1.12:8080/travel/g";
 			}
 			http.send(HttpMethod.POST, urlShare, params, new RequestCallBack<String>() {
 				@Override
 				public void onFailure(HttpException arg0, String arg1) {
 					// TODO Auto-generated method stub
-					Toast.makeText(context, "请求失败,请检查您的网络", Toast.LENGTH_LONG).show();
+					if(flag){
+						Toast.makeText(context, "请求失败,请检查您的网络", Toast.LENGTH_LONG).show();
+					}else{
+						Toast.makeText(context, "请登录查看更多", Toast.LENGTH_LONG).show();
+					}
 					startActivity(intent2);
 				}
 				
@@ -200,5 +245,5 @@ public class MyloginActivity extends Fragment implements OnClickListener{
 					startActivity(intent2);
 				}
 			});
-		}
+		}*/
 }

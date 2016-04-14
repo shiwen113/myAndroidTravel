@@ -13,7 +13,8 @@
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="30dip"
-        android:background="#FFFFFF" >
+        android:background="#ffffe0"
+         >
 
         <TextView
             android:id="@+id/tv_screnery_hot"
@@ -39,7 +40,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="当季"
+            android:text="关注"
              android:textSize="18sp"/>
     </LinearLayout>
 

@@ -5,22 +5,21 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView.ScaleType;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -28,10 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gem.home.dao.MyApplication;
-import com.gem.home.dao.MyImageAsyncTask;
 import com.gem.home.dao.TravelCommentAdapter;
 import com.gem.home.dao.UserPictureAsyncTask;
-import com.gem.home.until.LoginData;
 import com.gem.home.until.PublishTravel;
 import com.gem.home.until.ToolDao;
 import com.gem.home.until.TravelComment1;
@@ -50,6 +47,7 @@ import com.lidroid.xutils.http.RequestParams;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class Item_Activity extends Activity implements OnClickListener,
 		OnItemClickListener {
@@ -90,7 +88,8 @@ public class Item_Activity extends Activity implements OnClickListener,
 	boolean flag; // 是否有数据(旅行队的评论)传过来（是否有网）
 	private PersonalData pd;// 个人资料（发布者的个人资料）
 	private MyApplication m;
-
+	private ImageLoader imageloader = ImageLoader.getInstance();
+	private Context context;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -98,6 +97,7 @@ public class Item_Activity extends Activity implements OnClickListener,
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_item);
 		m = (MyApplication) getApplicationContext();
+		context=getApplicationContext();
 		initView();// 初始化控件
 		Intent intent = getIntent();
 		flag = intent.getBooleanExtra("flag", false);
@@ -142,10 +142,13 @@ public class Item_Activity extends Activity implements OnClickListener,
 							List<TravelMember> ltm = gson
 									.fromJson(result, type);
 							for (TravelMember tm : ltm) {
-
-								if (tm.getLd().getLd() == 17) {
+								if(m.getLd()!=null){
+								if (tm.getLd().getLd() == m.getLd().getLd()) {
 									joinText.setText("退出");
 								} else {
+									joinText.setText("立即加入");
+								}
+								}else{
 									joinText.setText("立即加入");
 								}
 							}
@@ -182,7 +185,7 @@ public class Item_Activity extends Activity implements OnClickListener,
 	}
 
 	/**
-	 * 显示数据，bug???
+	 * 显示数据
 	 */
 	public void showData() {
 		// 先显示PublishTravel对象
@@ -190,11 +193,18 @@ public class Item_Activity extends Activity implements OnClickListener,
 		}.getType();
 		pt = gson.fromJson(plt, type);
 		teamName.setText("旅行队：" + pt.getTeamName());
-		userName.setText(pt.getLd().getUserName());
-		if (pd.getSex() == 1) {
-			userSexAndAge.setText("男" + " " + pd.getAge());
-		} else if (pd.getSex() == 0) {
-			userSexAndAge.setText("女" + " " + pd.getAge());
+		int sex=pd.getSex();
+		if(sex==1){
+			userName.setText(pt.getLd().getUserName()+":男,"+pd.getAge()+"岁");
+		}else if(sex==0){
+			userName.setText(pt.getLd().getUserName()+":女,"+pd.getAge()+"岁");
+		}
+		if (pt.getSex() == 1) {
+			userSexAndAge.setText("优先性别:男");
+		} else if (pt.getSex() == 0) {
+			userSexAndAge.setText("优先性别:女");
+		}else if (pt.getSex() == 2) {
+			userSexAndAge.setText("优先性别:不限");
 		}
 		allDay.setText("全程 " + pt.getAllDay() + "天");
 		arrive.setText(pt.getStatPoint());
@@ -202,7 +212,7 @@ public class Item_Activity extends Activity implements OnClickListener,
 		jianjie.setText(pt.getIntro());
 		peopleNum.setText("人数" + pt.getPeopleNumber());
 		gotoDate.setText("出发时间" + ToolDao.setTimedate1(pt.getStartTime()));
-		new UserPictureAsyncTask(civ).execute(pd.getUriUpLoadPicture());
+		new UserPictureAsyncTask(civ).execute("http://10.201.1.12:8080/gotravel/UserImage/"+pd.getUriUpLoadPicture());
 		// if(MyImageAsyncTask.getImgtitle()!=null){
 		// civ.setImageBitmap(MyImageAsyncTask.getImgtitle());//设置图片
 		// }
@@ -219,20 +229,24 @@ public class Item_Activity extends Activity implements OnClickListener,
 		}
 
 		// 显示生活照
-		String[] urlP = pt.getUrlLifePicture().split(";");
+		String s=pt.getUrlLifePicture();
+		if(s!=null&&!s.equals("")){
+		String[] urlP =s.split(";");
 		BitmapUtils bu = new BitmapUtils(getApplication());
+		float scale = context.getResources().getDisplayMetrics().density;
+		int px = (int) (scale * 100 + 0.5f); 
 		for (int i = 0; i < urlP.length; i++) {
 			String uri = "http://10.201.1.12:8080/gotravel/TravelTeam/"
 					+ urlP[i];
-			Log.i("MyUri", uri);
-			ImageView iv = new ImageView(getApplication());
-			// imageloader.displayImage(url, iv);
-			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-					500, 500);
-			iv.setLayoutParams(layoutParams);
-			iv.setScaleType(ScaleType.CENTER_INSIDE);
+			ImageView iv=new ImageView(context);
+			iv.setPadding(0, 0, 10, 0);
+			imageloader.displayImage(url, iv);
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(px, px);
+		    iv.setLayoutParams(layoutParams);
+		    iv.setScaleType(ScaleType.CENTER_CROP);
 			bu.display(iv, uri);
 			ll.addView(iv);
+		}
 		}
 	}
 
@@ -511,9 +525,9 @@ public class Item_Activity extends Activity implements OnClickListener,
 								joinText.setText("立即加入");
 								Toast.makeText(getApplication(), "已退出",
 										Toast.LENGTH_LONG).show();
-								RongyunDemo ryun=new RongyunDemo(m.getLd().getLd()+"");
-								ryun.addQun();
 							} else if (Integer.parseInt(result) == 1) {
+								RongyunDemo ryun=new RongyunDemo(pt,m.getLd().getLd()+"");
+								ryun.addQun();
 								joinText.setText("退出");
 								Toast.makeText(getApplication(), "申请成功",
 										Toast.LENGTH_LONG).show();

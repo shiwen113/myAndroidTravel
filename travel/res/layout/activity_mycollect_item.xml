@@ -3,23 +3,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
+
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView1"
         android:layout_marginLeft="10dip"
-       >
+        android:layout_marginRight="10dip" >
+
         <ImageView
-        android:id="@+id/iv_lvxingdui_shoucang"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:src="@drawable/welcomepage" />
+            android:id="@+id/iv_lvxingdui_shoucang"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/welcomepage" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="5dip"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_lvxingdui_shoucang"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="TextView" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_lvxingdui_shoucang"
-        android:layout_width="wrap_content"
-        android:gravity="center"
-        android:layout_height="match_parent"
-        android:text="TextView" />
-    </LinearLayout>
-    
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="10dip"
+        android:layout_below="@+id/linearLayout1" />
+
 </RelativeLayout>

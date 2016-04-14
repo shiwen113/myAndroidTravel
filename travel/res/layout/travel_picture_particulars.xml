@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dip"
-            android:src="@drawable/back_one" />
+            android:src="@drawable/back_pressed" />
 
         <TextView
             android:id="@+id/tv_picture_all_data"
@@ -50,8 +50,8 @@
 
     <ImageView
         android:id="@+id/iv_picture_picture_comment"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
         android:layout_below="@+id/tv_point_picture_comment"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dip"
@@ -71,7 +71,7 @@
             android:id="@+id/iv_user_picture_comment"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/ceshitu" />
+            android:src="@drawable/pic_duckr" />
 
         <TextView
             android:id="@+id/tv_user_name_comment"

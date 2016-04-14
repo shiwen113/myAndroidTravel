@@ -21,7 +21,7 @@
                  android:layout_height="wrap_content"
                  android:layout_gravity="center_vertical"
                  android:layout_marginLeft="10dip"
-                 android:src="@drawable/back_one" />
+                 android:src="@drawable/back_pressed" />
 
             <TextView
                 android:id="@+id/tv_look_all"
@@ -70,7 +70,10 @@
     <HorizontalScrollView
         android:id="@+id/hsv_look_all_picture"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+		android:layout_marginLeft="10dip"
+		android:layout_marginTop="10dip"
+		android:layout_marginRight="10dip">
 
         <LinearLayout
             android:id="@+id/ll_look_all_people"

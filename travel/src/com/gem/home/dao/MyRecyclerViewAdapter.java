@@ -21,8 +21,11 @@ import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,7 +42,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHo
 	private Context context;
 	private static final int TYPE_ITEM = 0;
 	private ImageLoader imageloader = ImageLoader.getInstance();
-
+	private Bitmap mBitmap;
 	public MyRecyclerViewAdapter(List<PublishTravel> arr, Context context) {
 		super();
 		this.arr = arr;
@@ -59,30 +62,38 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHo
 	 * 获取生活照
 	 */
 	public void sendPictureFromServer(MyRecyclerViewHolder arg0,List<PublishTravel> arr,int arg1){
+		
 		String lifPicture =arr.get(arg1).getUrlLifePicture();
+		if(lifPicture!=null&&!lifPicture.equals("")){
 		String[] picture=lifPicture.split(";");
 		Log.i("test", picture.length + "");
 		BitmapUtils bpu=new BitmapUtils(context);
 		arg0.ll.removeAllViews();
+		float scale = context.getResources().getDisplayMetrics().density;
+		int px = (int) (scale * 100 + 0.5f); 
 		for(int i=0;picture.length>i;i++){
 			String url=picture[i];
+			 if(!url.equals("")&&url!=null){
 			ImageView iv=new ImageView(context);
-//			imageloader.displayImage(url, iv);
-			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(500, 500);
+			iv.setPadding(0, 0, 10, 0);
+			imageloader.displayImage(url, iv);
+			LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(px, px);
 		    iv.setLayoutParams(layoutParams);
-		    iv.setScaleType(ScaleType.CENTER_INSIDE);
+		    iv.setScaleType(ScaleType.CENTER_CROP);
 		    bpu.display(iv,"http://10.201.1.12:8080/gotravel/"+"TravelTeam/"+url);
-			arg0.ll.addView(iv);
+		    arg0.ll.addView(iv);
+		    }
+		}
 		}
 	}
 	String urlU="http://10.201.1.12:8080/travel/Home_home_yhtx";
 	/**
 	 * 获取用户图片
 	 */
-	public void sendUserPicture(int ld,final MyRecyclerViewHolder a){
+	public void sendUserPicture(final PublishTravel pt,final MyRecyclerViewHolder a){
 		RequestParams params = new RequestParams();
 		HttpUtils http=new HttpUtils();
-	 	params.addBodyParameter("ld",String.valueOf(ld));
+	 	params.addBodyParameter("ld",String.valueOf(pt.getLd().getLd()));
 		http.send(HttpMethod.POST, urlU, params,new RequestCallBack<String>() {
 
 			@Override
@@ -99,7 +110,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHo
 					Gson gson =new Gson();
 					Type type =new TypeToken<PersonalData>(){}.getType();
 					PersonalData pd=gson.fromJson(result, type);
-					new MyImageAsyncTask(a).execute(pd.getUriUpLoadPicture());
+					int sex=pd.getSex();
+					if(sex==1){
+						a.userName.setText(pt.getLd().getUserName()+":男,"+pd.getAge()+"岁");
+					}else if(sex==0){
+						a.userName.setText(pt.getLd().getUserName()+":女,"+pd.getAge()+"岁");
+					}
+					new MyImageAsyncTask(a).execute("http://10.201.1.12:8080/gotravel/UserImage/"+pd.getUriUpLoadPicture());
 				}
 			}
 		});
@@ -112,18 +129,29 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewHo
 		 if (arg0 instanceof MyRecyclerViewHolder) {
 	           // ((MyRecyclerViewHolder) arg0).tv.setText(arr.get(arg1));
 	       Log.i("2016.3.24", "set");
-		arg0.teamName.setText(arr.get(arg1).getTeamName());
+		arg0.teamName.setText("旅行队名:"+arr.get(arg1).getTeamName());
 		arg0.intro.setText(arr.get(arg1).getIntro());
 		arg0.allDay.setText("全程" + String.valueOf(arr.get(arg1).getAllDay()) + "天");
 		arg0.place.setText(arr.get(arg1).getStatPoint() + "--" + arr.get(arg1).getDestination());
-		arg0.userName.setText(arr.get(arg1).getLd().getUserName());
+		if (arr.get(arg1).getSex() == 1) {
+			arg0.limitSex.setText("优先性别:男");
+		} else if (arr.get(arg1).getSex() == 0) {
+			arg0.limitSex.setText("优先性别:女");
+		}else if (arr.get(arg1).getSex() == 2) {
+			arg0.limitSex.setText("优先性别:不限");
+		}
 		arg0.gotime.setText("出发时间:"+ToolDao.setTimedate1((arr.get(arg1).getStartTime())));
-		arg0.chakanliang.setText("点击量："+arr.get(arg1).getToView());
+		arg0.chakanliang.setText(""+arr.get(arg1).getToView());
 //		String url = arr.get(arg1).getUrlLifePicture();
 //		Log.i("myurl", "myurl:"+url);
 //		new MyImageAsyncTask(arg0).execute(url);
+		if(arr.get(arg1).getUrlLifePicture() != null){
+			arg0.setIsRecyclable(false);
 		sendPictureFromServer(arg0,arr,arg1);
-		sendUserPicture(arr.get(arg1).getLd().getLd(),arg0);
+		}
+		if(arr.get(arg1) != null){
+		sendUserPicture(arr.get(arg1),arg0);
+		}
 		 }
 		
 		if (mOnItemClickListener != null) {

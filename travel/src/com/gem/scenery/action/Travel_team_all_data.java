@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import android.R.string;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -19,19 +18,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gem.home.dao.MyApplication;
-import com.gem.home.until.LoginData;
 import com.gem.home.until.ToolDao;
+import com.gem.mine.activity.SharingActivity;
 import com.gem.scenery.R;
-import com.gem.scenery.entity.PersonalData;
 import com.gem.scenery.entity.PictureComment;
 import com.gem.scenery.entity.PopularScene;
 import com.gem.scenery.entity.SharePicture;
-import com.gem.travel.raw.PropertiesUtil;
+import com.gem.scenery.utils.SPUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -65,6 +62,9 @@ public class Travel_team_all_data extends Activity implements OnClickListener{
 	private BaseAdapter adapter;
 	private PopularScene ps;
 	private MyApplication m;
+	private String s;
+	private int comment;
+	private Context context;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -72,8 +72,11 @@ public class Travel_team_all_data extends Activity implements OnClickListener{
 		setContentView(R.layout.travel_picture_particulars);
 		m=(MyApplication) getApplicationContext();
 		initView();
+		context=getApplication();
 		Intent intent=getIntent();
 		String string=intent.getStringExtra("scene");
+		s=intent.getStringExtra("sa");
+		comment=intent.getIntExtra("comment", -1);
 		Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
 		ps=gson.fromJson(string, PopularScene.class);
 //		sp=(SharePicture) intent.getSerializableExtra("sp");
@@ -107,30 +110,39 @@ public class Travel_team_all_data extends Activity implements OnClickListener{
 		travelName.setText("旅行队："+ps.getSp().getTd().getTeamName());
 		travelPoint.setText("景点："+ps.getSp().getViewPoint());
 		issuePicture.setText("发表时间："+ToolDao.setTimedate1(ps.getSp().getTime()));
-		userName.setText("用户名："+ps.getSp().getLd().getUserName());
+		userName.setText(ps.getSp().getLd().getUserName());
 		number.setText(String.valueOf(ps.getThumbUpNumber()));
 		if(ps.getPhotoState()==0){
 			dainzan.setBackgroundResource(R.drawable.praise);
 		}else {
 			dainzan.setBackgroundResource(R.drawable.praise_have);
 		}
+		BitmapUtils bpu=new BitmapUtils(this);
 		 if(!ps.getUriUpLoadPicture().equals("")){
-			 BitmapUtils bpu=new BitmapUtils(this);
-			 bpu.display(userPicture, ps.getUriUpLoadPicture());
+			 bpu.display(userPicture, "http://10.201.1.12:8080/gotravel/UserImage/"+ps.getUriUpLoadPicture());
 		}
+		 if(!ps.getSp().getUrlPhotos().equals("")){
+			 bpu.display(picture, "http://10.201.1.12:8080/gotravel/lvtu/"+ps.getSp().getUrlPhotos());
+		 }
 	}
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.im_back_picture_all_data://返回
+			String sa="sa";
 			finish();
 			break;
 		case R.id.bt_fasong_comment:
+			if(m.getLd()==null||m.getLd().equals("")){
+				Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show();
+			}else {
 			text=input.getText().toString();
+			
 			if(text!=null){
 			addComment(text);
 			}else{
 				Toast.makeText(getApplication(), "请输入", Toast.LENGTH_LONG).show();
+			}
 			}
 			break;
 		default:
@@ -154,7 +166,7 @@ public class Travel_team_all_data extends Activity implements OnClickListener{
 		pc.setCommentNotes(text);
 		pc.setSp(ps.getSp());
 		pc.setPhotoTime(new Date());
-		Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
+		final Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
 		params.addBodyParameter("pc",gson.toJson(pc));
 		input.setText("");
 		http.send(HttpMethod.POST, urlU, params,new RequestCallBack<String>() {
@@ -177,6 +189,9 @@ public class Travel_team_all_data extends Activity implements OnClickListener{
 					list=new ArrayList<PictureComment>();
 				}
 				list.add(pc);
+				ps.setCommentNumber(ps.getCommentNumber()+1);
+				SPUtils.put(context, "ps",gson.toJson(ps));
+				SPUtils.put(context, "comment", String.valueOf(comment));
 				if(adapter==null){
 					adapter=new PictureCommentBastAdapter(list,Travel_team_all_data.this);
 					lv.setAdapter(adapter);

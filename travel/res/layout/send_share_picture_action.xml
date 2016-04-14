@@ -93,20 +93,41 @@
         android:layout_width="match_parent"
         android:layout_height="10dip" />
 
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+         >
+
+        <EditText
+            android:id="@+id/et_input_travel"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_edittext"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="点击获取旅行队" />
+        
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="10dip" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip" >
+        android:layout_marginRight="10dip" 
+        >
 
         <EditText
             android:id="@+id/et_point_share"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_weight="1"
-            android:hint="位置(必填)"
             android:background="@drawable/bg_edittext"
-            android:ems="10" />
+            android:ems="10"
+            android:hint="位置(必填)" />
 
         <ImageView
             android:id="@+id/iv_point_share"

@@ -1,55 +1,35 @@
 package com.gem.scenery;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentUris;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.Media;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RadioGroup.OnCheckedChangeListener;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,17 +38,14 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.Poi;
 import com.gem.home.baiduMap.LocationService;
 import com.gem.home.dao.MyApplication;
-import com.gem.home.until.LoginData;
-import com.gem.scenery.action.SceneryPopWindow;
-import com.gem.scenery.action.SceneryTile;
+import com.gem.home.until.PublishTravel;
+import com.gem.scenery.action.popupListView;
+import com.gem.scenery.entity.FileUtils;
+import com.gem.scenery.entity.ImageItem;
 import com.gem.scenery.entity.SharePicture;
-import com.king.photo.activity.AlbumActivity;
-import com.king.photo.activity.GalleryActivity;
-import com.king.photo.util.Bimp;
-import com.king.photo.util.FileUtils;
-import com.king.photo.util.ImageItem;
-import com.king.photo.util.PublicWay;
-import com.king.photo.util.Res;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.RequestParams;
@@ -77,9 +54,9 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
 public class PictureUpLoadActivity extends Activity implements OnClickListener {
-	private View parentView;
-	private PopupWindow pop = null;
-	private LinearLayout ll_popup;
+//	private View parentView;
+//	private PopupWindow pop = null;
+//	private LinearLayout ll_popup;
 	public static Bitmap bimap;
 	private ImageView back;// 返回
 	private TextView fabu;// 发布
@@ -91,11 +68,20 @@ public class PictureUpLoadActivity extends Activity implements OnClickListener {
 	private MyApplication m;
 	private LocationService locationService;
 	public BDLocationListener myListener = new MyLocationListener();
-	private PopupWindow popupWindow; 
-	private Uri imageUri;
+	private PopupWindow popupWindow;
+//	private Uri imageUri;
 	public static final int TAKE_PHOTO = 1;
 	public static final int CROP_PHOTO = 2;
 	public static final int CHOOSE_PHOTO = 3;
+	private ImageItem takePhoto ;
+
+	
+	private EditText lvxingdui;
+	private PopupWindow popup; 
+	private ListView listView;
+	private List<PublishTravel> arr;
+	private PublishTravel pt;
+	private boolean flag=false;
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -112,8 +98,19 @@ public class PictureUpLoadActivity extends Activity implements OnClickListener {
 		addPicture = (ImageView) findViewById(R.id.iv_add_picture);
 		addPicture.setOnClickListener(this);
 		ll = (LinearLayout) findViewById(R.id.ll_add_one_picture);
+		
+		lvxingdui=(EditText) findViewById(R.id.et_input_travel);
+		lvxingdui.setOnClickListener(this);
+		if(m.getLd()!=null){
+		initialize();
+		
+		}else{
+//			Toast.makeText(getApplication(), "请先登录", Toast.LENGTH_LONG)
+//			.show();
+		}
 	}
 
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -121,13 +118,20 @@ public class PictureUpLoadActivity extends Activity implements OnClickListener {
 			finish();
 			break;
 		case R.id.tv_fabu_share:// 发布
+			if(m.getLd()!=null){
 			String feel = share.getText().toString();
 			String pointText = point.getText().toString();
 			if (pointText != null) {
-				sendFaBu(feel, pointText,getImagePath(imageUri,""));
+				Log.i("takePhoto", takePhoto.getImagePath());
+				Log.i("takePhoto", takePhoto.getBitmap()+"");
+				sendFaBu(feel, pointText,takePhoto.getImagePath());
 			} else {
 				Toast.makeText(getApplication(), "请填写地址", Toast.LENGTH_LONG)
 						.show();
+			}
+			}else{
+				Toast.makeText(getApplication(), "请先登录", Toast.LENGTH_LONG)
+				.show();
 			}
 			break;
 		case R.id.iv_point_share:// 定位
@@ -150,185 +154,219 @@ public class PictureUpLoadActivity extends Activity implements OnClickListener {
 			Toast.makeText(PictureUpLoadActivity.this, "照相机", Toast.LENGTH_LONG)
 					.show();
 			break;
+		case R.id.et_input_travel:
+			if(m.getLd()==null){
+				 popup();
+				Toast.makeText(PictureUpLoadActivity.this, "请先登录", Toast.LENGTH_SHORT)
+				.show();
+			}else {
+				 popup();	 
+			}
 		default:
 			break;
 		}
 
 	}
+
 	/**
-	  * 照相机弹框
-	  */
-	 public void onCamera(){
-		//点击相机图片弹出PopupWindow
-//		 局注入器，注入布局给View对象
-       View myView = getLayoutInflater().inflate(R.layout.action_camera, null);
-       //通过view 和宽·高，构造PopopWindow
-       popupWindow = new PopupWindow(myView, 300, 400, true);
-        
-       popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000)
-               //此处为popwindow 设置背景，同事做到点击外部区域，popwindow消失
-              );
-       popupWindow.setOutsideTouchable(true);
-       //设置焦点为可点击
-       popupWindow.setFocusable(true);//可以试试设为false的结果
-       //将window视图显示在myButton下面
-       popupWindow.showAsDropDown(addPicture);
-//		System.out.println("点击了");
-       TextView tv_camera=(TextView) myView.findViewById(R.id.tv_camera);
-       TextView tv_photos=(TextView) myView.findViewById(R.id.tv_photos);
-       tv_camera.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// 定义file对象 用于存储摄像头拍下来的图片 图片命名
-			File outputImage = new File(Environment
-					.getExternalStorageDirectory(), "output_image.jpg");
-			if (outputImage.exists()) {
-				outputImage.delete();
+	 * 照相机弹框
+	 */
+	public void onCamera() {
+		// 点击相机图片弹出PopupWindow
+		// 局注入器，注入布局给View对象
+		View myView = getLayoutInflater().inflate(R.layout.action_camera, null);
+		// 通过view 和宽·高，构造PopopWindow
+		popupWindow = new PopupWindow(myView, 300, 400, true);
+
+		popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000)
+		// 此处为popwindow 设置背景，同事做到点击外部区域，popwindow消失
+				);
+		popupWindow.setOutsideTouchable(true);
+		// 设置焦点为可点击
+		popupWindow.setFocusable(true);// 可以试试设为false的结果
+		// 将window视图显示在myButton下面
+		popupWindow.showAsDropDown(addPicture);
+		// System.out.println("点击了");
+		TextView tv_camera = (TextView) myView.findViewById(R.id.tv_camera);
+		TextView tv_photos = (TextView) myView.findViewById(R.id.tv_photos);
+		tv_camera.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// 定义file对象 用于存储摄像头拍下来的图片 图片命名
+				/*File outputImage = new File(Environment
+						.getExternalStorageDirectory(), "output_image.jpg");
+				if (outputImage.exists()) {
+					outputImage.delete();
+				}
+				try {
+					outputImage.createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				// 调用URI的fromFile方法将File对象转化成Uri对象 这个对象指的就是拍出来的图片的唯一地址
+				imageUri = Uri.fromFile(outputImage);*/
+				// 利用意图调用相机
+				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			/*	Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+				// Android自定义裁切输出位置
+				intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+				// 调用startActivityForResult()这个方法来启动相机程序
+*/				startActivityForResult(intent, TAKE_PHOTO);
 			}
-			try {
-				outputImage.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		});
+		tv_photos.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent("android.intent.action.GET_CONTENT");// 打开相机程序，选择照片
+				intent.setType("image/*");
+				startActivityForResult(intent, CHOOSE_PHOTO);
+				popupWindow.dismiss();
 			}
-			// 调用URI的fromFile方法将File对象转化成Uri对象 这个对象指的就是拍出来的图片的唯一地址
-			imageUri = Uri.fromFile(outputImage);
-			// 利用意图调用相机
-			Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-			// Android自定义裁切输出位置
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-			// 调用startActivityForResult()这个方法来启动相机程序
-			startActivityForResult(intent, TAKE_PHOTO);
-		}
-	});
-       tv_photos.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent("android.intent.action.GET_CONTENT");// 打开相机程序，选择照片
-			intent.setType("image/*");
-			startActivityForResult(intent, CHOOSE_PHOTO);
-			popupWindow.dismiss();
-		}
-	});
-	 }
+		});
+	}
 
 	// 通过onActivityResult()接收传回的图像
-		@Override
-		protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-			// TODO Auto-generated method stub
-			super.onActivityResult(requestCode, resultCode, data);
-			switch (requestCode) {
-			case TAKE_PHOTO:
-				if (resultCode == RESULT_OK) {
-					Toast.makeText(getApplication(), "onActivityResult_TAKE_PHOTO", Toast.LENGTH_SHORT).show();
-					Log.i("onActivityResult", "TAKE_PHOTO");
-					Intent intent = new Intent("com.android.camera.action.CROP");
-					intent.setDataAndType(imageUri, "image/*");
-					intent.putExtra("scale", true);
-					intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-					startActivityForResult(intent, CROP_PHOTO);
-				}
-				break;
-			case CROP_PHOTO:
-				if (resultCode == RESULT_OK) {
-					Log.i("log", "ok");
-					try {
-						Bitmap bitmap = BitmapFactory
-								.decodeStream(getContentResolver().openInputStream(
-										imageUri));
-						Toast.makeText(getApplication(), "onActivityResult_TAKE_PHOTO", Toast.LENGTH_SHORT).show();
-						Log.i("onActivityResult", "CROP_PHOTO");
-						// 将裁剪后的照片显示出来
-						addPicture.setImageBitmap(bitmap);
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case TAKE_PHOTO:
+			if (resultCode == RESULT_OK) {
+//				Toast.makeText(getApplication(), "onActivityResult_TAKE_PHOTO",
+//						Toast.LENGTH_SHORT).show();
+//				Log.i("onActivityResult", "TAKE_PHOTO");
+//				Intent intent = new Intent("com.android.camera.action.CROP");
+//				intent.setDataAndType(imageUri, "image/*");
+//				intent.putExtra("scale", true);
+//				intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+//				startActivityForResult(intent, CROP_PHOTO);
+				String fileName = String.valueOf(System.currentTimeMillis());
+				// Bitmap bitmap = BitmapFactory
+				// .decodeStream(getContentResolver().openInputStream(
+				// imageUri));
+				Bitmap bm = (Bitmap) data.getExtras().get("data");
+				Toast.makeText(getApplication(), "onActivityResult_TAKE_PHOTO",
+						Toast.LENGTH_SHORT).show();
+				Log.i("onActivityResult", "CROP_PHOTO");
+				FileUtils.saveBitmap(bm, fileName);
 
-				}
-				break;
-			case CHOOSE_PHOTO:
-				if (resultCode ==RESULT_OK) {
-					// 判断手机系统版本号
-					if (Build.VERSION.SDK_INT >= 19) {
-						HandlerImageOnKitKat(data);
-					} else {
-						HandlerImageBeforeKitKat(data);
-					}
-				}
-				break;
-			default:
-				break;
-		
-		}
-		}
-		@TargetApi(19)
-		private void HandlerImageOnKitKat(Intent data) {
-			// TODO Auto-generated method stub
-			String imagePath = null;
-			Uri uri = data.getData();
-			if (DocumentsContract.isDocumentUri(this, uri)) {
-				String docId = DocumentsContract.getDocumentId(uri);
-				if ("com.android.providers.downloads.documents".equals(uri
-						.getAuthority())) {
-					String id = docId.split(":")[1];
-					String selection = MediaStore.Images.Media._ID + "=" + id;
-					imagePath = getImagePath(
-							MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
-				} else if ("com.android.providers.downloads.documents".equals(uri
-						.getAuthority())) {
-					Uri contentUri = ContentUris.withAppendedId(Uri
-							.parse("content://downloads/public_" + "dowloads"),
-							Long.valueOf(docId));
-					imagePath = getImagePath(contentUri, null);
-				}
-			} else if ("content".equalsIgnoreCase(uri.getScheme())) {
-				imagePath = getImagePath(uri, null);
+				takePhoto = new ImageItem();
+				takePhoto.setBitmap(bm);
+				takePhoto.setImagePath(FileUtils.SDPATH + fileName + ".JPEG");
+				// 将裁剪后的照片显示出来
+				addPicture.setImageBitmap(bm);
+
 			}
-			displayImage(imagePath);
-		}
+			break;
+		case CROP_PHOTO:
+			if (resultCode == RESULT_OK) {
+				Log.i("log", "ok");
+//				String fileName = String.valueOf(System.currentTimeMillis());
+//				// Bitmap bitmap = BitmapFactory
+//				// .decodeStream(getContentResolver().openInputStream(
+//				// imageUri));
+//				Bitmap bm = (Bitmap) data.getExtras().get("data");
+//				Toast.makeText(getApplication(), "onActivityResult_TAKE_PHOTO",
+//						Toast.LENGTH_SHORT).show();
+//				Log.i("onActivityResult", "CROP_PHOTO");
+//				FileUtils.saveBitmap(bm, fileName);
+//
+//				ImageItem takePhoto = new ImageItem();
+//				takePhoto.setBitmap(bm);
+//				takePhoto.setImagePath(FileUtils.SDPATH + fileName + ".JPEG");
+//				// 将裁剪后的照片显示出来
+//				addPicture.setImageBitmap(bm);
 
-		private void HandlerImageBeforeKitKat(Intent data) {
-			// TODO Auto-generated method stub
-			Uri uri = data.getData();
-			String imagePath = getImagePath(uri, null);
-			displayImage(imagePath);
-		}
-
-
-		private String getImagePath(Uri uri, String selection) {
-			// TODO Auto-generated method stub
-			String path = null;
-			Cursor cursor =getContentResolver().query(uri, null, selection,
-					null, null);
-			if (cursor != null) {
-				if (cursor.moveToFirst()) {
-					path = cursor.getString(cursor.getColumnIndex(Media.DATA));
+			}
+			break;
+		case CHOOSE_PHOTO:
+			if (resultCode == RESULT_OK) {
+				// 判断手机系统版本号
+				if (Build.VERSION.SDK_INT >= 19) {
+					HandlerImageOnKitKat(data);
+				} else {
+					HandlerImageBeforeKitKat(data);
 				}
-				cursor.close();
 			}
-			return path;
+			break;
+		default:
+			break;
+
 		}
-		
-		private void displayImage(String imagePath) {
-			// TODO Auto-generated method stub
-			if (imagePath != null) {
-				Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-				addPicture.setImageBitmap(bitmap);
-			} else {
-				Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT)
-						.show();
-			
+	}
+
+	@TargetApi(19)
+	private void HandlerImageOnKitKat(Intent data) {
+		// TODO Auto-generated method stub
+		String imagePath = null;
+		Uri uri = data.getData();
+		if (DocumentsContract.isDocumentUri(this, uri)) {
+			String docId = DocumentsContract.getDocumentId(uri);
+			if ("com.android.providers.downloads.documents".equals(uri
+					.getAuthority())) {
+				String id = docId.split(":")[1];
+				String selection = MediaStore.Images.Media._ID + "=" + id;
+				imagePath = getImagePath(
+						MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+			} else if ("com.android.providers.downloads.documents".equals(uri
+					.getAuthority())) {
+				Uri contentUri = ContentUris.withAppendedId(Uri
+						.parse("content://downloads/public_" + "dowloads"),
+						Long.valueOf(docId));
+				imagePath = getImagePath(contentUri, null);
 			}
+		} else if ("content".equalsIgnoreCase(uri.getScheme())) {
+			imagePath = getImagePath(uri, null);
 		}
+		displayImage(imagePath);
+	}
+
+	private void HandlerImageBeforeKitKat(Intent data) {
+		// TODO Auto-generated method stub
+		Uri uri = data.getData();
+		String imagePath = getImagePath(uri, null);
+		displayImage(imagePath);
+	}
+
+	private String getImagePath(Uri uri, String selection) {
+		// TODO Auto-generated method stub
+		String path = null;
+		Cursor cursor = getContentResolver().query(uri, null, selection, null,
+				null);
+		if (cursor != null) {
+			if (cursor.moveToFirst()) {
+				path = cursor.getString(cursor.getColumnIndex(Media.DATA));
+			}
+			cursor.close();
+		}
+		return path;
+	}
+
+	private void displayImage(String imagePath) {
+		// TODO Auto-generated method stub
+		if (imagePath != null) {
+			Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+			takePhoto = new ImageItem();
+			takePhoto.setBitmap(bitmap);
+			takePhoto.setImagePath(imagePath);
+			addPicture.setImageBitmap(bitmap);
+		} else {
+			Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT)
+					.show();
+
+		}
+	}
+
 	String url = "http://10.201.1.12:8080/travel/SharePicture_shangchuanlvtu";
 
 	/**
 	 * 发布旅途
 	 */
-	public void sendFaBu(String feel, String point,final String urlP) {
+	public void sendFaBu(String feel, String point, final String urlP) {
 		if (m.getLd() != null) {
 			HttpUtils http = new HttpUtils();
 			RequestParams params = new RequestParams();
@@ -338,6 +376,11 @@ public class PictureUpLoadActivity extends Activity implements OnClickListener {
 			sp.setTime(new Date());
 			sp.setUrlPhotos("123");
 			sp.setViewPoint(point);
+			PublishTravel pt=new PublishTravel();
+			pt.setTd(12);
+			sp.setTd(pt);
+			Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
+			params.addBodyParameter("sp",gson.toJson(sp));
 			http.send(HttpMethod.POST, url, params,
 					new RequestCallBack<String>() {
 
@@ -352,7 +395,9 @@ public class PictureUpLoadActivity extends Activity implements OnClickListener {
 						public void onSuccess(ResponseInfo<String> arg0) {
 							Toast.makeText(getApplication(), "发布成功",
 									Toast.LENGTH_LONG).show();
-							sendPictureTravel(sp,urlP);
+							String result=arg0.result;
+							
+							sendPictureTravel(Integer.parseInt(result), urlP);
 						}
 					});
 		} else {
@@ -363,34 +408,37 @@ public class PictureUpLoadActivity extends Activity implements OnClickListener {
 	/**
 	 * 发图片
 	 */
-	public void sendPictureTravel(SharePicture sp,String urlp){
-		HttpUtils http=new HttpUtils();
-		RequestParams params=new RequestParams();
-		params.addBodyParameter("sp",String.valueOf(sp.getSp()));
-		File file=new File(urlp);
-		params.addBodyParameter("file",file);
+	public void sendPictureTravel(int sp, String urlp) {
+		HttpUtils http = new HttpUtils();
+		RequestParams params = new RequestParams();
+		params.addBodyParameter("sp", String.valueOf(sp));
+		File file = new File(urlp);
+		params.addBodyParameter("file", file);
 		http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
 
 			@Override
 			public void onFailure(HttpException arg0, String arg1) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void onSuccess(ResponseInfo<String> arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 	}
+
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 
 		super.onStop();
-		locationService.unregisterListener(myListener); // 注销掉监听
-		locationService.stop(); // 停止定位服务
+		if (locationService != null) {
+			locationService.unregisterListener(myListener); // 注销掉监听
+			locationService.stop(); // 停止定位服务
+		}
 	}
 
 	public void onConfigurationChanged(
@@ -398,7 +446,6 @@ public class PictureUpLoadActivity extends Activity implements OnClickListener {
 		// 其实这里什么都不要做
 		super.onConfigurationChanged(newConfig);
 	};
-
 
 	public class MyLocationListener implements BDLocationListener {
 		String city;
@@ -501,4 +548,63 @@ public class PictureUpLoadActivity extends Activity implements OnClickListener {
 		point.setText(city);
 	}
 
+	public void initialize(){
+	       HttpUtils httpUtils=new HttpUtils();
+	       RequestParams params=new RequestParams();
+	       params.addBodyParameter("ld",String.valueOf(m.getLd().getLd()));
+	       String url="http://10.201.1.12:8080/travel/Wode_lvxingdui";
+	       httpUtils.send(HttpMethod.POST, url, params,new RequestCallBack<String>() {
+
+			@Override
+			public void onFailure(HttpException arg0, String arg1) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onSuccess(ResponseInfo<String> arg0) {
+				// TODO Auto-generated method stub
+				String s=arg0.result;
+				if(s!=null&&!s.equals("")&&!s.equals("null")){
+				Gson gson=new GsonBuilder()
+ 			.setDateFormat("yyyy-MM-dd hh:mm:ss")
+ 			.create();
+				Type type=new TypeToken<List<PublishTravel>>(){}.getType();
+				arr=gson.fromJson(s,type);	
+				}
+			}
+			});
+	}
+	 	
+	public void popup(){
+		   View myView = getLayoutInflater().inflate(R.layout.action_popup, null);
+		   popup = new PopupWindow(myView, 500, 400, true);
+	        
+		   popup.setBackgroundDrawable(new ColorDrawable(0x00000000)
+	               //此处为popwindow 设置背景，同事做到点击外部区域，popwindow消失
+	              );
+		   popup.setOutsideTouchable(true);
+	       //设置焦点为可点击
+		   popup.setFocusable(true);//可以试试设为false的结果
+		  
+		   
+	       listView=(ListView) myView.findViewById(R.id.lv_popup);
+	       if(arr!=null&&arr.size()!=0){
+		   popupListView adapter=new popupListView(arr,PictureUpLoadActivity.this);
+		   listView.setAdapter(adapter);
+		   listView.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+							int position, long id) {
+						// TODO Auto-generated method stub
+						pt=arr.get(position);
+					    lvxingdui.setText(pt.getTeamName());
+						popup.dismiss();
+					}
+					
+				});
+	       }
+	       popup.showAsDropDown(lvxingdui);
+//      listView.setAdapter(new popupListView(arr, context))          	       
+	}
 }

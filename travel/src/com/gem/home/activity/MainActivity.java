@@ -2,9 +2,13 @@ package com.gem.home.activity;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.params.HttpParams;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,6 +21,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -85,6 +90,10 @@ public class MainActivity extends Activity {
 	private int i=0;
 //	private String url="http://10.201.1.12:8080/travel/Home_home_yy";
 	private String urlsendPicture="http://10.201.1.12:8080/travel/Home_home_yyzp";
+	
+	private boolean flag;
+	private boolean mf=false;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -97,6 +106,8 @@ public class MainActivity extends Activity {
 		setContentView(parentView);
 		Init();
 		m=(MyApplication) getApplicationContext();
+		
+		flag=true;
 		
 		Intent intentDB = getIntent();
 		intentDB(intentDB);
@@ -119,7 +130,13 @@ public class MainActivity extends Activity {
 				sview = view.getText().toString();
 				 sintroduce = introduce.getText().toString();
 				 Log.i("MainActivity","sview:"+sview+",sintroduce:"+sintroduce);
-				sendHttp();//发送网络
+				if(flag){
+				 sendHttp();
+				}else{
+					Toast.makeText(getApplication(), "不能重复发送", Toast.LENGTH_SHORT).show();
+				}
+				
+				//发送网络
 //				try {
 //					Thread.sleep(500);
 //					sendPicture();
@@ -148,7 +165,11 @@ public class MainActivity extends Activity {
 		plt=new PublishTravel();
 		plt.setTeamName(teamName);
 		plt.setLd(m.getLd());
+		if(!allDay.equals("请填写全程的天数")&&!allDay.equals("")){
 		plt.setAllDay( Integer.parseInt(allDay));
+		}else{
+			plt.setAllDay( Integer.parseInt("0"));
+		}
 		plt.setStatPoint(startPoint);
 		plt.setDestination(destination);
 		plt.setSex(Integer.parseInt(sex));
@@ -197,6 +218,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onSuccess(ResponseInfo<String> arg0) {
 				// TODO Auto-generated method stub
+				flag=false;
 				if (arg0 != null) {
 					Log.i("MainActivity", "is ok");
 					String result = arg0.result;
@@ -204,6 +226,7 @@ public class MainActivity extends Activity {
 						Toast.makeText(getApplication(), "is ok", Toast.LENGTH_LONG).show();
 //						Intent intent = new Intent(MainActivity.this, Fragment_Activity.class);
 //						startActivity(intent);
+						Log.i("td", result);
 						sendPicture(result);
 					}  
 				}
@@ -220,13 +243,25 @@ public class MainActivity extends Activity {
 	public void sendPicture(String td){
 		HttpUtils http=new HttpUtils();
 		RequestParams param =new RequestParams();
+//        ConnManagerParams.setTimeout(param, 2000); 
 //		LoginData ld=new LoginData();
-//		Gson gson =new Gson();
+//		Gson gson =new Gson();	
 //		ld.setLd(17);
 //		String s=gson.toJson();
 		
+		if(Bimp.tempSelectBitmap.size()==0){
+			mf=true;
+			if(mf){
+				 Intent intent = new Intent(MainActivity.this, Fragment_Activity.class);
+				 startActivity(intent);
+			 }
+		}else{
+			mf=false;
 		for (ImageItem image : Bimp.tempSelectBitmap) {
+			Log.i("picture", "image:"+image);
+			String url=image.getImagePath();
 			File file=new File(image.getImagePath());
+			Log.i("pic", url);
 			param.addBodyParameter("file"+i,file);
 			i++;
 		}
@@ -243,18 +278,17 @@ public class MainActivity extends Activity {
 			@Override
 			public void onSuccess(ResponseInfo<String> arg0) {
 				// TODO Auto-generated method stub
+				flag=false;
 				if (arg0 != null) {
 					String result = arg0.result;
 					Log.i("MainActivity", "is ok"+","+result);
-					if(result.equals("success")){
 						Toast.makeText(getApplication(), "发送成功", Toast.LENGTH_LONG).show();
-//						Intent intent = new Intent(MainActivity.this, Home_home.class);
-//						startActivity(intent);
-					}
+						Intent intent = new Intent(MainActivity.this, Fragment_Activity.class);
+						startActivity(intent);
 				}
 			}
 		});
-		
+		}
 	}
 	
 	/**
@@ -398,7 +432,8 @@ public class MainActivity extends Activity {
 		}
 
 		public void update() {
-			loading();
+//			loading();//有bug
+			adapter.notifyDataSetChanged();
 		}
 
 		public int getCount() {
@@ -515,11 +550,14 @@ public class MainActivity extends Activity {
 				
 				String fileName = String.valueOf(System.currentTimeMillis());
 				Bitmap bm = (Bitmap) data.getExtras().get("data");
+				Log.i("photos", bm+":"+fileName);
 				FileUtils.saveBitmap(bm, fileName);
 				
 				ImageItem takePhoto = new ImageItem();
 				takePhoto.setBitmap(bm);
+				takePhoto.setImagePath(FileUtils.SDPATH+fileName+".JPEG");
 				Bimp.tempSelectBitmap.add(takePhoto);
+				Log.i("tempSelectBitmap", Bimp.tempSelectBitmap+"");
 			}
 			break;
 		}

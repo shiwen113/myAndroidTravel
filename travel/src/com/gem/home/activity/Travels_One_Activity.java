@@ -1,6 +1,7 @@
 package com.gem.home.activity;
 
 import com.gem.home.db.MyDatabaseHelper;
+import com.gem.home.until.ToolDao;
 import com.gem.scenery.R;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -43,7 +44,6 @@ public class Travels_One_Activity extends Activity implements OnCheckedChangeLis
 		setContentView(R.layout.travel_one_activity);
 		//初始化view
 		inView();
-
 		btnNext.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -51,24 +51,42 @@ public class Travels_One_Activity extends Activity implements OnCheckedChangeLis
 				
 				//获得输入框数据
 				inData();
-				
-		
 				Intent intent = new Intent(Travels_One_Activity.this, MainActivity.class);
 				intent.putExtra("teamName", mteamName);
 //				intent.putExtra("teamZt", mteamZt);
-				intent.putExtra("allDay", mallDay);
+				if(!mallDay.equals("请填写全程的天数")){
+					intent.putExtra("allDay", mallDay);
+				}else{
+					intent.putExtra("allDay", 0);
+				}
 				intent.putExtra("startPoint", mstartPoint);
 				intent.putExtra("destination", mdestination);
 				intent.putExtra("sex",msex );
 				intent.putExtra("teamNumber", mteamNumber);
 //				intent.putExtra("age", mage);
 				intent.putExtra("city", mcity);
+				if(!mstartTime.equals("请点击右边的图标")){
 				intent.putExtra("startTime", mstartTime);
-				intent.putExtra("arriveTime", marriveTime);
-				if(!mteamName.equals("")&&!destination.equals("")&&!mteamNumber.equals("")){
-				startActivity(intent);
 				}else{
-					Toast.makeText(getApplication(), "请填写用户名，目的地，人数", Toast.LENGTH_LONG).show();
+					intent.putExtra("startTime", "");
+				}
+				if(!marriveTime.equals("请点击右边的图标")){
+					intent.putExtra("arriveTime", marriveTime);
+				}else{
+					intent.putExtra("arriveTime", "");
+				}
+				if(!mteamName.equals("")&&!destination.equals("")&&!mteamNumber.equals("")){
+					if(!marriveTime.equals("")&&!mstartTime.equals("")){
+						if((ToolDao.getTimedate1(mstartTime).getTime()-ToolDao.getTimedate1(marriveTime).getTime())<0){
+						startActivity(intent);
+						}else{
+							Toast.makeText(getApplication(), "出发时间不能大于到达时间", Toast.LENGTH_LONG).show();
+						}
+					}else{
+						startActivity(intent);
+					}
+				}else{
+					Toast.makeText(getApplication(), "请填写队名，目的地，人数", Toast.LENGTH_LONG).show();
 				}
 			}
 
@@ -129,8 +147,8 @@ public class Travels_One_Activity extends Activity implements OnCheckedChangeLis
 					} else if (text.equals("不限")) {
 						sexi = 2;
 					}
-					Toast.makeText(getApplication(), "text" + text, Toast.LENGTH_LONG)
-							.show();
+//					Toast.makeText(getApplication(), "text" + text, Toast.LENGTH_LONG)
+//							.show();
 	}
 	
 	public class OnCheckedChangedCity implements OnCheckedChangeListener{
@@ -149,8 +167,8 @@ public class Travels_One_Activity extends Activity implements OnCheckedChangeLis
 			} else if (text.equals("不限")) {
 				cityi = 2;
 			}
-			Toast.makeText(getApplication(), "text" + text, Toast.LENGTH_LONG)
-					.show();
+//			Toast.makeText(getApplication(), "text" + text, Toast.LENGTH_LONG)
+//					.show();
 		}
 
 	

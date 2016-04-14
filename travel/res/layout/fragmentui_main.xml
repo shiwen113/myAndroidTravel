@@ -13,12 +13,12 @@
         android:layout_height="0dp"
         android:layout_weight="1.0"
         android:background="#FFFFCC" />
-
+<!-- RadioGroup android:background="#FFFFFF"这里是白色，你想什么颜色自己设置 -->
     <RadioGroup
         android:id="@+id/radioGroup_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#99CCFF"
+        android:background="#FFFFFF"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingBottom="7dp"
@@ -39,6 +39,7 @@
             android:textSize="15sp" />
 
         <RadioButton
+            
             android:id="@+id/picture"
             android:drawableTop="@drawable/collect_bg"
             android:layout_width="0dp"

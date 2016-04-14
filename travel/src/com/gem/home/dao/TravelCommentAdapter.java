@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import com.gem.home.until.ToolDao;
 import com.gem.home.until.TravelComment1;
 import com.gem.scenery.R;
 
+import android.R.integer;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -37,7 +36,9 @@ public class TravelCommentAdapter extends BaseAdapter {
 	Map<Integer, Integer> map=new HashMap<Integer, Integer>();
 	List<A> arr=new ArrayList<A>();
 	int c=0;  //表示现在要显示的 他前面一个的主键
-	int d=0;  //计录现在的主键
+	int d=0;  //计录前一个的主键
+//	int i=0;  //评论者的主键
+	int j=0;  //被评论者的主键
 	public TravelCommentAdapter(Context context, List<TravelComment1> list) {
 		super();
 		this.context = context;
@@ -80,7 +81,7 @@ public class TravelCommentAdapter extends BaseAdapter {
 		TravelComment1 travelComment1=list.get(position);
 		c=travelComment1.getIdWith();
 		
-		String string=null;
+		String string="";
 		
 		if(travelComment1.getIdWith()==0){
 			b=1;
@@ -88,10 +89,12 @@ public class TravelCommentAdapter extends BaseAdapter {
 				arr.clear();
 			}
 			
-			string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+travelComment1.getTd().getLd().getUserName()+"发布的旅行队评论："+travelComment1.getCommentNotes();
+//			string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+travelComment1.getTd().getLd().getUserName()+"发布的旅行队评论："+travelComment1.getCommentNotes();
+            string=travelComment1.getLd().getUserName()+":"+travelComment1.getCommentNotes();
+            		
 //			viewHolder.textView.setText(string);
 			if(travelComment1.getIsend()==1){
-				A a=new A(b,travelComment1.getLd().getUserName(),travelComment1.getTd().getLd().getUserName());
+				A a=new A(b,travelComment1.getLd().getLd(),travelComment1.getTd().getLd().getLd());
 				arr.add(a);
 //				map.put(travelComment1, b);
 			}
@@ -101,6 +104,8 @@ public class TravelCommentAdapter extends BaseAdapter {
 			if(c==d){
 				b=b+1;
 				s=list.get(a).getLd().getUserName();
+				
+				j=list.get(a).getLd().getLd();
 			}else {
 //				b=b-1;
 				int i=travelComment1.getIdWith();
@@ -111,6 +116,8 @@ public class TravelCommentAdapter extends BaseAdapter {
 					}
 				}
 			   s=tc1.getLd().getUserName();
+			   
+			   j=tc1.getLd().getLd();
 			   b=map.get(tc1.getTcm())+1;
 			}
 			
@@ -119,15 +126,27 @@ public class TravelCommentAdapter extends BaseAdapter {
 //				int b1=map.get(comment1);
 //				if(b1+1==b&&comment1.getLd().getUserName().equals(s)&&);
 //			}
-			string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+s+"的评论："+travelComment1.getCommentNotes();
+			
+			for(int i=1;i<b;i++){
+				string=string+"        ";
+			}
+			boolean flag=false;
+//			string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+s+"的评论："+travelComment1.getCommentNotes();
 			for(A tc:arr){
-				if(tc.a==(b-1)&&tc.b.equals(s)&&tc.c.equals(travelComment1.getLd().getUserName())){
-					string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+s+"的回复："+travelComment1.getCommentNotes();
+				if(tc.a==(b-1)&&tc.b==j&&tc.c==travelComment1.getLd().getLd()){
+					flag=true;
+//					string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+s+"的回复："+travelComment1.getCommentNotes();
+				    string=string+travelComment1.getLd().getUserName()+"回复"+s+":"+travelComment1.getCommentNotes();
 				}
 			}
+			if(!flag){
+//				string=b+"级评论   "+travelComment1.getLd().getUserName()+"对"+s+"的评论："+travelComment1.getCommentNotes();
+			    string=string+travelComment1.getLd().getUserName()+"评论"+s+":"+travelComment1.getCommentNotes();
+			}
+			
 			
 			if(travelComment1.getIsend()==1){
-				A a=new A(b,travelComment1.getLd().getUserName(),s);
+				A a=new A(b,travelComment1.getLd().getLd(),j);
 				arr.add(a);
 			}
 //			viewHolder.textView.setText(string);		
@@ -158,14 +177,15 @@ public class TravelCommentAdapter extends BaseAdapter {
 
   class A{
 	  public int a;  //表示几级评论
-	  public String b; //表示评论者
-	  public String c; //表示被评论者
-	public A(int a, String b, String c) {
+	  public int b; //表示评论者的主键
+	  public int c; //表示被评论者的主键
+	public A(int a, int b, int c) {
 		super();
 		this.a = a;
 		this.b = b;
 		this.c = c;
 	}
+
  }
   
   class B{

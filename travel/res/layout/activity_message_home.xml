@@ -38,9 +38,11 @@
 
             <ImageView
                 android:id="@+id/iv_search"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:src="@drawable/sereach" />
+                android:layout_marginTop="5dip"
+                android:layout_marginRight="10dip"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:src="@drawable/home_search" />
 
         </LinearLayout>
 
@@ -61,6 +63,7 @@
                 android:id="@+id/bt_message_zuijin"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:layout_marginLeft="10dip"
                 android:background="@color/pink"
                 android:text="@string/zuijin_message" />
 

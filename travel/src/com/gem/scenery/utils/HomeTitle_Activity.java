@@ -26,11 +26,11 @@ public class HomeTitle_Activity extends LinearLayout implements OnClickListener 
 		activity=(Activity) context;
 //		new SceneryPopWindow(context);
 		rightBtn = (LinearLayout) findViewById(R.id.home_right);
-		leftBtn = (LinearLayout) findViewById(R.id.home_left);
+//		leftBtn = (LinearLayout) findViewById(R.id.home_left);
 		title=(TextView) findViewById(R.id.home_title);
 		title.setTextColor(COLOR_TITLE);
 		rightBtn.setOnClickListener(this);
-		leftBtn.setOnClickListener(this);
+//		leftBtn.setOnClickListener(this);
 	}
 
 	public void onClick(View v) {

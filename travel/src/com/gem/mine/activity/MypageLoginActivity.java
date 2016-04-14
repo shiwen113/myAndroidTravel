@@ -7,8 +7,8 @@ import com.gem.home.activity.Fragment_Activity;
 import com.gem.home.dao.MyApplication;
 import com.gem.home.until.LoginData;
 import com.gem.message.activity.RongyunDemo;
-import com.gem.message.activity.SPUtils;
 import com.gem.scenery.R;
+import com.gem.scenery.utils.SPUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.HttpUtils;
@@ -60,8 +60,8 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
 	
 	//登录按钮
 	private Button LoginActivitydlbutton;
-	//找回密码
-	private TextView tv_MypageLoginActivity_forgetpassword;
+	//退出登录
+	private TextView tuiChuLogind;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,8 +79,10 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
         tv_MypageLoginActivity_mypageregister=(TextView) findViewById(R.id.tv_MypageLoginActivity_mypageregister);
         tv_MypageLoginActivity_mypageregister.setOnClickListener(this);
       //忘记密码监听
-        tv_MypageLoginActivity_forgetpassword=(TextView) findViewById(R.id.tv_MypageLoginActivity_forgetpassword);
-        tv_MypageLoginActivity_forgetpassword.setOnClickListener(this);
+        tuiChuLogind=(TextView) findViewById(R.id.tv_MypageLoginActivity_forgetpassword);
+        tuiChuLogind.setOnClickListener(this);
+        eT.setText((String)SPUtils.get(context, "Account", ""));
+        pw.setText((String)SPUtils.get(context, "pwd", ""));
 	   //点击登录头像，页面跳转我的页面
 //        im_MypageLoginActivity_touxiang=(ImageView) findViewById(R.id.im_MypageLoginActivity_touxiang);
 //        im_MypageLoginActivity_touxiang.setOnClickListener(this);
@@ -96,10 +98,16 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
 			startActivity(intent);   	  
 			break;
 		
-			//实现页面跳转 至密码找回页面
+			//退出登录
 		case R.id.tv_MypageLoginActivity_forgetpassword:
-			Intent intent10=new Intent(this,Mypageforgetpassword.class);
-			startActivity(intent10);
+//			Intent intent10=new Intent(this,Mypageforgetpassword.class);
+//			startActivity(intent10);
+			if(m.getLd()!=null){
+				m.setLd(null);
+				Toast.makeText(getApplication(), "已退出", Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(getApplication(), "请登录", Toast.LENGTH_LONG).show();
+			}
 			break;
 //			//点击头像，页面跳转至我的个人页面
 //		case R.id.im_MypageLoginActivity_touxiang:
@@ -146,11 +154,13 @@ public class MypageLoginActivity extends Activity implements OnClickListener {
 				    }else if(data.getAccount().equals(account)&&data.getPassWord().equals(pwd)){
 				    	Tt.setText("登录成功");
 				    	 m.setLd(data);
+				    	 SPUtils.put(context, "Account",data.getAccount());
+				    	 SPUtils.put(context, "pwd",data.getPassWord());
 				    	 RongyunDemo rd=new RongyunDemo(context);
 //				    	 rd.getToken();
 				    	 Intent intent=new Intent(MypageLoginActivity.this,Fragment_Activity.class);
-				 		if(SPUtils.get(context,"token","")!=null&&!SPUtils.get(context, "token","").equals("")){
-				 			rd.connect((String)SPUtils.get(context, "token",""));
+				 		if(SPUtils.get(context,data.getLd()+"","")!=null&&!SPUtils.get(context,data.getLd()+"","").equals("")){
+				 			rd.connect((String)SPUtils.get(context, data.getLd()+"",""));
 				 		}else{
 				 			rd.getToken();
 				 		}

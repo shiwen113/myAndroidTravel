@@ -7,6 +7,7 @@ import io.rong.imlib.model.Conversation;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.app.Activity;
@@ -36,6 +37,7 @@ import com.gem.mine.action.ListViewManagerTravel;
 import com.gem.mine.action.MineViewChage;
 import com.gem.mine.action.MineViewPage;
 import com.gem.scenery.R;
+import com.gem.scenery.entity.PTPD;
 import com.gem.scenery.entity.PersonalData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -62,9 +64,11 @@ public class TroopsActivity extends Activity implements OnClickListener {
 	private TextView joinText;//加入的旅行队
 	private ListView createTravel;//创建的旅行队
 	private ListView joinTravel;//加入的旅行队
-	private List<PublishTravel> list;
-	private List<PublishTravel> createList=new ArrayList<PublishTravel>();
-	private List<PublishTravel> joinList=new ArrayList<PublishTravel>();
+	
+	private List<PTPD> list;
+	private List<PTPD> createList=new ArrayList<PTPD>();
+	private List<PTPD> joinList=new ArrayList<PTPD>();
+	
 	private View v1;
 	private View v2;
 	private int i=0;
@@ -72,6 +76,9 @@ public class TroopsActivity extends Activity implements OnClickListener {
 	private Context context;
 	private PopupWindow popupWindow;
 	private RongyunDemo ryun;
+	ListViewManagerTravel travel;
+	ListViewJoinTravel travel2;
+	private Boolean flag=true;
 	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,15 +104,19 @@ public class TroopsActivity extends Activity implements OnClickListener {
 		backgroundMy();
 		Intent intent=getIntent();
 		String s=intent.getStringExtra("result");
-		Type type=new TypeToken<List<PublishTravel>>(){}.getType();
+		
+		Type type=new TypeToken<List<PTPD>>(){}.getType();
 		Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd hh:mm:ss").create();
 		list =gson.fromJson(s, type);
 		showData();
+		
 		vp.setAdapter(mvp);
 		MineViewChage mvc=new MineViewChage(this,myIv,joinIv);
 		vp.setOnPageChangeListener(mvc);
-		createTravel.setAdapter(new ListViewManagerTravel(createList,this));
-		joinTravel.setAdapter(new ListViewJoinTravel(joinList,this));
+		 travel=new ListViewManagerTravel(createList,this);
+		createTravel.setAdapter(travel);
+		 travel2=new ListViewJoinTravel(joinList,this);
+		joinTravel.setAdapter(travel2);
 	}
 	public void initView(){
 		back=(ImageView) findViewById(R.id.im_back_travel_team);
@@ -135,8 +146,8 @@ public class TroopsActivity extends Activity implements OnClickListener {
 	public void showData(){
 		title.setText("我的旅行队");
 		if(list!=null&&!list.equals("")&&list.size()!=0){
-			for (PublishTravel pt : list) {
-				if(pt.getLd().getLd()==m.getLd().getLd()){
+			for (PTPD pt : list) {
+				if(pt.getPt().getLd().getLd()==m.getLd().getLd()){
 					createList.add(pt);
 				}else{
 					joinList.add(pt);
@@ -193,8 +204,8 @@ public class TroopsActivity extends Activity implements OnClickListener {
 		joinIv.setBackgroundResource(R.drawable.p);
 	}
 	
-	String urlDelete="";
-	public void sendDelete(final PublishTravel pt,View arg1) {
+	String urlDelete="http://10.201.1.12:8080/travel/TravelComment_Join_Exit";
+	public void sendDelete(final PTPD pt,View arg1,final int i,Boolean flag) {
 		// 通过view 和宽·高，构造PopopWindow
 		View v=LayoutInflater.from(context).inflate(R.layout.select_friend_action, null);
 		popupWindow = new PopupWindow(v,400, 300, true);
@@ -209,7 +220,11 @@ public class TroopsActivity extends Activity implements OnClickListener {
 		// popupWindow.showAsDropDown(chaKanAllPeople);
 		popupWindow.showAsDropDown(arg1, 0, 0);
 		TextView del=(TextView) v.findViewById(R.id.tv_delete);
-		del.setText("退队");
+		if(flag){
+			del.setText("删除");
+		}else{
+			del.setText("退队");
+		}
 		del.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -217,8 +232,9 @@ public class TroopsActivity extends Activity implements OnClickListener {
 				// TODO Auto-generated method stub
 				HttpUtils http=new HttpUtils();
 				RequestParams params=new RequestParams();
-				params.addBodyParameter("fd",String.valueOf(pt.getLd().getLd()));
+				params.addBodyParameter("td",String.valueOf(pt.getPt().getTd()));
 				params.addBodyParameter("ld",String.valueOf(m.getLd().getLd()));
+				params.addBodyParameter("state", String.valueOf(1));
 				http.send(HttpMethod.POST, urlDelete, params, new RequestCallBack<String>() {
 
 					@Override
@@ -232,13 +248,33 @@ public class TroopsActivity extends Activity implements OnClickListener {
 					public void onSuccess(ResponseInfo<String> arg0) {
 						// TODO Auto-generated method stub
 						String restult=arg0.result;
-						if(!restult.equals("")&&!restult.equals("null")){
-							Gson gson=new Gson();
-							Type type=new TypeToken<List<PersonalData>>(){}.getType();
-//							list.clear();
-//							list.addAll((List<PersonalData>)gson.fromJson(restult, type));
-//							adapter.notifyDataSetChanged();
+						if(restult!=null&&!restult.equals("")){
+						       int j= Integer.parseInt(restult);
+							if(j==0){
 							popupWindow.dismiss();
+							if(i==0){
+								Iterator<PTPD> ite=	createList.iterator();
+								while(ite.hasNext()){  
+									PTPD s = ite.next();  
+								    if(s.equals(pt)){  
+								        ite.remove();  
+								    }  
+								}  
+//								createList.remove(arg2);
+								travel.notifyDataSetChanged();
+							}else {  
+								Iterator<PTPD> ite2= joinList.iterator();
+								while(ite2.hasNext()){  
+									PTPD s = ite2.next();  
+								    if(s.equals(pt)){  
+								        ite2.remove();  
+								    }  
+								} 
+//								joinList.remove(arg2);
+								travel2.notifyDataSetChanged();
+							}
+
+							}
 						}
 					}
 					
@@ -252,7 +288,7 @@ public class TroopsActivity extends Activity implements OnClickListener {
 				// TODO Auto-generated method stub
 //				聊天
 //				RongIM.getInstance().startConversation(context, Conversation.ConversationType.PRIVATE, pt.getLd().getLd()+"", "聊天标题");
-				RongIM.getInstance().startGroupChat(TroopsActivity.this, pt.getTd()+"", null);
+				RongIM.getInstance().startGroupChat(TroopsActivity.this, pt.getPt().getTd()+"", null);
 			}
 		});
 	}
@@ -266,10 +302,11 @@ public class TroopsActivity extends Activity implements OnClickListener {
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
 			// TODO Auto-generated method stub
-			ryun=new RongyunDemo(createList.get(arg2));
+			ryun=new RongyunDemo(createList.get(arg2).getPt(),m.getLd().getLd()+"");
 			ryun.createQun();
-			ryun.addQun();
-			sendDelete(createList.get(arg2),arg1);
+//			ryun.addQun();
+			flag=true;
+			sendDelete(createList.get(arg2),arg1,0,flag);
 		}
 		
 	}
@@ -283,9 +320,10 @@ public class TroopsActivity extends Activity implements OnClickListener {
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
 			// TODO Auto-generated method stub
-			ryun=new RongyunDemo(joinList.get(arg2));
+			ryun=new RongyunDemo(joinList.get(arg2).getPt(),m.getLd().getLd()+"");
 			ryun.createQun();
-			sendDelete(joinList.get(arg2),arg1);
+			flag=false;
+			sendDelete(joinList.get(arg2),arg1,1,flag);
 		}
 		
 	}

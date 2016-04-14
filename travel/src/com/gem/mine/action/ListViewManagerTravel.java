@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.gem.home.until.PublishTravel;
 import com.gem.scenery.R;
+import com.gem.scenery.entity.PTPD;
 import com.gem.scenery.entity.PersonalData;
 import com.gem.scenery.utils.CircleImageView;
 import com.google.gson.Gson;
@@ -28,11 +29,11 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest.HttpMethod;
 
 public class ListViewManagerTravel extends BaseAdapter {
-	private List<PublishTravel> createList;
+	private List<PTPD> createList;
 	private Context context;
 	private Holder holder;
 	private BitmapUtils bu;
-	public ListViewManagerTravel(List<PublishTravel> createList, Context context) {
+	public ListViewManagerTravel(List<PTPD> createList, Context context) {
 		super();
 		this.createList = createList;
 		this.context = context;
@@ -68,10 +69,15 @@ public class ListViewManagerTravel extends BaseAdapter {
 		}else{
 			holder=(Holder) v.getTag();
 		}
-		PublishTravel pt=createList.get(arg0);
+		PublishTravel pt=createList.get(arg0).getPt();
 		if(pt!=null){
 			holder.tv.setText(pt.getTeamName());
-			sendPersonalData(pt);
+			
+//			sendPersonalData(pt);
+		}
+		String string=createList.get(arg0).getUriUpLoadPicture();
+		if(string!=null&&!string.equals("")){
+			bu.display(holder.civ,"http://10.201.1.12:8080/gotravel/UserImage/"+string);
 		}
 		return v;
 	}
@@ -80,33 +86,34 @@ public class ListViewManagerTravel extends BaseAdapter {
 		ImageView civ;
 		TextView tv;
 	}
-	String url="http://10.201.1.12:8080/travel/Home_home_yhtx";
-	/**
-	 * 请求个人资料
-	 */
-	public void sendPersonalData(PublishTravel pt){
-		HttpUtils http =new HttpUtils();
-		RequestParams params =new RequestParams();
-		params.addBodyParameter("ld",String.valueOf(pt.getLd().getLd()));
-		http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
-
-			@Override
-			public void onFailure(HttpException arg0, String arg1) {
-				// TODO Auto-generated method stub
-				Toast.makeText(context, "请求失败,请检查您的网络", Toast.LENGTH_LONG).show();
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> arg0) {
-				String result =arg0.result;
-				if(!result.equals("")){
-					Gson gson=new Gson();
-					Type type =new TypeToken<PersonalData>(){}.getType();
-					PersonalData pd=gson.fromJson(result, type);
-					bu.display(holder.civ, pd.getUriUpLoadPicture());
-				}
-			}
-		});
-		
-	}
+	
+//	String url="http://10.201.1.12:8080/travel/Home_home_yhtx";
+//	/**
+//	 * 请求个人资料
+//	 */
+//	public void sendPersonalData(PublishTravel pt){
+//		HttpUtils http =new HttpUtils();
+//		RequestParams params =new RequestParams();
+//		params.addBodyParameter("ld",String.valueOf(pt.getLd().getLd()));
+//		http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
+//
+//			@Override
+//			public void onFailure(HttpException arg0, String arg1) {
+//				// TODO Auto-generated method stub
+//				Toast.makeText(context, "请求失败,请检查您的网络", Toast.LENGTH_LONG).show();
+//			}
+//
+//			@Override
+//			public void onSuccess(ResponseInfo<String> arg0) {
+//				String result =arg0.result;
+//				if(!result.equals("")){
+//					Gson gson=new Gson();
+//					Type type =new TypeToken<PersonalData>(){}.getType();
+//					PersonalData pd=gson.fromJson(result, type);
+//					bu.display(holder.civ,"http://10.201.1.12:8080/gotravel/UserImage/"+ pd.getUriUpLoadPicture());
+//				}
+//			}
+//		});
+//		
+//	}
 }

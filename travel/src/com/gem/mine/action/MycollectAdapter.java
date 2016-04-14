@@ -104,7 +104,7 @@ public class MycollectAdapter extends BaseAdapter {
                     
 					PersonalData ld=gson.fromJson(result,type);	
 					BitmapUtils bitmapUtils=new BitmapUtils(context);
-					bitmapUtils.display(view,ld.getUriUpLoadPicture());
+					bitmapUtils.display(view,"http://10.201.1.12:8080/gotravel/UserImage/"+ld.getUriUpLoadPicture());
 //					Type type=new TypeToken<List<PublishTravel>>(){}.getType();
 //                    arr=gson.fromJson(result,type);
 //                    adapter.notifyDataSetChanged();

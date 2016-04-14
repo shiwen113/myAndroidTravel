@@ -38,8 +38,8 @@ public class Fragment_Activity extends FragmentActivity implements OnCheckedChan
 	private RadioGroup mRadioGroup;
 	private int currentIndex = 0;//
 	private List<Fragment> fragments;
-	private static final int COLOR_TEXT_HIGHTLIGHT = Color.parseColor("#FFFFFF");
-	private static final int COLOR_TEXT_NORMAL = Color.parseColor("#000000");
+	private static final int COLOR_TEXT_HIGHTLIGHT = Color.parseColor("#FFFFFF");//选中时，字体颜色这里是白色
+	private static final int COLOR_TEXT_NORMAL = Color.parseColor("#000000");//未选中时，字体颜色，这里是黑色
 	private MyDatabaseHelper dbHelper;
 	private FragmentManager fragmentManager = getSupportFragmentManager();
 	private FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -79,7 +79,7 @@ public class Fragment_Activity extends FragmentActivity implements OnCheckedChan
 		changeTextColor(currentIndex);
 
 	}
-
+	
 	@Override
 	public void onAttachFragment(Fragment fragment) {
 		// TODO Auto-generated method stub
@@ -87,6 +87,7 @@ public class Fragment_Activity extends FragmentActivity implements OnCheckedChan
 //		FragmentManager fragmentManager = getSupportFragmentManager();
 //		FragmentTransaction ft = fragmentManager.beginTransaction();
 		Log.i("ft", "ft+" + ft);
+		ft.remove(fragment);
 		if (home == null && fragment instanceof Home_home) {
 			home = (Home_home) fragment;
 		} else if (scenery == null && fragment instanceof SceneryHomeActivity) {
@@ -104,6 +105,7 @@ public class Fragment_Activity extends FragmentActivity implements OnCheckedChan
 
 		if (R.id.home == checkedId) {
 			nextIndex = 0;
+			//选中时图片
 			picutre_on = R.drawable.home_logo_focus;
 		} else if (R.id.picture == checkedId) {
 			nextIndex = 1;
@@ -144,7 +146,8 @@ public class Fragment_Activity extends FragmentActivity implements OnCheckedChan
 		resterTextColor();
 
 		if (view instanceof TextView) {
-			((TextView) view).setTextColor(COLOR_TEXT_HIGHTLIGHT);
+			//选中时，改变字体颜色
+		//	((TextView) view).setTextColor(COLOR_TEXT_HIGHTLIGHT);
 
 		}
 
@@ -173,10 +176,11 @@ public class Fragment_Activity extends FragmentActivity implements OnCheckedChan
 		View view = mRadioGroup.getChildAt(currentIndex);
 		switch (currentIndex) {
 		case 0:
+			//未选中时各个图片
 			picture_off = R.drawable.home_logo_unfocus;
 			break;
 		case 1:
-			picture_off = R.drawable.picture_off;
+			picture_off = R.drawable.collect_bg;
 			break;
 		case 2:
 			picture_off = R.drawable.message_off;

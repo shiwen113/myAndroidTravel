@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.gem.home.until.PublishTravel;
 import com.gem.scenery.R;
+import com.gem.scenery.entity.PTPD;
 import com.gem.scenery.entity.PersonalData;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -27,11 +28,11 @@ import android.widget.Toast;
 
 public class ListViewJoinTravel extends BaseAdapter {
 
-	private List<PublishTravel> joinList;
+	private List<PTPD> joinList;
 	private Context context;
 	private Holder holder;
 	private BitmapUtils bu;
-	public ListViewJoinTravel(List<PublishTravel> joinList, Context context) {
+	public ListViewJoinTravel(List<PTPD> joinList, Context context) {
 		super();
 		this.joinList = joinList;
 		this.context = context;
@@ -67,10 +68,15 @@ public class ListViewJoinTravel extends BaseAdapter {
 		}else{
 			holder=(Holder) v.getTag();
 		}
-		PublishTravel pt=joinList.get(arg0);
+		PublishTravel pt=joinList.get(arg0).getPt();
 		if(pt!=null){
 			holder.tv.setText(pt.getTeamName());
-			sendPersonalData(pt);
+		
+//			sendPersonalData(pt);
+		}
+		String string=joinList.get(arg0).getUriUpLoadPicture();
+		if(string!=null&&!string.equals("")){
+			bu.display(holder.civ,"http://10.201.1.12:8080/gotravel/UserImage/"+string);
 		}
 		return v;
 	}
@@ -79,34 +85,34 @@ public class ListViewJoinTravel extends BaseAdapter {
 		ImageView civ;
 		TextView tv;
 	}
-	String url="http://10.201.1.12:8080/travel/Home_home_yhtx";
-	/**
-	 * 请求个人资料
-	 */
-	public void sendPersonalData(PublishTravel pt){
-		HttpUtils http =new HttpUtils();
-		RequestParams params =new RequestParams();
-		params.addBodyParameter("ld",String.valueOf(pt.getLd().getLd()));
-		http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
-
-			@Override
-			public void onFailure(HttpException arg0, String arg1) {
-				// TODO Auto-generated method stub
-				Toast.makeText(context, "请求失败,请检查您的网络", Toast.LENGTH_LONG).show();
-			}
-
-			@Override
-			public void onSuccess(ResponseInfo<String> arg0) {
-				String result =arg0.result;
-				if(!result.equals("")){
-					Gson gson=new Gson();
-					Type type =new TypeToken<PersonalData>(){}.getType();
-					PersonalData pd=gson.fromJson(result, type);
-					bu.display(holder.civ, pd.getUriUpLoadPicture());
-				}
-			}
-		});
-		
-	}
+//	String url="http://10.201.1.12:8080/travel/Home_home_yhtx";
+//	/**
+//	 * 请求个人资料
+//	 */
+//	public void sendPersonalData(PublishTravel pt){
+//		HttpUtils http =new HttpUtils();
+//		RequestParams params =new RequestParams();
+//		params.addBodyParameter("ld",String.valueOf(pt.getLd().getLd()));
+//		http.send(HttpMethod.POST, url, params, new RequestCallBack<String>() {
+//
+//			@Override
+//			public void onFailure(HttpException arg0, String arg1) {
+//				// TODO Auto-generated method stub
+//				Toast.makeText(context, "请求失败,请检查您的网络", Toast.LENGTH_LONG).show();
+//			}
+//
+//			@Override
+//			public void onSuccess(ResponseInfo<String> arg0) {
+//				String result =arg0.result;
+//				if(!result.equals("")){
+//					Gson gson=new Gson();
+//					Type type =new TypeToken<PersonalData>(){}.getType();
+//					PersonalData pd=gson.fromJson(result, type);
+//					bu.display(holder.civ, "http://10.201.1.12:8080/gotravel/UserImage/"+pd.getUriUpLoadPicture());
+//				}
+//			}
+//		});
+//		
+//	}
 
 }

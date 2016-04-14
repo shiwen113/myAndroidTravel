@@ -116,6 +116,7 @@
         
         <activity android:name="com.gem.home.activity.Fragment_Activity"
             android:launchMode="singleTask"
+            android:configChanges="orientation"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -123,6 +124,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity android:name="com.gem.home.activity.PersonalDataActivity"></activity>
+        
         <activity 
             android:screenOrientation="portrait"
             android:name="com.gem.home.activity.Travels_One_Activity" >
@@ -314,6 +318,23 @@
                     android:scheme="rong" />
             </intent-filter>
         </activity>
+        
+        <activity
+           android:name="com.gem.message.activity.SubConversationListActivtiy"
+           android:screenOrientation="portrait"
+           android:windowSoftInputMode="stateHidden|adjustResize">
+
+           <intent-filter>
+               <action android:name="android.intent.action.VIEW" />
+
+               <category android:name="android.intent.category.DEFAULT" />
+
+               <data
+                   android:host="com.gem.scenery"
+                   android:pathPrefix="/subconversationlist"
+                   android:scheme="rong" />
+           </intent-filter>
+       </activity>
         
         
     </application>
